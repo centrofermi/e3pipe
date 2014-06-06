@@ -22,9 +22,10 @@
 
 
 
-class E3EventField:
+class E3AnalyzerEventField:
 
-    """ Small utility class describing an "atomic" field in an actual event.
+    """ Small utility class describing an "atomic" field in an actual event,
+    as contained in the .out file produced by the analyzer.
 
     This encapsulates things such as the field name (e.g., the run number and
     the event number), type (e.g., int or float) and the measurement units,
@@ -40,7 +41,7 @@ class E3EventField:
         
 
 
-class E3Event(dict):
+class E3AnalyzerEvent(dict):
 
     """ Basic data structure encapsulating a DST event.
 
@@ -54,17 +55,17 @@ class E3Event(dict):
     list of values as well.
     """
 
-    FIELDS = [E3EventField('RunNumber', int),
-              E3EventField('EventNumber', int),
-              E3EventField('Seconds', int),
-              E3EventField('Nanoseconds', int),
-              E3EventField('Microseconds', int),
-              E3EventField('XDir', float),
-              E3EventField('YDir', float),
-              E3EventField('ZDir', float),
-              E3EventField('ChiSquare', float),
-              E3EventField('TimeOfFlight', float, 'ns'),
-              E3EventField('TrackLengths', float, 'cm')
+    FIELDS = [E3AnalyzerEventField('RunNumber', int),
+              E3AnalyzerEventField('EventNumber', int),
+              E3AnalyzerEventField('Seconds', int),
+              E3AnalyzerEventField('Nanoseconds', int),
+              E3AnalyzerEventField('Microseconds', int),
+              E3AnalyzerEventField('XDir', float),
+              E3AnalyzerEventField('YDir', float),
+              E3AnalyzerEventField('ZDir', float),
+              E3AnalyzerEventField('ChiSquare', float),
+              E3AnalyzerEventField('TimeOfFlight', float, 'ns'),
+              E3AnalyzerEventField('TrackLengths', float, 'cm')
           ]
 
     def __init__(self, data):
@@ -93,7 +94,7 @@ def test():
     The data are taken from an actual .out file.
     """
     data = '     1          0  231408003    4193514         4193   0.37030   0.09268   0.92428  2.78417     -2.900      95.21'
-    e = E3Event(data)
+    e = E3AnalyzerEvent(data)
     print(e)
     print(e.values())
 
