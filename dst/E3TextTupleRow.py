@@ -46,12 +46,12 @@ class E3TextTupleRow(dict):
         """
         dict.__init__(self)
         for field, datum in zip(self.FIELDS, data.split()):
-            self[field[0]] = field[1](datum)
+            self[field.Name] = field.Type(datum)
     
     def values(self):
         """ Return an ordered list of the field values.
 
         Note the order is dictated by the FIELD class member.
         """
-        return [self[field[0]] for field in self.FIELDS]
+        return [self[field.Name] for field in self.FIELDS]
 
