@@ -34,6 +34,8 @@ class E3TextTupleRow(dict):
     the row fields by name, e.g., when converting the thing into a ROOT
     tree. However, we do provide facilities to represent an event as an ordered
     list of values as well.
+
+    We provide a text-formatting facility, too.
     """
     
     FIELDS = []
@@ -54,4 +56,12 @@ class E3TextTupleRow(dict):
         Note the order is dictated by the FIELD class member.
         """
         return [self[field.Name] for field in self.FIELDS]
+
+    def __str__(self):
+        """ Text formatting.
+        """
+        text = ''
+        for field in self.FIELDS:
+            text += '%15s = %s\n' % (field.Name, self[field.Name])
+        return text
 
