@@ -21,11 +21,9 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-
-from e3pipe.dst.E3InputFile import E3InputFile
 from e3pipe.dst.E3TextTupleField import E3TextTupleField
 from e3pipe.dst.E3TextTupleRow import E3TextTupleRow
-
+from e3pipe.dst.E3TextTupleBase import E3TextTupleBase
 
 
 class E3AnalyzerOutRow(E3TextTupleRow):
@@ -48,18 +46,15 @@ class E3AnalyzerOutRow(E3TextTupleRow):
 
 
 
-class E3AnalyzerOutFile(E3InputFile):
+class E3AnalyzerOutFile(E3TextTupleBase):
 
     """ Class encapsulating a .out file from the analyizer.
 
     The main purpose of this class is to be able to iterate on a .out file
-    getting out E3Event objects rather than text lines, e.g.
-
-    f = E3AnalyzerOutFile(filePath)
-    e = f.next()
-
-    will return an E3Event object e.
+    getting out structured objects rather than text lines, e.g.
     """
+
+    ROW_DESCRIPTOR = E3AnalyzerOutRow
 
     def __init__(self, filePath):
         """ Constructor.
@@ -67,15 +62,8 @@ class E3AnalyzerOutFile(E3InputFile):
         Note we call the base class next() method once, right at the
         beginning, to skip the file header.
         """
-        E3InputFile.__init__(self, filePath, '.out')
+        E3TextTupleBase.__init__(self, filePath, '.out')
         file.next(self)
-
-    def next(self):
-        """ Overloaded next() method.
-
-        Here we serve an actual E3Event object rather than a line of text.
-        """
-        return E3AnalyzerOutRow(file.next(self))
 
 
 
