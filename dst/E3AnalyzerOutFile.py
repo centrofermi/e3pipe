@@ -23,7 +23,9 @@
 
 
 from e3pipe.dst.E3InputFile import E3InputFile
+from e3pipe.dst.E3TextTupleField import E3TextTupleField
 from e3pipe.dst.E3TextTupleRow import E3TextTupleRow
+
 
 
 class E3AnalyzerOutRow(E3TextTupleRow):
@@ -31,17 +33,17 @@ class E3AnalyzerOutRow(E3TextTupleRow):
     """ Class encapsulating a row of a .out file from the analyzer.
     """
 
-    FIELDS = [('RunNumber', int),
-              ('EventNumber', int),
-              ('Seconds', int),
-              ('Nanoseconds', int),
-              ('Microseconds', int),
-              ('XDir', float),
-              ('YDir', float),
-              ('ZDir', float),
-              ('ChiSquare', float),
-              ('TimeOfFlight', float, 'ns'),
-              ('TrackLengths', float, 'cm')
+    FIELDS = [E3TextTupleField('RunNumber', int),
+              E3TextTupleField('EventNumber', int),
+              E3TextTupleField('Seconds', int, 's'),
+              E3TextTupleField('Nanoseconds', int, 'ns'),
+              E3TextTupleField('Microseconds', int, 'us'),
+              E3TextTupleField('XDir', float),
+              E3TextTupleField('YDir', float),
+              E3TextTupleField('ZDir', float),
+              E3TextTupleField('ChiSquare', float),
+              E3TextTupleField('TimeOfFlight', float, 'ns'),
+              E3TextTupleField('TrackLengths', float, 'cm')
           ]
 
 
