@@ -67,11 +67,12 @@ class E3AnalyzerOutFile(E3TextTupleBase):
 
 
 
-def test(filePath):
+def test(filePath, numEvents = 5):
     """ Test code.
     """
     f = E3AnalyzerOutFile(filePath)
-    print f.next()
+    for i in range(numEvents):
+        print f.next()
 
 
 

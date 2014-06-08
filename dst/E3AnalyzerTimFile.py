@@ -60,11 +60,12 @@ class E3AnalyzerTimFile(E3TextTupleBase):
 
 
 
-def test(filePath):
+def test(filePath, numEvents = 5):
     """ Test code.
     """
     f = E3AnalyzerTimFile(filePath)
-    print f.next()
+    for i in range(numEvents):
+        print f.next()
 
 
 
