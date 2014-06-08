@@ -23,7 +23,26 @@
 
 
 from e3pipe.dst.E3InputFile import E3InputFile
-from e3pipe.dst.E3Event import E3Event
+from e3pipe.dst.E3TextTupleRow import E3TextTupleRow
+
+
+class E3AnalyzerOutRow(E3TextTupleRow):
+    
+    """ Class encapsulating a row of a .out file from the analyzer.
+    """
+
+    FIELDS = [('RunNumber', int),
+              ('EventNumber', int),
+              ('Seconds', int),
+              ('Nanoseconds', int),
+              ('Microseconds', int),
+              ('XDir', float),
+              ('YDir', float),
+              ('ZDir', float),
+              ('ChiSquare', float),
+              ('TimeOfFlight', float, 'ns'),
+              ('TrackLengths', float, 'cm')
+          ]
 
 
 
@@ -54,7 +73,7 @@ class E3AnalyzerOutFile(E3InputFile):
 
         Here we serve an actual E3Event object rather than a line of text.
         """
-        return E3Event(file.next(self))
+        return E3AnalyzerOutRow(file.next(self))
 
 
 
