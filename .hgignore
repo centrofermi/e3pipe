@@ -1,0 +1,10 @@
+syntax: glob
+
+*.pyc
+*.pyo
+*~
+*/*.pyc
+*/*.pyo
+*/*~
+recon/*/*.o
+recon/fortran/EEE_V15
