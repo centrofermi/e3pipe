@@ -29,6 +29,7 @@ E3PIPE_APPS = os.path.join(E3PIPE_BASE, 'apps')
 E3PIPE_DST = os.path.join(E3PIPE_BASE, 'dst')
 E3PIPE_RECON = os.path.join(E3PIPE_BASE, 'recon')
 E3PIPE_ROOT = os.path.join(E3PIPE_BASE, 'ROOT')
+E3PIPE_TASKS = os.path.join(E3PIPE_BASE, 'tasks')
 E3PIPE_TEST = os.path.join(E3PIPE_BASE, 'test')
 
 FORTRAN_ANALYIZER_PATH = os.path.join(E3PIPE_RECON, 'fortran', 'EEE_V15')
