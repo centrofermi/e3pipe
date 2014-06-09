@@ -72,15 +72,17 @@ class E3Tree(ROOT.TTree):
     - O : [the letter 'o', not a zero] a boolean (Bool_t)
     """
 
+    NAME = 'Tree'
     BRANCHES = []
 
-    def __init__(self, name, title = None):
+    def __init__(self, title = None):
         """ Constructor.
         """
-        ROOT.TTree.__init__(self, name, title or name)
+        ROOT.TTree.__init__(self, self.NAME, title or self.NAME)
         self.__ArrayDict = {}
         for branch in self.BRANCHES:
             self.addBranch(branch.Name, branch.Type)
+        self.BranchList = [branch.Name for branch in self.BRANCHES]
 
     def addBranch(self, branchName, branchType):
         """ Add a branch to the output tree.
@@ -90,6 +92,21 @@ class E3Tree(ROOT.TTree):
         a = numpy.array([0], dtype = root2numpy(branchType))
         self.__ArrayDict[branchName] = a
         self.Branch(branchName, a, branchTitle)
+
+    def fillRow(self, row):
+        """ Fill a row of the tree.
+
+        This really set the value for all the branches of the tree and calls the
+        ROOT.TTree.Fill() method at the end.
+
+        The argument row is essentially a dictionary which is supposed to
+        contain all the branch names as keys (note that the loop is actually
+        done over the branch names, so that the dictionary can contain a
+        superset of the branch names as its keys.)
+        """
+        for branchName in self.BranchList:
+            self.setValue(branchName, row[branchName])
+        self.Fill()
 
     def setValue(self, branchName, value):
         """ Set the value of a specific array.

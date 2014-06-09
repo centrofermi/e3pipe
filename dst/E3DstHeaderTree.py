@@ -31,7 +31,8 @@ class E3DstHeaderTree(E3Tree):
     information.
     """
 
-    BRANCHES = [E3BranchDescriptor('RunId', 'i'),
+    NAME = 'Header'
+    BRANCHES = [E3BranchDescriptor('RunNumber', 'i'),
                 E3BranchDescriptor('NumEvents', 'i'),
                 E3BranchDescriptor('NumGpsEvents', 'i')
             ]
@@ -39,18 +40,7 @@ class E3DstHeaderTree(E3Tree):
     def __init__(self):
         """ Constructor.
         """
-        E3Tree.__init__(self, 'Header', 'Header tree')
-        self.__BranchList = [branch.Name for branch in self.BRANCHES]
-        
-    def fill(self, info):
-        """ Fill the info in the tree.
-
-        The argument info, here, is a dictionary that we assume will have
-        all the keys corresponding to the branch names.
-        """
-        for branchName in self.__BranchList:
-            self.setValue(branchName, info[branchName])
-        self.Fill()
+        E3Tree.__init__(self, 'Header tree')
 
 
 
