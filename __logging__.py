@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # *********************************************************************
-# * Copyright (C) 2012--2013 Luca Baldini (luca.baldini@pi.infn.it)   *
+# * Copyright (C) 2014 Luca Baldini (luca.baldini@pi.infn.it)         *
 # *                                                                   *
 # * For the license terms see the file LICENCE, distributed           *
 # * along with this software.                                         *
@@ -25,7 +25,7 @@ import logging
 import sys
 import time
 
-logger = logging.getLogger('e3logger')
+logger = logging.getLogger('e3pipe')
 logger.setLevel(logging.DEBUG)
 
 # Terminal setting.
@@ -34,6 +34,7 @@ consoleHandler.setLevel(logging.DEBUG)
 consoleFormatter = logging.Formatter(">>> %(message)s")
 consoleHandler.setFormatter(consoleFormatter)
 logger.addHandler(consoleHandler)
+
 
 
 class E3FileFormatter(logging.Formatter):
