@@ -150,8 +150,6 @@ class E3AnalyzerSumFile(E3InputFile):
         """
         return self.__Data.get(key, default)
 
-
-
     def __str__(self):
         """ Text formatting.
         """
