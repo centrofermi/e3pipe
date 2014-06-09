@@ -48,6 +48,9 @@ class E3AnalyzerSumFile(E3InputFile):
         Note that we are actually skipping some of the data along the way.
         We might want to come back and create an exact in-memory replica of the
         sum file.
+
+        And we might probably devise a more clever way to do it than repeating
+        the same block of code many times.
         """
         self.__Data = {}
         logger.info('Parsing file content...')
@@ -89,7 +92,6 @@ class E3AnalyzerSumFile(E3InputFile):
         self.__add('HitMultTotal', hist)
         for i in range(4):
             line = self.next()
-
         # Cluster multiplicity chamber BOTTOM.
         line = self.next()
         hist = {}
