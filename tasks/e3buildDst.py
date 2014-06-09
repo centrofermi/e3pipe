@@ -32,6 +32,20 @@ from e3pipe.dst.E3DstEventTree import E3DstEventTree
 from e3pipe.dst.E3DstHeaderTree import E3DstHeaderTree
 
 
+def data2hist(data, key, xmin = -0.5, xmax = 50.5, xbins = 51):
+    """
+    """
+    name = 'h%s' % key
+    title = key.replace('Mult', ' multiplicity ')
+    logger.info('Filling histogram %s...' % name)
+    h = ROOT.TH1I(name, title, xbins, xmin, xmax)
+    h.SetXTitle(title)
+    content = data[key]
+    for value, weight in content.items():
+        h.Fill(value, weight)
+    return h
+
+
 def e3buildDst(baseFilePath):
     """ Parse all the output text files from the analyzer and build the
     actual DST in ROOT format.
@@ -48,7 +62,6 @@ def e3buildDst(baseFilePath):
     for row in outFile:
         eventTree.fillRow(row)
     eventTree.Write()
-
     logger.info('Initializing header tree...')
     headerTree = E3DstHeaderTree()
     logger.info('Filling header tree...')
@@ -56,7 +69,12 @@ def e3buildDst(baseFilePath):
     data['RunNumber'] = row['RunNumber']
     headerTree.fillRow(data)
     headerTree.Write()
-
+    logger.info('Creating histograms...')
+    for key in ['HitMultBot', 'HitMultMid', 'HitMultTop', 'HitMultTotal',
+                'ClusterMultBot', 'ClusterMultMid', 'ClusterMultTop',
+                'ClusterMultTotal']:
+        h = data2hist(data, key)
+        h.Write()
     logger.info('Closing files...')
     rootFile.Close()
     outFile.close()
