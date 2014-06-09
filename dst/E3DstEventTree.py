@@ -47,6 +47,15 @@ class E3DstEventTree(E3Tree):
         """ Constructor.
         """
         E3Tree.__init__(self, 'Events', 'Event tree')
+        self.__BranchList = [branch.Name for branch in self.BRANCHES]
+
+    def addRow(self, row):
+        """ Set the branch values from a row of the .out file produced by
+        the analyzer.
+        """
+        for branchName in self.__BranchList:
+            self.setValue(branchName, row[branchName])
+        self.Fill()
 
 
 
