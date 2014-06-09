@@ -22,9 +22,31 @@
 
 
 import ROOT
-import array
+import numpy
 
 from e3pipe.__logging__ import logger
+
+
+ROOT_TO_NUMPY_DICT = {'C': '',
+                      'B' : 'int8',
+                      'b' : 'uint8',
+                      'S' : 'int16',
+                      's' : 'uint16',
+                      'I' : 'int32',
+                      'i' : 'uint32',
+                      'F' : 'float32',
+                      'D' : 'float64',
+                      'L' : 'int64',
+                      'l' : 'uint64',
+                      'O' : 'bool_'
+                  }
+
+def root2numpy(rootType):
+    """ Convert a ROOT branch type into the corresponding numpy type.
+    """
+    return ROOT_TO_NUMPY_DICT[rootType]
+
+
 
 
 class E3Tree(ROOT.TTree):
@@ -34,20 +56,38 @@ class E3Tree(ROOT.TTree):
     Compared to the base class, this class provides some additional facility to
     create and manipulate branches and it's mainly used to write ROOT tree
     to file.
+
+    The list of supported types, straight from the ROOT documentation, is:
+    - C : a character string terminated by the 0 character
+    - B : an 8 bit signed integer (Char_t)
+    - b : an 8 bit unsigned integer (UChar_t)
+    - S : a 16 bit signed integer (Short_t)
+    - s : a 16 bit unsigned integer (UShort_t)
+    - I : a 32 bit signed integer (Int_t)
+    - i : a 32 bit unsigned integer (UInt_t)
+    - F : a 32 bit floating point (Float_t)
+    - D : a 64 bit floating point (Double_t)
+    - L : a 64 bit signed integer (Long64_t)
+    - l : a 64 bit unsigned integer (ULong64_t)
+    - O : [the letter 'o', not a zero] a boolean (Bool_t)
     """
+
+    BRANCHES = []
 
     def __init__(self, name, title = None):
         """ Constructor.
         """
         ROOT.TTree.__init__(self, name, title or name)
         self.__ArrayDict = {}
+        for branch in self.BRANCHES:
+            self.addBranch(branch.Name, branch.Type)
 
     def addBranch(self, branchName, branchType):
         """ Add a branch to the output tree.
         """
         branchTitle = '%s/%s' % (branchName, branchType)
         logger.info('Adding branch %s to %s...' % (branchTitle, self.GetName()))
-        a = array.array(branchType.lower(), [0])
+        a = numpy.array([0], dtype = root2numpy(branchType))
         self.__ArrayDict[branchName] = a
         self.Branch(branchName, a, branchTitle)
 
