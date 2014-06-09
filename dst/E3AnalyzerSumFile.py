@@ -42,6 +42,11 @@ class E3AnalyzerSumFile(E3InputFile):
         E3InputFile.__init__(self, filePath, '.sum')
         self.__parse()
 
+    def __add(self, key, value):
+        """ Add a piece of data to the underlying dictionary.
+        """
+        self.__Data[key] = value
+
     def __parse(self):
         """ Main parsing method.
 
@@ -55,7 +60,7 @@ class E3AnalyzerSumFile(E3InputFile):
         self.__Data = {}
         logger.info('Parsing file content...')
         self.__add('NumEvents', self.nextval(int))
-        self.__add('GpsEvents', self.nextval(int))
+        self.__add('NumGpsEvents', self.nextval(int))
         for i in range(5):
             line = self.next()
         # Hit multiplicity chamber BOTTOM.
@@ -126,6 +131,11 @@ class E3AnalyzerSumFile(E3InputFile):
         self.__add('ClusterMultTotal', hist)
         logger.info('Done.')
 
+    def data(self):
+        """ Return the __Data class member.
+        """
+        return self.__Data
+
     def next(self):
         """ This essentially calls the base class next method and strips the
         leading/trailing white spaces and return carriages, which are
@@ -139,11 +149,6 @@ class E3AnalyzerSumFile(E3InputFile):
         and casting the value to a specific data type.
         """
         return dataType(self.next().split()[-1])
-
-    def __add(self, key, value):
-        """ Add a piece of data to the underlying dictionary.
-        """
-        self.__Data[key] = value
 
     def get(self, key, default = None):
         """ Retrieve data from the underlying dictionary.

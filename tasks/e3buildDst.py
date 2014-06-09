@@ -42,17 +42,21 @@ def e3buildDst(baseFilePath):
     rootFilePath = '%s_dst.root' % baseFilePath
     logger.info('Opening output ROOT file %s...' % rootFilePath)
     rootFile = ROOT.TFile(rootFilePath, 'RECREATE')
-    logger.info('Initializing header tree...')
-    headerTree = E3DstHeaderTree()
-    logger.info('Filling header tree...')
-    #headerTree
-    
     logger.info('Initializing event tree...')
     eventTree = E3DstEventTree()
     logger.info('Filling event tree...')
     for row in outFile:
-        eventTree.addRow(row)
+        eventTree.fillRow(row)
     eventTree.Write()
+
+    logger.info('Initializing header tree...')
+    headerTree = E3DstHeaderTree()
+    logger.info('Filling header tree...')
+    data = sumFile.data()
+    data['RunNumber'] = row['RunNumber']
+    headerTree.fillRow(data)
+    headerTree.Write()
+
     logger.info('Closing files...')
     rootFile.Close()
     outFile.close()
