@@ -22,11 +22,14 @@
 
 
 import os
+import ROOT
 import e3pipe.__utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
 from e3pipe.dst.E3AnalyzerOutFile import E3AnalyzerOutFile
 from e3pipe.dst.E3AnalyzerSumFile import E3AnalyzerSumFile
+from e3pipe.dst.E3DstEventTree import E3DstEventTree
+from e3pipe.dst.E3DstHeaderTree import E3DstHeaderTree
 
 
 def e3buildDst(baseFilePath):
@@ -36,7 +39,24 @@ def e3buildDst(baseFilePath):
     logger.info('Collecting input files for the DST...')
     outFile = E3AnalyzerOutFile('%s.out' % baseFilePath)
     sumFile = E3AnalyzerSumFile('%s.sum' % baseFilePath)
-    logger.info('Ready to go!')
+    rootFilePath = '%s_dst.root' % baseFilePath
+    logger.info('Opening output ROOT file %s...' % rootFilePath)
+    rootFile = ROOT.TFile(rootFilePath, 'RECREATE')
+    logger.info('Initializing header tree...')
+    headerTree = E3DstHeaderTree()
+    logger.info('Filling header tree...')
+    #headerTree
+    
+    logger.info('Initializing event tree...')
+    eventTree = E3DstEventTree()
+    logger.info('Filling event tree...')
+    for row in outFile:
+        eventTree.addRow(row)
+    eventTree.Write()
+    logger.info('Closing files...')
+    rootFile.Close()
+    outFile.close()
+    sumFile.close()
 
 
 
