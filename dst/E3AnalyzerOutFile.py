@@ -41,7 +41,7 @@ class E3AnalyzerOutRow(E3TextTupleRow):
               E3TextTupleField('ZDir', float),
               E3TextTupleField('ChiSquare', float),
               E3TextTupleField('TimeOfFlight', float, 'ns'),
-              E3TextTupleField('TrackLengths', float, 'cm')
+              E3TextTupleField('TrackLength', float, 'cm')
           ]
 
 
