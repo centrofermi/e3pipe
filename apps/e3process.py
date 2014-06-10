@@ -21,8 +21,12 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import e3pipe.__utils__
+
 from e3pipe.__logging__ import startmsg
+from e3pipe.__package__ import E3CALIB_FILE_NAME
 from e3pipe.tasks.e3process import e3process
+
 
 
 if __name__ == '__main__':
@@ -30,5 +34,7 @@ if __name__ == '__main__':
     parser = OptionParser()
     (opts, args) = parser.parse_args()
     startmsg()
+    #if True:
+    #    e3pipe.__utils__.rm(E3CALIB_FILE_NAME)
     for arg in args:
         e3process(arg)
