@@ -25,7 +25,8 @@ import os
 import e3pipe.__utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
-from e3pipe.__package__ import FORTRAN_ANALYIZER_PATH
+from e3pipe.__package__ import E3FORTRAN_ANALYZER_PATH
+from e3pipe.misc.E3Chrono import E3Chrono
 
 
 def e3runAnalyzer(binFilePath):
@@ -35,6 +36,7 @@ def e3runAnalyzer(binFilePath):
     have the right eee_calib.txt file---it is really your responsibility
     to do it.
     """
+    chrono = E3Chrono()
     if not os.path.exists(binFilePath):
         logger.error('Could not find %s, giving up...' % binFilePath)
         return 1
@@ -42,10 +44,10 @@ def e3runAnalyzer(binFilePath):
         logger.error('%s not a .bin file, giving up...' % binFilePath)
         return 1
     logger.info('Processing run data file %s...' % binFilePath)
-    sc = e3pipe.__utils__.cmd('%s %s' % (FORTRAN_ANALYIZER_PATH, binFilePath))
+    sc = e3pipe.__utils__.cmd('%s %s' % (E3FORTRAN_ANALYZER_PATH, binFilePath))
     if sc:
         return None
-    logger.info('Run processed.')
+    logger.info('Run processed in %.3f s.' % chrono.stop())
     baseFilePath = binFilePath.replace('.bin', '')
     return baseFilePath
 
