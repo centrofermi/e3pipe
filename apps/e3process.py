@@ -21,19 +21,14 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-from e3pipe.tasks.e3runAnalyzer import e3runAnalyzer
-
-
-def e3recon(binFilePath, opts):
-    """
-    """
-    baseFilePath = e3runAnalyzer(binFilePath)
-
+from e3pipe.__logging__ import startmsg
+from e3pipe.tasks.e3process import e3process
 
 
 if __name__ == '__main__':
     from optparse import OptionParser
     parser = OptionParser()
     (opts, args) = parser.parse_args()
+    startmsg()
     for arg in args:
-        e3recon(arg, opts)
+        e3process(arg)

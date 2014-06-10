@@ -53,15 +53,18 @@ def e3buildDst(baseFilePath):
     logger.info('Collecting input files for the DST...')
     outFile = E3AnalyzerOutFile('%s.out' % baseFilePath)
     sumFile = E3AnalyzerSumFile('%s.sum' % baseFilePath)
-    rootFilePath = '%s_dst.root' % baseFilePath
-    logger.info('Opening output ROOT file %s...' % rootFilePath)
-    rootFile = ROOT.TFile(rootFilePath, 'RECREATE')
+    dstFilePath = '%s_dst.root' % baseFilePath
+    logger.info('Opening output ROOT file %s...' % dstFilePath)
+    rootFile = ROOT.TFile(dstFilePath, 'RECREATE')
     logger.info('Initializing event tree...')
     eventTree = E3DstEventTree()
     logger.info('Filling event tree...')
     for row in outFile:
         eventTree.fillRow(row)
     eventTree.Write()
+    logger.info('Done, %d event(s) filled in.' % eventTree.GetEntries())
+    if eventTree.GetEntries() == 0:
+        abort('No events found (maybe an issue with eee_calib.txt?)')
     logger.info('Initializing header tree...')
     headerTree = E3DstHeaderTree()
     logger.info('Filling header tree...')
@@ -79,6 +82,7 @@ def e3buildDst(baseFilePath):
     rootFile.Close()
     outFile.close()
     sumFile.close()
+    return dstFilePath
 
 
 
