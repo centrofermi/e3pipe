@@ -23,7 +23,8 @@
 
 import os
 
-
+""" Basic folder structure of the package.
+"""
 E3PIPE_BASE = os.path.abspath(os.path.dirname(__file__))
 E3PIPE_APPS = os.path.join(E3PIPE_BASE, 'apps')
 E3PIPE_DST = os.path.join(E3PIPE_BASE, 'dst')
@@ -32,8 +33,15 @@ E3PIPE_ROOT = os.path.join(E3PIPE_BASE, 'ROOT')
 E3PIPE_TASKS = os.path.join(E3PIPE_BASE, 'tasks')
 E3PIPE_TEST = os.path.join(E3PIPE_BASE, 'test')
 
-FORTRAN_ANALYIZER_PATH = os.path.join(E3PIPE_RECON, 'fortran', 'EEE_V15')
+""" Paths to the analysis program executables. 
+"""
+E3FORTRAN_ANALYZER_PATH = os.path.join(E3PIPE_RECON, 'fortran', 'EEE_V15')
+E3CPP_ANALYZER_PATH = os.path.join(E3PIPE_RECON, 'cpp', 'EEE_V15')
 
+""" Name of the calibration file that is created on the fly by the analysis
+program.
+"""
+E3CALIB_FILE_NAME = 'eee_calib.txt'
 
 
 if __name__ == '__main__':
