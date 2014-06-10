@@ -28,25 +28,25 @@ from e3pipe.__logging__ import logger, startmsg, abort
 from e3pipe.__package__ import FORTRAN_ANALYIZER_PATH
 
 
-def e3runAnalyzer(inputFilePath):
+def e3runAnalyzer(binFilePath):
     """ Run the official EEE analyzer.
 
     Mind we are not doing anything, at this level, to make sure that you do
     have the right eee_calib.txt file---it is really your responsibility
     to do it.
     """
-    if not os.path.exists(inputFilePath):
-        logger.error('Could not find %s, giving up...' % inputFilePath)
+    if not os.path.exists(binFilePath):
+        logger.error('Could not find %s, giving up...' % binFilePath)
         return 1
-    if not inputFilePath.endswith('.bin'):
-        logger.error('%s not a .bin file, giving up...' % inputFilePath)
+    if not binFilePath.endswith('.bin'):
+        logger.error('%s not a .bin file, giving up...' % binFilePath)
         return 1
-    logger.info('Processing run data file %s...' % inputFilePath)
-    sc = e3pipe.__utils__.cmd('%s %s' % (FORTRAN_ANALYIZER_PATH, inputFilePath))
+    logger.info('Processing run data file %s...' % binFilePath)
+    sc = e3pipe.__utils__.cmd('%s %s' % (FORTRAN_ANALYIZER_PATH, binFilePath))
     if sc:
         return None
     logger.info('Run processed.')
-    baseFilePath = inputFilePath.replace('.bin', '')
+    baseFilePath = binFilePath.replace('.bin', '')
     return baseFilePath
 
 

@@ -94,16 +94,16 @@ def abort(message = ''):
 def startmsg():
     """ Print the start message.
     """
-    from e3py.__version__ import TAG, BUILD_DATE
-    print('\n    Welcome to e3py version %s (built on %s).\n' %\
+    from e3pipe.__version__ import TAG, BUILD_DATE
+    print('\n    Welcome to e3pipe version %s (built on %s).\n' %\
               (TAG, BUILD_DATE))
     print('    Copyright (C) 2014 Luca Baldini '
           '(luca.baldini@pi.infn.it)\n\n'
-          '    eee comes with ABSOLUTELY NO WARRANTY.\n'
+          '    e3pipe comes with ABSOLUTELY NO WARRANTY.\n'
           '    This is free software, and you are welcome to redistribute '
           'it under certain\n'
           '    conditions. See the LICENSE file for details.\n\n'
-          '    Visit https://bitbucket.org/lbaldini/e3py/wiki/Home for '
+          '    Visit https://bitbucket.org/lbaldini/e3pipe for '
           'more information.\n')
 
 
