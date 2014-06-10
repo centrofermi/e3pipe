@@ -30,6 +30,7 @@ from e3pipe.dst.E3AnalyzerOutFile import E3AnalyzerOutFile
 from e3pipe.dst.E3AnalyzerSumFile import E3AnalyzerSumFile
 from e3pipe.dst.E3DstEventTree import E3DstEventTree
 from e3pipe.dst.E3DstHeaderTree import E3DstHeaderTree
+from e3pipe.misc.E3Chrono import E3Chrono
 
 
 def data2hist(data, key, xmin = -0.5, xmax = 50.5, xbins = 51):
@@ -50,6 +51,7 @@ def e3buildDst(baseFilePath):
     """ Parse all the output text files from the analyzer and build the
     actual DST in ROOT format.
     """
+    chrono = E3Chrono()
     logger.info('Collecting input files for the DST...')
     outFile = E3AnalyzerOutFile('%s.out' % baseFilePath)
     sumFile = E3AnalyzerSumFile('%s.sum' % baseFilePath)
@@ -82,6 +84,7 @@ def e3buildDst(baseFilePath):
     rootFile.Close()
     outFile.close()
     sumFile.close()
+    logger.info('DST created in %.3f s.' % chrono.stop())
     return dstFilePath
 
 
