@@ -6,5 +6,5 @@ syntax: glob
 */*.pyc
 */*.pyo
 */*~
-recon/*/*.o
-recon/fortran/EEE_V15
+recon/linux/fortran/*.o
+recon/linux/fortran/EEE_V15
