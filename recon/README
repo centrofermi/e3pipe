@@ -8,7 +8,6 @@ More tweaks following.
 
 
 *** Under linux/fortran ***
-
 * Added a Makefile.
 * Tweaked the .f source to match the function definitions in the two .c files
   (iopenfile -> iopenfile_ and similar). With the original version the linker
@@ -23,4 +22,4 @@ More tweaks following.
 
 
 *** Under linux/cpp ***
-
+* Added a Makefile.

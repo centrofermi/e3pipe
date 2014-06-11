@@ -8,3 +8,4 @@ syntax: glob
 */*~
 recon/linux/fortran/*.o
 recon/linux/fortran/EEE_V15
+recon/linux/cpp/EEE_Analyzer
