@@ -128,7 +128,7 @@ c	   write(*,*)n_ev(1:len2)
 c
 c open input file
 c	   
-	   i=iopenfile(filename(1:len))
+	   i=iopenfile_(filename(1:len))
 	  
 c
 c Define input data file
@@ -289,7 +289,7 @@ c
 	   iwadflag=0
        do kk=1,10
 	   if(iwadflag.eq.1.and.igeoflag.eq.1)goto 2234
-	    j=iread_file(nlen,ntype,iarray,ierror)
+	    j=iread_file_(nlen,ntype,iarray,ierror)
 		if(ntype.eq.6) then
 		iwadflag=1
 		write(*,*)' Have found WAD block'
@@ -421,11 +421,11 @@ c second try and get tdc time calibration
 c
        igps_event=0
 1234   continue
-       j=iread_file(nlen,ntype,iarray,ierror)
+       j=iread_file_(nlen,ntype,iarray,ierror)
 	   if (ntype.eq.0) then
 	       if (igps_event.eq.1) then
        write(*,*)' Have found initial gps event' 		   
-		     j=irewind()
+		     j=irewind_()
 		     goto 1235
 	       endif
 		 igps_event = 1
@@ -497,7 +497,7 @@ c
 c
    3   continue
 c       read(1,*,END=3000) nev,ncod,data1,data2
-       j=iread_file(nlen,ntype,iarray,ierror)
+       j=iread_file_(nlen,ntype,iarray,ierror)
 c	   write(*,*)ierror
 	   if(ierror.ne.0)go to 3000
 
