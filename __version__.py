@@ -1,2 +1,1 @@
-TAG = '0.0.0'
-BUILD_DATE = 'N/A'
+TAG = '0.0.1'

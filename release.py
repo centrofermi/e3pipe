@@ -21,6 +21,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import time
 import e3pipe.__utils__ as __utils__
 
 from e3pipe.__logging__ import logger
@@ -28,6 +29,7 @@ from e3pipe.__package__ import E3PIPE_VERSION_FILE_PATH, versionInfo,\
     E3PIPE_RELEASE_NOTES_PATH
 
 
+BUILD_DATE = time.strftime('%a, %d %b %Y %H:%M:%S %z')
 TAG_MODES = ['major', 'minor', 'patch']
 
 
