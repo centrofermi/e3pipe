@@ -1,2 +1,2 @@
-TAG = '0.0.0 alpha'
+TAG = '0.0.0'
 BUILD_DATE = 'N/A'
