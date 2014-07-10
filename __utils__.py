@@ -26,7 +26,7 @@ import os
 import sys
 import subprocess
 
-from e3py.__logging__ import logger
+from e3pipe.__logging__ import logger
 
 
 
