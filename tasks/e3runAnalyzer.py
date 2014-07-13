@@ -25,11 +25,11 @@ import os
 import e3pipe.__utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
-from e3pipe.__package__ import E3FORTRAN_ANALYZER_PATH
+from e3pipe.__package__ import E3FORTRAN_ANALYZER_PATH, E3CPP_ANALYZER_PATH
 from e3pipe.misc.E3Chrono import E3Chrono
 
 
-def e3runAnalyzer(binFilePath):
+def e3runAnalyzer(binFilePath, useFortran = False):
     """ Run the official EEE analyzer.
 
     Mind we are not doing anything, at this level, to make sure that you do
@@ -44,7 +44,11 @@ def e3runAnalyzer(binFilePath):
         logger.error('%s not a .bin file, giving up...' % binFilePath)
         return 1
     logger.info('Processing run data file %s...' % binFilePath)
-    sc = e3pipe.__utils__.cmd('%s %s' % (E3FORTRAN_ANALYZER_PATH, binFilePath))
+    if useFortran:
+        exePath = E3FORTRAN_ANALYZER_PATH
+    else:
+        exePath = E3CPP_ANALYZER_PATH
+    sc = e3pipe.__utils__.cmd('%s %s' % (exePath, binFilePath))
     if sc:
         return None
     logger.info('Run processed in %.3f s.' % chrono.stop())
