@@ -36,6 +36,9 @@ parser.add_option('-F', '--fortran', action = 'store_true',
 parser.add_option('-D', '--delete-ascii', action = 'store_true',
                   default = False, dest = 'delete_ascii',
                   help = 'delete the ASCII files created by the analyzer')
+parser.add_option('-s', '--output_suffix', type = str, default = None,
+                  dest = 'output_suffix',
+                  help = 'a text label to be attached to the output file names')
 (opts, args) = parser.parse_args()
 
 # Print the start message.
@@ -62,4 +65,4 @@ if opts.recreate_calib:
 
 # And now we are ready to go.
 for arg in args:
-    e3recon(arg, opts.delete_ascii, opts.use_fortran)
+    e3recon(arg, opts.delete_ascii, opts.use_fortran, opts.output_suffix)

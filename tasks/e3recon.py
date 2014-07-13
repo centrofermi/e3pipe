@@ -28,11 +28,12 @@ from e3pipe.tasks.e3buildDst import e3buildDst
 from e3pipe.__package__ import E3ANALYZER_OUTPUTS
 
 
-def e3recon(binFilePath, deleteAscii = False, useFortran = False):
+def e3recon(binFilePath, deleteAscii = False, useFortran = False,
+            outputSuffix = None):
     """ Run the analyzer and build the DST (i.e., run the full
     reconstruction).
     """
-    baseFilePath = e3runAnalyzer(binFilePath, useFortran)
+    baseFilePath = e3runAnalyzer(binFilePath, useFortran, outputSuffix)
     dstFilePath = e3buildDst(baseFilePath)
     if deleteAscii:
         for extension in E3ANALYZER_OUTPUTS:
