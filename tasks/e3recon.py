@@ -25,6 +25,7 @@ import e3pipe.__utils__
 
 from e3pipe.tasks.e3runAnalyzer import e3runAnalyzer
 from e3pipe.tasks.e3buildDst import e3buildDst
+from e3pipe.__package__ import E3ANALYZER_OUTPUTS
 
 
 def e3recon(binFilePath, deleteAscii = False, useFortran = False):
@@ -34,6 +35,6 @@ def e3recon(binFilePath, deleteAscii = False, useFortran = False):
     baseFilePath = e3runAnalyzer(binFilePath, useFortran)
     dstFilePath = e3buildDst(baseFilePath)
     if deleteAscii:
-        for extension in ['2tt', 'out', 'sum', 'tim']:
-            e3pipe.__utils__.rm('%s.%s' % (baseFilePath, extension))
+        for extension in E3ANALYZER_OUTPUTS:
+            e3pipe.__utils__.rm('%s%s' % (baseFilePath, extension))
     return dstFilePath
