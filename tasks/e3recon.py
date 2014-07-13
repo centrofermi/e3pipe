@@ -21,12 +21,19 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import e3pipe.__utils__
+
 from e3pipe.tasks.e3runAnalyzer import e3runAnalyzer
 from e3pipe.tasks.e3buildDst import e3buildDst
 
 
-def e3process(binFilePath):
+def e3recon(binFilePath, deleteAscii = False, useFortran = False):
+    """ Run the analyzer and build the DST (i.e., run the full
+    reconstruction).
     """
-    """
-    baseFilePath = e3runAnalyzer(binFilePath)
+    baseFilePath = e3runAnalyzer(binFilePath, useFortran)
     dstFilePath = e3buildDst(baseFilePath)
+    if deleteAscii:
+        for extension in ['2tt', 'out', 'sum', 'tim']:
+            e3pipe.__utils__.rm('%s.%s' % (baseFilePath, extension))
+    return dstFilePath

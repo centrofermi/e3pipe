@@ -105,6 +105,9 @@ def rm(filePath):
     Return 0 upon succesfull operation, 1 otherwise.
     """
     logger.info('About to remove file %s...' % filePath)
+    if not os.path.exists(filePath):
+        logger.info('File is not there, giving up...')
+        return 0
     try:
         os.remove(filePath)
         logger.info('File succesfully removed.')
