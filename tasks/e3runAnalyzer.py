@@ -25,11 +25,15 @@ import os
 import e3pipe.__utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
-from e3pipe.__package__ import E3FORTRAN_ANALYZER_PATH, E3CPP_ANALYZER_PATH
+from e3pipe.__package__ import E3FORTRAN_ANALYZER_PATH, E3CPP_ANALYZER_PATH,\
+    E3ANALYZER_OUTPUTS
 from e3pipe.misc.E3Chrono import E3Chrono
 
 
-def e3runAnalyzer(binFilePath, useFortran = False):
+E3FORTRAN_SUFFIX = 'FORTRAN'
+
+
+def e3runAnalyzer(binFilePath, useFortran = False, outputSuffix = None):
     """ Run the official EEE analyzer.
 
     Mind we are not doing anything, at this level, to make sure that you do
@@ -46,6 +50,10 @@ def e3runAnalyzer(binFilePath, useFortran = False):
     logger.info('Processing run data file %s...' % binFilePath)
     if useFortran:
         exePath = E3FORTRAN_ANALYZER_PATH
+        if outputSuffix is None:
+            outputSuffix = E3FORTRAN_SUFFIX 
+        else:
+            outputSuffix = '%s_%s' % (outputSuffix, E3FORTRAN_SUFFIX)
     else:
         exePath = E3CPP_ANALYZER_PATH
     sc = e3pipe.__utils__.cmd('%s %s' % (exePath, binFilePath))
@@ -53,6 +61,12 @@ def e3runAnalyzer(binFilePath, useFortran = False):
         return None
     logger.info('Run processed in %.3f s.' % chrono.stop())
     baseFilePath = binFilePath.replace('.bin', '')
+    if outputSuffix is not None:
+        for extension in E3ANALYZER_OUTPUTS:
+            src = '%s%s' % (baseFilePath, extension)
+            dest = '%s_%s%s' % (baseFilePath, outputSuffix, extension)
+            e3pipe.__utils__.mv(src, dest)
+    baseFilePath = '%s_%s' % (baseFilePath, outputSuffix)
     return baseFilePath
 
 
