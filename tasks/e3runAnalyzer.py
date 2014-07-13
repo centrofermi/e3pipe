@@ -66,7 +66,7 @@ def e3runAnalyzer(binFilePath, useFortran = False, outputSuffix = None):
             src = '%s%s' % (baseFilePath, extension)
             dest = '%s_%s%s' % (baseFilePath, outputSuffix, extension)
             e3pipe.__utils__.mv(src, dest)
-    baseFilePath = '%s_%s' % (baseFilePath, outputSuffix)
+        baseFilePath = '%s_%s' % (baseFilePath, outputSuffix)
     return baseFilePath
 
 
