@@ -74,7 +74,7 @@ class E3AnalyzerSumFile(E3InputFile):
         # Hit multiplicity chamber BOTTOM.
         line = self.next()
         hist = {}
-        while not 'UP' in line:
+        while not ('UP' in line or 'TOP' in line):
             mul, evts = [int(item.strip()) for item in line.split()]
             hist[mul] = evts
             line = self.next()
@@ -108,7 +108,7 @@ class E3AnalyzerSumFile(E3InputFile):
         # Cluster multiplicity chamber BOTTOM.
         line = self.next()
         hist = {}
-        while not 'UP' in line:
+        while not ('UP' in line or 'TOP' in line):
             mul, evts = [int(item.strip()) for item in line.split()]
             hist[mul] = evts
             line = self.next()
