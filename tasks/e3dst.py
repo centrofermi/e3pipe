@@ -47,7 +47,7 @@ def data2hist(data, key, xmin = -0.5, xmax = 50.5, xbins = 51):
     return h
 
 
-def e3buildDst(baseFilePath):
+def e3dst(baseFilePath):
     """ Parse all the output text files from the analyzer and build the
     actual DST in ROOT format.
     """
@@ -94,4 +94,4 @@ if __name__ == '__main__':
     parser = OptionParser()
     (opts, args) = parser.parse_args()
     for arg in args:
-        e3buildDst(arg)
+        e3dst(arg)
