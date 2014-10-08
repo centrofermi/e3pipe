@@ -21,8 +21,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-from e3pipe.ROOT.E3Tree import E3Tree
-from e3pipe.ROOT.E3BranchDescriptor import E3BranchDescriptor
+from e3pipe.root.E3Tree import E3Tree
+from e3pipe.root.E3BranchDescriptor import E3BranchDescriptor
 
 
 class E3DstEventTree(E3Tree):
