@@ -29,10 +29,11 @@ class E3TextTupleField:
     This encapulates the name, type and units of the field.
     """
 
-    def __init__(self, fieldName, fieldType, units = None):
+    def __init__(self, fieldName, fieldType, default = None, units = None):
         """ Constructor.
         """
         self.Name = fieldName
         self.Type = fieldType
+        self.Default = default
         self.Units = units
 

@@ -33,15 +33,15 @@ class E3AnalyzerOutRow(E3TextTupleRow):
 
     FIELDS = [E3TextTupleField('RunNumber', int),
               E3TextTupleField('EventNumber', int),
-              E3TextTupleField('Seconds', int, 's'),
-              E3TextTupleField('Nanoseconds', int, 'ns'),
-              E3TextTupleField('Microseconds', int, 'us'),
-              E3TextTupleField('XDir', float),
-              E3TextTupleField('YDir', float),
-              E3TextTupleField('ZDir', float),
-              E3TextTupleField('ChiSquare', float),
-              E3TextTupleField('TimeOfFlight', float, 'ns'),
-              E3TextTupleField('TrackLength', float, 'cm')
+              E3TextTupleField('Seconds', int, -1, 's'),
+              E3TextTupleField('Nanoseconds', int, -1, 'ns'),
+              E3TextTupleField('Microseconds', int, -1, 'us'),
+              E3TextTupleField('XDir', float, -1.),
+              E3TextTupleField('YDir', float, -1.),
+              E3TextTupleField('ZDir', float, -1.),
+              E3TextTupleField('ChiSquare', float, -1.),
+              E3TextTupleField('TimeOfFlight', float, -1., 'ns'),
+              E3TextTupleField('TrackLength', float, -1., 'cm')
           ]
 
 
@@ -55,6 +55,7 @@ class E3AnalyzerOutFile(E3TextTupleBase):
     """
 
     ROW_DESCRIPTOR = E3AnalyzerOutRow
+    NO_TRACK_MARKER = 'no hits'
 
     def __init__(self, filePath):
         """ Constructor.
@@ -64,6 +65,20 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         """
         E3TextTupleBase.__init__(self, filePath, '.out')
         file.next(self)
+
+    def next(self):
+        """ Overloaded next() method.
+        
+        Here is essentially a horrible hack to tell which events have no
+        reconstructed track and therefore should have all the fields
+        initialized to the default values.
+        """
+        data = file.next(self)
+        if self.NO_TRACK_MARKER in data:
+            data = data.replace(self.NO_TRACK_MARKER, '').strip('\n')
+            for field in self.ROW_DESCRIPTOR.FIELDS[2:]:
+                data += '  %s' % field.Default
+        return self.ROW_DESCRIPTOR(data)
 
 
 
