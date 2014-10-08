@@ -54,12 +54,6 @@ def versionInfo():
 E3PIPE_RELEASE_NOTES_PATH = os.path.join(E3PIPE_DOC, 'release.notes')
 
 
-""" Paths to the analysis program executables. 
-"""
-E3FORTRAN_ANALYZER_PATH = os.path.join(E3PIPE_RECON, 'fortran', 'EEE_V15')
-E3CPP_ANALYZER_PATH = os.path.join(E3PIPE_RECON, 'cpp', 'EEE_Analyzer')
-
-
 """ Name of the calibration file that is created on the fly by the analysis
 program.
 """
