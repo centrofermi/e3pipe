@@ -25,15 +25,17 @@ import os
 import e3pipe.__utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
-from e3pipe.__package__ import E3FORTRAN_ANALYZER_PATH, E3CPP_ANALYZER_PATH,\
-    E3ANALYZER_OUTPUTS
+from e3pipe.__package__ import E3ANALYZER_OUTPUTS
 from e3pipe.misc.E3Chrono import E3Chrono
 
 
-E3FORTRAN_SUFFIX = 'FORTRAN'
+""" TODO: need to think about how to make this configurable.
+"""
+E3_ANALYZER_PATH = '/opt/eee/bin/EEE_Analyzer'
+E3_ANALYZER_TMP_FOLDER = '/opt/eee/temp'
 
 
-def e3runAnalyzer(binFilePath, useFortran = False, outputSuffix = None):
+def e3runAnalyzer(binFilePath, outputSuffix = None):
     """ Run the official EEE analyzer.
 
     Mind we are not doing anything, at this level, to make sure that you do
@@ -48,19 +50,14 @@ def e3runAnalyzer(binFilePath, useFortran = False, outputSuffix = None):
         logger.error('%s not a .bin file, giving up...' % binFilePath)
         return 1
     logger.info('Processing run data file %s...' % binFilePath)
-    if useFortran:
-        exePath = E3FORTRAN_ANALYZER_PATH
-        if outputSuffix is None:
-            outputSuffix = E3FORTRAN_SUFFIX 
-        else:
-            outputSuffix = '%s_%s' % (outputSuffix, E3FORTRAN_SUFFIX)
-    else:
-        exePath = E3CPP_ANALYZER_PATH
-    sc = e3pipe.__utils__.cmd('%s %s' % (exePath, binFilePath))
+    binFileName = os.path.basename(binFilePath)
+    tmpFilePath = os.path.join(E3_ANALYZER_TMP_FOLDER, binFileName)
+    e3pipe.__utils__.cp(binFilePath, tmpFilePath)
+    sc = e3pipe.__utils__.cmd('%s %s' % (E3_ANALYZER_PATH, tmpFilePath))
     if sc:
         return None
     logger.info('Run processed in %.3f s.' % chrono.stop())
-    baseFilePath = binFilePath.replace('.bin', '')
+    baseFilePath = tmpFilePath.replace('.bin', '')
     if outputSuffix is not None:
         for extension in E3ANALYZER_OUTPUTS:
             src = '%s%s' % (baseFilePath, extension)
