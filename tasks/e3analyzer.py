@@ -35,7 +35,7 @@ E3_ANALYZER_PATH = '/opt/eee/bin/EEE_Analyzer'
 E3_ANALYZER_TMP_FOLDER = '/opt/eee/temp'
 
 
-def e3runAnalyzer(binFilePath, outputSuffix = None):
+def e3analyzer(binFilePath, outputSuffix = None):
     """ Run the official EEE analyzer.
 
     Mind we are not doing anything, at this level, to make sure that you do
@@ -73,4 +73,4 @@ if __name__ == '__main__':
     parser = OptionParser()
     (opts, args) = parser.parse_args()
     for arg in args:
-        e3runAnalyzer(arg)
+        e3analyzer(arg)
