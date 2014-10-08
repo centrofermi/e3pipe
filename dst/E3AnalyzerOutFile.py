@@ -55,7 +55,7 @@ class E3AnalyzerOutFile(E3TextTupleBase):
     """
 
     ROW_DESCRIPTOR = E3AnalyzerOutRow
-    NO_TRACK_MARKER = 'no hits'
+    NO_TRACK_MARKER = 'no hit'
 
     def __init__(self, filePath):
         """ Constructor.
@@ -75,7 +75,7 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         """
         data = file.next(self)
         if self.NO_TRACK_MARKER in data:
-            data = data.replace(self.NO_TRACK_MARKER, '').strip('\n')
+            data = data.split(self.NO_TRACK_MARKER)[0]
             for field in self.ROW_DESCRIPTOR.FIELDS[2:]:
                 data += '  %s' % field.Default
         return self.ROW_DESCRIPTOR(data)
