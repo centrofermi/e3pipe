@@ -29,7 +29,7 @@ E3PIPE_BASE = os.path.abspath(os.path.dirname(__file__))
 E3PIPE_APPS = os.path.join(E3PIPE_BASE, 'apps')
 E3PIPE_DOC = os.path.join(E3PIPE_BASE, 'doc')
 E3PIPE_DST = os.path.join(E3PIPE_BASE, 'dst')
-E3PIPE_ROOT = os.path.join(E3PIPE_BASE, 'ROOT')
+E3PIPE_ROOT = os.path.join(E3PIPE_BASE, 'root')
 E3PIPE_TASKS = os.path.join(E3PIPE_BASE, 'tasks')
 E3PIPE_TEST = os.path.join(E3PIPE_BASE, 'test')
 
