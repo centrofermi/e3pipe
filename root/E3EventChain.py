@@ -34,23 +34,26 @@ class E3EventChain(E3Chain):
     """
 
     TREE_NAME = 'Events'
+    ALIAS_DICT = {'Timestamp': 'Seconds + 1.0e-9*Nanoseconds'}
 
     def __init__(self, filePath):
         """ Constructor.
         """
         E3Chain.__init__(self, filePath, self.TREE_NAME)
-        self.GetEntry(0)
-        self.StartTime = self.Seconds + 1e-6*self.Nanoseconds
-        self.GetEntry(self.GetEntries() - 1)
-        self.StopTime = self.Seconds + 1e-6*self.Nanoseconds
+        self.StartTime = self.value('Timestamp', 0)
+        self.StopTime = self.value('Timestamp', self.GetEntries() - 1)
         self.Duration = self.StopTime - self.StartTime
         logger.info('Time range: %.3f--%.3f (%.3f) s' %\
                     (self.StartTime, self.StopTime, self.Duration))
 
-    def trendingHist(self, expression, timeDelta = 60, cut = '', **kwargs):
+    def trendingHist(self, cut = '', timeDelta = 60, **kwargs):
         """ Create a trending histogram.
         """
-        pass
+        xmin = self.StartTime - 1e-3
+        xmax = self.StopTime + 1e-3
+        xbins = int(self.Duration/float(timeDelta) + 0.5)
+        h = self.hist1d('Timestamp', cut, xmin, xmax, xbins, **kwargs)
+        return h
 
 
 
@@ -58,7 +61,8 @@ def test(filePath):
     """ Test program.
     """
     t = E3EventChain(filePath)
-    print t
+    h = t.trendingHist('Seconds > 0')
+    return h
 
 
 
@@ -67,4 +71,5 @@ if __name__ == '__main__':
     parser = OptionParser()
     (opts, args) = parser.parse_args()
     for filePath in args:
-        test(filePath)
+        h = test(filePath)
+        h.Draw()

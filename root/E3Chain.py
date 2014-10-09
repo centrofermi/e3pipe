@@ -26,6 +26,7 @@ import ROOT
 
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3InputRootFile import E3InputRootFile
+from e3pipe.root.E3H1D import E3H1D
 
 
 class E3Chain(ROOT.TChain):
@@ -34,6 +35,7 @@ class E3Chain(ROOT.TChain):
     """
 
     EXTENSION = E3InputRootFile.EXTENSION
+    ALIAS_DICT = {}
 
     def __init__(self, filePath, treeName):
         """ Constructor.
@@ -47,11 +49,39 @@ class E3Chain(ROOT.TChain):
         ROOT.TChain.__init__(self, treeName)
         self.Add(filePath)
         logger.info('Done, %d entries found.' % self.GetEntries())
+        self.__TreeFormulaDict = {}
+        for key, value in self.ALIAS_DICT.items():
+            logger.info('Setting alias "%s" -> "%s"...' % (key, value))
+            self.SetAlias(key, value)
+            self.__TreeFormulaDict[key] = ROOT.TTreeFormula(key, value, self)
 
-    def hist1d(self, expression, cut = '', **kwargs):
+    def value(self, key, entry = None):
+        """
+        """
+        if entry is not None:
+            self.GetEntry(entry)
+        return self.__TreeFormulaDict[key].EvalInstance()
+
+    def hist1d(self, expression, cut = '', xmin = None, xmax = None,
+               xbins = 100, xpad = 0, **kwargs):
         """ Create a 1 dimensional histogram.
         """
-        pass
+        logger.info('Creating 1-d histogram for %s...' % expression)
+        kwargs['XTitle'] = kwargs.get('XTitle', expression)
+        kwargs['YTitle'] = kwargs.get('YTitle', 'Entries/bin')
+        hname = 'hist_%s' % expression
+        if xmin is None or xmax is None:
+            branchMin = self.GetMinimum(expression)
+            branchMax = self.GetMaximum(expression) 
+            branchRange = branchMax - branchMin
+        if xmin is None:
+            xmin = branchMin - xpad*branchRange
+        if xmax is None:
+            xmax = branchMax + xpad*branchRange
+        htitle = expression
+        hist = E3H1D(hname, htitle, xbins, xmin, xmax, **kwargs)
+        self.Project(hname, expression, cut)
+        return hist
 
     def hist2d(self, expression, cut = '', **kwargs):
         """ Create a 1 dimensional histogram.
