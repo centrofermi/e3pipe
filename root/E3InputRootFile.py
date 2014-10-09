@@ -21,12 +21,10 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-
 import os
 import ROOT
 
 from e3pipe.__logging__ import logger, abort
-
 
 
 class E3InputRootFile(ROOT.TFile):
