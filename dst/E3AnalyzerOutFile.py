@@ -33,9 +33,9 @@ class E3AnalyzerOutRow(E3TextTupleRow):
 
     FIELDS = [E3TextTupleField('RunNumber', int),
               E3TextTupleField('EventNumber', int),
-              E3TextTupleField('Seconds', int, -1, 's'),
-              E3TextTupleField('Nanoseconds', int, -1, 'ns'),
-              E3TextTupleField('Microseconds', int, -1, 'us'),
+              E3TextTupleField('Seconds', int, 0, 's'),
+              E3TextTupleField('Nanoseconds', int, 0, 'ns'),
+              E3TextTupleField('Microseconds', int, 0, 'us'),
               E3TextTupleField('XDir', float, -1.),
               E3TextTupleField('YDir', float, -1.),
               E3TextTupleField('ZDir', float, -1.),
