@@ -42,7 +42,7 @@ class E3InputFile(file):
         if not os.path.exists(filePath):
             abort('Could not find input file %s' % filePath)
         if extension is not None and not filePath.endswith(extension):
-            abort('Wrong file extension for input file %s (%s expectet)' %\
+            abort('Wrong file extension for input file %s (%s expected)' %\
                   (filePath, extension))
         logger.info('Opening input file %s...' % filePath)
         file.__init__(self, filePath)
