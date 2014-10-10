@@ -57,7 +57,7 @@ class E3InputRootFile(ROOT.TFile):
             logger.error('Could not find key "%s" in the ROOT file.' % key)
             return None
 
-    def filter(self, *args):
+    def filter(self, *args, **kwargs):
         """ Filter the objects in the file based on their class.
 
         This involves looping over the list of keys in the file,
@@ -70,9 +70,34 @@ class E3InputRootFile(ROOT.TFile):
             rootObject = self.Get(key.GetName())
             for arg in args:
                 if isinstance(rootObject, arg):
-                    outputList.append(rootObject)
+                    if not kwargs.get('strict') or rootObject.__class__ == arg:
+                        outputList.append(rootObject)
                     break
-        return outputList    
+        return outputList
+
+    def __str__(self):
+        """ Terminal formatting.
+        """
+
+        def _format(obj):
+            """ Nested function for basic formatting.
+            """
+            return '* [ROOT.%s] %s (%s)\n' %\
+                (obj.__class__.__name__, obj.GetName(), obj.GetTitle())
+
+        text = ''
+        text += '### Annotation(s)\n'
+        for label in self.filter(ROOT.TNamed, strict = True):
+            text += _format(label)
+        text += '### Tree(s)\n'
+        for tree in self.filter(ROOT.TTree):
+            text += _format(tree)
+            for branch in tree.GetListOfBranches():
+                text += '** %s\n' % branch.GetTitle()
+        text += '### Histogram(s)\n'
+        for hist in self.filter(ROOT.TH1):
+            text += _format(hist)
+        return text
 
 
 
