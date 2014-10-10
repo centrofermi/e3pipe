@@ -86,17 +86,17 @@ def tagPackage(mode, dryRun = False):
     (*) figure out the target tag and update the release.notes;
     (*) commit the modifications, tag and push.
     """
-    __utils__.cmd('hg pull', verbose = True, dryRun = dryRun)
-    __utils__.cmd('hg update', verbose = True, dryRun = dryRun)
+    __utils__.cmd('git pull', verbose = True, dryRun = dryRun)
     __utils__.cmd('hg status', verbose = True, dryRun = dryRun)
     tag = updateVersionInfo(mode, dryRun)
     updateReleaseNotes(tag, dryRun)
     msg = 'Prepare for tag %s.' % tag
-    __utils__.cmd('hg commit -m "%s"' % msg, verbose = True, dryRun = dryRun)
-    __utils__.cmd('hg push', verbose = True, dryRun = dryRun)
-    __utils__.cmd('hg tag %s' % tag, verbose = True, dryRun = dryRun)
-    __utils__.cmd('hg push', verbose = True, dryRun = dryRun)
-    __utils__.cmd('hg status', verbose = True, dryRun = dryRun)
+    __utils__.cmd('git commit -a -m "%s"' % msg, verbose = True,
+                  dryRun = dryRun)
+    __utils__.cmd('git push', verbose = True, dryRun = dryRun)
+    __utils__.cmd('git tag %s' % tag, verbose = True, dryRun = dryRun)
+    __utils__.cmd('git push', verbose = True, dryRun = dryRun)
+    __utils__.cmd('git status', verbose = True, dryRun = dryRun)
 
 
 
@@ -107,10 +107,10 @@ if __name__ == '__main__':
                       help = 'The release tag mode %s.' % TAG_MODES)
     parser.add_option('-n', action = 'store_true', dest = 'dryrun',
                       help = 'Dry run (i.e. do not actually do anything).')
-    parser.add_option('-s', action = 'store_true', dest = 'src',
-                      help = 'Create a source distribution.')
+    #parser.add_option('-s', action = 'store_true', dest = 'src',
+    #                  help = 'Create a source distribution.')
     (opts, args) = parser.parse_args()
-    if not opts.tagmode and not (opts.src or opts.rpm):
+    if not opts.tagmode and not (opts.src):
         parser.print_help()
         parser.error('Please specify at least one valid option.')        
     tag = None

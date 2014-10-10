@@ -1,5 +1,7 @@
 
-
+* Many many changes, essentially the first rough implementation of the
+  entire dst. We should be much more careful in detailing the changes
+  from now on.
 
 -------------------------------------------------------------------------------
 e3pipe (0.0.1) - Thu, 12 Jun 2014 06:57:40 +0200
