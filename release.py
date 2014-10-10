@@ -110,7 +110,7 @@ if __name__ == '__main__':
     #parser.add_option('-s', action = 'store_true', dest = 'src',
     #                  help = 'Create a source distribution.')
     (opts, args) = parser.parse_args()
-    if not opts.tagmode and not (opts.src):
+    if not opts.tagmode:# and not (opts.src):
         parser.print_help()
         parser.error('Please specify at least one valid option.')        
     tag = None
