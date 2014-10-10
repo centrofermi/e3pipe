@@ -35,6 +35,11 @@ class E3TreePlotter:
         """
         self.__PlotDict = {}
 
+    def plot(self, name):
+        """ Return a specific plot.
+        """
+        return self.__PlotDict[name]
+
     def plots(self):
         """ Return all the underlying plot objects.
         """
