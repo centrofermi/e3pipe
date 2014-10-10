@@ -48,6 +48,32 @@ class E3InputRootFile(ROOT.TFile):
         logger.info('Opening input file %s...' % filePath)
         ROOT.TFile.__init__(self, filePath)
 
+    def readString(self, key):
+        """ Read a piece of text from the ROOT file.
+        """
+        try:
+            return self.Get(key).GetTitle()
+        except ReferenceError:
+            logger.error('Could not find key "%s" in the ROOT file.' % key)
+            return None
+
+    def filter(self, *args):
+        """ Filter the objects in the file based on their class.
+
+        This involves looping over the list of keys in the file,
+        retrieving the corresponding objects and returning a list of
+        objects matching the types specified in the arguments passed 
+        to the function.
+        """
+        outputList = []
+        for key in self.GetListOfKeys():
+            rootObject = self.Get(key.GetName())
+            for arg in args:
+                if isinstance(rootObject, arg):
+                    outputList.append(rootObject)
+                    break
+        return outputList    
+
 
 
 def test(filePath):

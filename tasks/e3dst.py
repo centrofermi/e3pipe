@@ -30,6 +30,7 @@ from e3pipe.dst.E3AnalyzerOutFile import E3AnalyzerOutFile
 from e3pipe.dst.E3AnalyzerSumFile import E3AnalyzerSumFile
 from e3pipe.dst.E3DstEventTree import E3DstEventTree
 from e3pipe.dst.E3DstHeaderTree import E3DstHeaderTree
+from e3pipe.root.E3OutputRootFile import E3OutputRootFile
 from e3pipe.misc.E3Chrono import E3Chrono
 
 
@@ -57,7 +58,7 @@ def e3dst(baseFilePath):
     sumFile = E3AnalyzerSumFile('%s.sum' % baseFilePath)
     dstFilePath = '%s_dst.root' % baseFilePath
     logger.info('Opening output ROOT file %s...' % dstFilePath)
-    rootFile = ROOT.TFile(dstFilePath, 'RECREATE')
+    rootFile = E3OutputRootFile(dstFilePath)
     logger.info('Initializing event tree...')
     eventTree = E3DstEventTree()
     logger.info('Filling event tree...')
