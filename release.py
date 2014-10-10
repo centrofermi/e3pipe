@@ -94,7 +94,9 @@ def tagPackage(mode, dryRun = False):
     __utils__.cmd('git commit -a -m "%s"' % msg, verbose = True,
                   dryRun = dryRun)
     __utils__.cmd('git push', verbose = True, dryRun = dryRun)
-    __utils__.cmd('git tag %s' % tag, verbose = True, dryRun = dryRun)
+    msg = 'tagging version %s' % tag
+    __utils__.cmd('git tag -a %s -m "%s"' % (tag, msg), verbose = True,
+                  dryRun = dryRun)
     __utils__.cmd('git push', verbose = True, dryRun = dryRun)
     __utils__.cmd('git status', verbose = True, dryRun = dryRun)
 
