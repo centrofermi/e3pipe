@@ -25,8 +25,8 @@ _usage = 'usage: %prog [options] binfile1 ... binfileN'
 _synopsis = 'Process one or more .bin files and create the correposnding DST'
 
 # Set up the command-line switches.
-from optparse import OptionParser
-parser = OptionParser(usage = _usage)
+from e3pipe.misc.E3OptionParser import E3OptionParser
+parser = E3OptionParser(_usage, _synopsis)
 parser.add_option('-R', '--recreate-calib', action = 'store_true',
                   default = False, dest = 'recreate_calib',
                   help = 'recreate the eee_calib.txt file')
@@ -41,14 +41,14 @@ parser.add_option('-s', '--output_suffix', type = str, default = None,
                   help = 'a text label to be attached to the output file names')
 (opts, args) = parser.parse_args()
 
-# Print the start message.
-from e3pipe.__logging__ import startmsg
-startmsg()
-
 # Make sure we are passing some argument.
 if not len(args):
     parser.print_help()
     parser.error('Please provide at least an input file.')
+
+# Print the start message.
+from e3pipe.__logging__ import startmsg
+startmsg()
 
 # Import the necessary stuff.
 import e3pipe.__utils__

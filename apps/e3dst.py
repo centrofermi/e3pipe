@@ -25,18 +25,18 @@ _usage = 'usage: %prog [options] filePath'
 _synopsis = 'Create the ROOT dst from the outputs of the Analyzer'
 
 # Set up the command-line switches.
-from optparse import OptionParser
-parser = OptionParser(usage = _usage)
+from e3pipe.misc.E3OptionParser import E3OptionParser
+parser = E3OptionParser(_usage, _synopsis)
 (opts, args) = parser.parse_args()
-
-# Print the start message.
-from e3pipe.__logging__ import startmsg
-startmsg()
 
 # Make sure we are passing some argument.
 if not len(args):
     parser.print_help()
     parser.error('Please provide a single input file.')
+
+# Print the start message.
+from e3pipe.__logging__ import startmsg
+startmsg()
 
 # Import the necessary stuff.
 import e3pipe.__utils__
