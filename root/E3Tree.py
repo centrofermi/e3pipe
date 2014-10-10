@@ -119,7 +119,7 @@ class E3Tree(ROOT.TTree, E3TreePlotter):
         """
         self.__ArrayDict[branchName][0] = value
 
-    def getValue(self, branchName, entry = None):
+    def value(self, branchName, entry = None):
         """ Return the value of a specific array.
         """
         if entry is not None:

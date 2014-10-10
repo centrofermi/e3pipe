@@ -66,32 +66,6 @@ class E3Chain(ROOT.TChain):
             self.GetEntry(entry)
         return self.__TreeFormulaDict[key].EvalInstance()
 
-    def hist1d(self, expression, cut = '', xmin = None, xmax = None,
-               xbins = 100, xpad = 0, **kwargs):
-        """ Create a 1 dimensional histogram.
-        """
-        logger.info('Creating 1-d histogram for %s...' % expression)
-        kwargs['XTitle'] = kwargs.get('XTitle', expression)
-        kwargs['YTitle'] = kwargs.get('YTitle', 'Entries/bin')
-        hname = 'hist_%s' % expression
-        if xmin is None or xmax is None:
-            branchMin = self.GetMinimum(expression)
-            branchMax = self.GetMaximum(expression) 
-            branchRange = branchMax - branchMin
-        if xmin is None:
-            xmin = branchMin - xpad*branchRange
-        if xmax is None:
-            xmax = branchMax + xpad*branchRange
-        htitle = expression
-        hist = E3H1D(hname, htitle, xbins, xmin, xmax, **kwargs)
-        self.Project(hname, expression, cut)
-        return hist
-
-    def hist2d(self, expression, cut = '', **kwargs):
-        """ Create a 1 dimensional histogram.
-        """
-        pass
-
 
 
 def test(filePath, treeName):

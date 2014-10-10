@@ -54,21 +54,43 @@ class E3DstEventTree(E3Tree):
         """
         E3Tree.__init__(self, 'Event tree')
 
+    def timestamp(self, entry = None):
+        """ Retrurn the timestamp for a given entry.
+        """
+        if entry is not None:
+            self.GetEntry(entry)
+        return self.value('Seconds') + 1.e-9*self.value('Nanoseconds')
+
+    def startRun(self):
+        """ Return the timestamp of the first event.
+        """
+        return self.timestamp(0)
+
+    def stopRun(self):
+        """ Return the timestamp of the last event.
+        """
+        return self.timestamp(self.GetEntries() - 1)
+
     def runDuration(self):
         """ Return the run duration.
         """
-        self.GetEntry(0)
-        start = self.Seconds + 1.e-9*self.Nanoseconds
-        self.GetEntry(self.GetEntries() - 1)
-        stop = self.Seconds + 1.e-9*self.Nanoseconds
-        return stop - start
+        return self.stopRun() - self.startRun()
 
     def numTrackEvents(self):
         """ Return the number of events with tracks.
         """
         return self.GetEntries(self.TRACK_CUT)
 
-    def createMonitoringPlots(self):
+    def trendingHist(self, cut = '', timeDelta = 60, **kwargs):
+        """ Create a trending histogram.
+        """
+        xmin = self.startRun() - 1e-3
+        xmax = self.stopRun() + 1e-3
+        xbins = max(1, int(self.runDuration()/float(timeDelta) + 0.5))
+        h = self.hist1d('Timestamp', cut, xmin, xmax, xbins, **kwargs)
+        return h
+
+    def doMonitoring(self):
         """ Create the standard set of monitoring plots.
 
         TODO: this should properly configured via a configuration file.
@@ -79,7 +101,8 @@ class E3DstEventTree(E3Tree):
         self.hist1d('Phi', self.TRACK_CUT,
                     xmin = -180., xmax = 180., xbins = 50,
                     XTitle = '#phi [#circ]', Minimum = 0.)
-        self.hist1d('DeltaTime', xmin = -1, xmax = 1,
+        self.hist1d('DeltaTime',
+                    xmin = 0, xmax = 1, xbins = 100,
                     XTitle = 'Time difference [s]')
         self.hist1d('ChiSquare', self.TRACK_CUT,
                     xmin = 0, xmax = 50, xbins = 100,
@@ -90,6 +113,11 @@ class E3DstEventTree(E3Tree):
         self.hist1d('TrackLength', self.TRACK_CUT,
                     xmin = 0, xmax = 300., xbins = 100,
                     XTitle = 'Track length [cm]')
+
+    def doTrending(self):
+        """ Create the trending plots/tree.
+        """
+        pass
 
 
 

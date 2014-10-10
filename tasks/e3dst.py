@@ -67,9 +67,11 @@ def e3dst(baseFilePath):
     logger.info('Done, %d event(s) filled in.' % eventTree.GetEntries())
     if eventTree.GetEntries() == 0:
         abort('No events found (maybe an issue with eee_calib.txt?)')
-    logger.info('Filling monitoring plots...')
-    eventTree.createMonitoringPlots()
-    logger.info('Writing monitoring plots...')
+    logger.info('Creating monitoring plots...')
+    eventTree.doMonitoring()
+    logger.info('Creating trending data products...')
+    eventTree.doTrending()
+    logger.info('Writing monitoring/trending plots...')
     for plot in eventTree.plots():
         plot.Write()
     logger.info('Initializing header tree...')

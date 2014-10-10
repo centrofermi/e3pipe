@@ -46,15 +46,6 @@ class E3EventChain(E3Chain):
         logger.info('Time range: %.3f--%.3f (%.3f) s' %\
                     (self.StartTime, self.StopTime, self.Duration))
 
-    def trendingHist(self, cut = '', timeDelta = 60, **kwargs):
-        """ Create a trending histogram.
-        """
-        xmin = self.StartTime - 1e-3
-        xmax = self.StopTime + 1e-3
-        xbins = int(self.Duration/float(timeDelta) + 0.5)
-        h = self.hist1d('Timestamp', cut, xmin, xmax, xbins, **kwargs)
-        return h
-
 
 
 def test(filePath):
