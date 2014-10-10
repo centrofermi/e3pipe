@@ -25,6 +25,7 @@ import ROOT
 import numpy
 
 from e3pipe.__logging__ import logger
+from e3pipe.root.E3TreePlotter import E3TreePlotter
 
 
 ROOT_TO_NUMPY_DICT = {'C': '',
@@ -49,7 +50,7 @@ def root2numpy(rootType):
 
 
 
-class E3Tree(ROOT.TTree):
+class E3Tree(ROOT.TTree, E3TreePlotter):
     
     """ Small wrapper around the ROOT.Tree class.
 
@@ -74,15 +75,20 @@ class E3Tree(ROOT.TTree):
 
     NAME = 'Tree'
     BRANCHES = []
+    ALIAS_DICT = {}
 
     def __init__(self, title = None):
         """ Constructor.
         """
         ROOT.TTree.__init__(self, self.NAME, title or self.NAME)
+        E3TreePlotter.__init__(self)
         self.__ArrayDict = {}
         for branch in self.BRANCHES:
             self.addBranch(branch.Name, branch.Type)
         self.BranchList = [branch.Name for branch in self.BRANCHES]
+        for key, value in self.ALIAS_DICT.items():
+            logger.info('Setting alias "%s" -> "%s"...' % (key, value))
+            self.SetAlias(key, value)
 
     def addBranch(self, branchName, branchType):
         """ Add a branch to the output tree.
@@ -113,9 +119,11 @@ class E3Tree(ROOT.TTree):
         """
         self.__ArrayDict[branchName][0] = value
 
-    def getValue(self, branchName):
+    def getValue(self, branchName, entry = None):
         """ Return the value of a specific array.
         """
+        if entry is not None:
+            self.GetEntry(entry)
         return self.__ArrayDict[branchName][0]
 
 

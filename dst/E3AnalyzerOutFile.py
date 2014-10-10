@@ -40,9 +40,15 @@ class E3AnalyzerOutRow(E3TextTupleRow):
               E3TextTupleField('YDir', float, -1.),
               E3TextTupleField('ZDir', float, -1.),
               E3TextTupleField('ChiSquare', float, -1.),
-              E3TextTupleField('TimeOfFlight', float, -1., 'ns'),
-              E3TextTupleField('TrackLength', float, -1., 'cm')
+              E3TextTupleField('TimeOfFlight', float, -99., 'ns'),
+              E3TextTupleField('TrackLength', float, -1., 'cm'),
+              E3TextTupleField('DeltaTime', float, -1., 's')
           ]
+
+    def timestamp(self):
+        """ Return the event timestamp.
+        """
+        return self['Seconds'] + 1.e-9*self['Nanoseconds']
 
 
 
@@ -64,6 +70,7 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         beginning, to skip the file header.
         """
         E3TextTupleBase.__init__(self, filePath, '.out')
+        self.__LastTimestamp = None
         file.next(self)
 
     def next(self):
@@ -72,17 +79,28 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         Here is essentially a horrible hack to tell which events have no
         reconstructed track and therefore should have all the fields
         initialized to the default values.
+
+        And we also add the delta event time :-)
         """
         data = file.next(self)
         if self.NO_TRACK_MARKER in data:
             data = data.split(self.NO_TRACK_MARKER)[0]
             for field in self.ROW_DESCRIPTOR.FIELDS[2:]:
                 data += '  %s' % field.Default
-        return self.ROW_DESCRIPTOR(data)
+            return self.ROW_DESCRIPTOR(data)
+        data = self.ROW_DESCRIPTOR(data)
+        timestamp = data.timestamp()
+        if self.__LastTimestamp is None:
+            deltaTime = -1.
+        else:
+            deltaTime = timestamp - self.__LastTimestamp
+        data['DeltaTime'] = deltaTime
+        self.__LastTimestamp = timestamp
+        return data
 
 
 
-def test(filePath, numEvents = 5):
+def test(filePath, numEvents = 20):
     """ Test code.
     """
     f = E3AnalyzerOutFile(filePath)

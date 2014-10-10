@@ -34,7 +34,7 @@ from e3pipe.misc.E3Chrono import E3Chrono
 
 
 def data2hist(data, key, xmin = -0.5, xmax = 50.5, xbins = 51):
-    """
+    """ TODO: move this to the sumfile class?
     """
     name = 'h%s' % key
     title = key.replace('Mult', ' multiplicity ')
@@ -67,11 +67,21 @@ def e3dst(baseFilePath):
     logger.info('Done, %d event(s) filled in.' % eventTree.GetEntries())
     if eventTree.GetEntries() == 0:
         abort('No events found (maybe an issue with eee_calib.txt?)')
+    logger.info('Filling monitoring plots...')
+    eventTree.createMonitoringPlots()
+    logger.info('Writing monitoring plots...')
+    for plot in eventTree.plots():
+        plot.Write()
     logger.info('Initializing header tree...')
     headerTree = E3DstHeaderTree()
     logger.info('Filling header tree...')
     data = sumFile.data()
+    # Mind we need to add a few things "by hand", here, as not all the
+    # information that we want in the header is really coming from the
+    # sum file.
     data['RunNumber'] = row['RunNumber']
+    data['RunDuration'] = eventTree.runDuration()
+    data['NumTrackEvents'] = eventTree.numTrackEvents()
     headerTree.fillRow(data)
     headerTree.Write()
     logger.info('Creating histograms...')

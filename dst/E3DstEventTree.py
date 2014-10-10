@@ -41,13 +41,53 @@ class E3DstEventTree(E3Tree):
                 E3BranchDescriptor('ZDir', 'F'),
                 E3BranchDescriptor('ChiSquare', 'F'),
                 E3BranchDescriptor('TimeOfFlight', 'F'),
-                E3BranchDescriptor('TrackLength', 'F')
+                E3BranchDescriptor('TrackLength', 'F'),
+                E3BranchDescriptor('DeltaTime', 'F')
             ]
+    ALIAS_DICT = {'Timestamp': 'Seconds + 1.e-9*Nanoseconds',
+                  'Theta'    : '57.29577951308232*acos(ZDir)',
+                  'Phi'      : '57.29577951308232*atan2(YDir, XDir)'}
+    TRACK_CUT = 'ChiSquare >= 0'
 
     def __init__(self):
         """ Constructor.
         """
         E3Tree.__init__(self, 'Event tree')
+
+    def runDuration(self):
+        """ Return the run duration.
+        """
+        self.GetEntry(0)
+        start = self.Seconds + 1.e-9*self.Nanoseconds
+        self.GetEntry(self.GetEntries() - 1)
+        stop = self.Seconds + 1.e-9*self.Nanoseconds
+        return stop - start
+
+    def numTrackEvents(self):
+        """ Return the number of events with tracks.
+        """
+        return self.GetEntries(self.TRACK_CUT)
+
+    def createMonitoringPlots(self):
+        """ Create the standard set of monitoring plots.
+        """
+        self.hist1d('Theta', self.TRACK_CUT,
+                    xmin = 0., xmax = 70., xbins = 50,
+                    XTitle = '#theta [#circ]')
+        self.hist1d('Phi', self.TRACK_CUT,
+                    xmin = -180., xmax = 180., xbins = 50,
+                    XTitle = '#phi [#circ]', Minimum = 0.)
+        self.hist1d('DeltaTime', xmin = -1, xmax = 1,
+                    XTitle = 'Time difference [s]')
+        self.hist1d('ChiSquare', self.TRACK_CUT,
+                    xmin = 0, xmax = 50, xbins = 100,
+                    XTitle = '#chi^{2}')
+        self.hist1d('TimeOfFlight', self.TRACK_CUT,
+                    xmin = -10, xmax = 20, xbins = 100,
+                    XTitle = 'Time of flight [ns]')
+        self.hist1d('TrackLength', self.TRACK_CUT,
+                    xmin = 0, xmax = 300., xbins = 100,
+                    XTitle = 'Track length [cm]')
 
 
 

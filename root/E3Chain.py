@@ -32,6 +32,10 @@ from e3pipe.root.E3H1D import E3H1D
 class E3Chain(ROOT.TChain):
 
     """ Small wrapper around the TChain class.
+
+    TODO: we probably want to move all the plotting stuff to a base
+    class so that we can use it both when while writing and while
+    reading trees.
     """
 
     EXTENSION = E3InputRootFile.EXTENSION
