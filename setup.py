@@ -24,7 +24,7 @@
 from distutils.core import setup
 import glob
 
-from __tag__ import TAG
+from __version__ import TAG
 
 
 _NAME = 'e3pipe'
@@ -41,7 +41,7 @@ _URL = 'https://bitbucket.org/lbaldini/e3pipe'
 
 _PACKAGES = [
     'e3pipe', 'e3pipe.apps', 'e3pipe.doc', 'e3pipe.dqm', 'e3pipe.dst',
-    'e3pipe.misc', 'e3pipe.recon', 'e3pipe.root', 'e3pipe.tasks', 'e3pipe.test'
+    'e3pipe.misc', 'e3pipe.root', 'e3pipe.tasks', 'e3pipe.test'
     ]
 
 _PACKAGE_DIR = {
@@ -55,7 +55,6 @@ _PACKAGE_DATA = {
     'e3pipe.dqm'  : [],
     'e3pipe.dst'  : [],
     'e3pipe.misc' : [],
-    'e3pipe.recon': ['fortran/*.f', 'fortran/*.c', 'fortran/Makefile'],
     'e3pipe.root' : [],
     'e3pipe.tasks': [],
     'e3pipe.test' : []

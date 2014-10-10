@@ -23,6 +23,7 @@
 
 import glob
 import os
+import shutil
 from e3pipe.__logging__ import logger
 from e3pipe.__package__ import *
 
@@ -38,9 +39,21 @@ def cleanup(folderPath, patterns = ['*~', '*.pyc', '*.pyo']):
         logger.info('Removing %s...' % filePath)
         os.remove(filePath)
 
+def cleanupdist():
+    """
+    """
+    if os.path.exists(E3PIPE_DIST):
+        logger.info('Removing %s altogether...' % E3PIPE_DIST)
+        shutil.rmtree(E3PIPE_DIST)
+    filePath = os.path.join(E3PIPE_BASE, 'MANIFEST')
+    if os.path.exists(filePath):
+        logger.info('Removing %s...' % filePath)
+        os.remove(filePath)
+
+
 
 if __name__ == '__main__':
     for folderPath in [E3PIPE_BASE, E3PIPE_APPS, E3PIPE_DST, E3PIPE_ROOT,
                        E3PIPE_TASKS, E3PIPE_TEST]:
         cleanup(folderPath)
-    
+    cleanupdist()

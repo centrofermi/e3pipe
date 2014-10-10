@@ -22,11 +22,12 @@
 
 
 import time
+import os
 import e3pipe.__utils__ as __utils__
 
 from e3pipe.__logging__ import logger
 from e3pipe.__package__ import E3PIPE_VERSION_FILE_PATH, versionInfo,\
-    E3PIPE_RELEASE_NOTES_PATH
+    E3PIPE_RELEASE_NOTES_PATH, E3PIPE_DIST, E3PIPE_BASE
 
 
 BUILD_DATE = time.strftime('%a, %d %b %Y %H:%M:%S %z')
@@ -100,6 +101,21 @@ def tagPackage(mode, dryRun = False):
     __utils__.cmd('git push --tags', verbose = True, dryRun = dryRun)
     __utils__.cmd('git status', verbose = True, dryRun = dryRun)
 
+def distsrc():
+    """ Create a plain source distribution.
+    """
+    tag, buildDate = versionInfo()
+    logger.info('Creating plain source distribution...')
+    distDir = os.path.join(E3PIPE_DIST, 'src')
+    srcLogFilePath = 'src.log'
+    # Create the distribution.
+    __utils__.cmd('python setup.py sdist --dist-dir=%s --prune' % distDir,
+                  verbose = False, logFilePath = srcLogFilePath)
+    # Cleanup.
+    __utils__.rm(srcLogFilePath)
+    __utils__.rm(os.path.join(E3PIPE_BASE, 'MANIFEST'))
+    logger.info('Done.')
+
 
 
 if __name__ == '__main__':
@@ -109,10 +125,10 @@ if __name__ == '__main__':
                       help = 'The release tag mode %s.' % TAG_MODES)
     parser.add_option('-n', action = 'store_true', dest = 'dryrun',
                       help = 'Dry run (i.e. do not actually do anything).')
-    #parser.add_option('-s', action = 'store_true', dest = 'src',
-    #                  help = 'Create a source distribution.')
+    parser.add_option('-s', action = 'store_true', dest = 'src',
+                      help = 'Create a source distribution.')
     (opts, args) = parser.parse_args()
-    if not opts.tagmode:# and not (opts.src):
+    if not opts.tagmode and not (opts.src):
         parser.print_help()
         parser.error('Please specify at least one valid option.')        
     tag = None
@@ -121,8 +137,8 @@ if __name__ == '__main__':
             parser.error('Invalid tag mode %s (allowed: %s)' %\
                              (opts.tagmode, TAG_MODES))
         tagPackage(opts.tagmode, opts.dryrun)
-    #if opts.src and not opts.dryrun:
-    #    distsrc()
+    if opts.src and not opts.dryrun:
+        distsrc()
 
 
 
