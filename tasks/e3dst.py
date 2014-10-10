@@ -36,7 +36,7 @@ from e3pipe.misc.E3Chrono import E3Chrono
 def data2hist(data, key, xmin = -0.5, xmax = 50.5, xbins = 51):
     """ TODO: move this to the sumfile class?
     """
-    name = 'h%s' % key
+    name = key
     title = key.replace('Mult', ' multiplicity ')
     logger.info('Filling histogram %s...' % name)
     h = ROOT.TH1I(name, title, xbins, xmin, xmax)
@@ -70,7 +70,9 @@ def e3dst(baseFilePath):
     logger.info('Creating monitoring plots...')
     eventTree.doMonitoring()
     logger.info('Creating trending data products...')
-    eventTree.doTrending()
+    trendingTree = eventTree.doTrending()
+    logger.info('Writing trending tree...')
+    trendingTree.Write()
     logger.info('Writing monitoring/trending plots...')
     for plot in eventTree.plots():
         plot.Write()

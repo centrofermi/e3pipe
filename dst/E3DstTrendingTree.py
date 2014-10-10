@@ -31,8 +31,7 @@ class E3DstTrendingTree(E3Tree):
     """
 
     NAME = 'Trending'
-    BRANCHES = [E3BranchDescriptor('RunNumber', 'i'),
-                E3BranchDescriptor('BinStart', 'F'),
+    BRANCHES = [E3BranchDescriptor('BinStart', 'F'),
                 E3BranchDescriptor('BinEnd', 'F'),
                 E3BranchDescriptor('RateTrackEvents', 'F'),
                 E3BranchDescriptor('RateTrackEventsErr', 'F'),

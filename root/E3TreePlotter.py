@@ -45,14 +45,15 @@ class E3TreePlotter:
         """
         return self.__PlotDict.values()
 
-    def hist1d(self, expression, cut = '', xmin = None, xmax = None,
-               xbins = 100, xpad = 0, **kwargs):
+    def hist1d(self, expression, cut = '', name = None, title = None,
+               xmin = None, xmax = None, xbins = 100, xpad = 0, **kwargs):
         """ Create a 1-dimensional histogram.
         """
         logger.info('Creating 1-d histogram for %s...' % expression)
         kwargs['XTitle'] = kwargs.get('XTitle', expression)
         kwargs['YTitle'] = kwargs.get('YTitle', 'Entries/bin')
-        hname = 'h%s' % expression
+        name = name or expression
+        title = title or name
         if xmin is None or xmax is None:
             _xmin = self.GetMinimum(expression)
             _xmax = self.GetMaximum(expression) 
@@ -61,9 +62,8 @@ class E3TreePlotter:
             xmin = _xmin - xpad*_xrange
         if xmax is None:
             xmax = _xmax + xpad*_xrange
-        htitle = expression
-        hist = E3H1D(hname, htitle, xbins, xmin, xmax, **kwargs)
-        self.Project(hname, expression, cut)
+        hist = E3H1D(name, title, xbins, xmin, xmax, **kwargs)
+        self.Project(name, expression, cut)
         self.__PlotDict[hist.GetName()] = hist
         return hist
 

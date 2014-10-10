@@ -23,6 +23,8 @@
 
 from e3pipe.root.E3Tree import E3Tree
 from e3pipe.root.E3BranchDescriptor import E3BranchDescriptor
+from e3pipe.dst.E3DstTrendingTree import E3DstTrendingTree
+
 
 
 class E3DstEventTree(E3Tree):
@@ -81,44 +83,59 @@ class E3DstEventTree(E3Tree):
         """
         return self.GetEntries(self.TRACK_CUT)
 
-    def trendingHist(self, cut = '', timeDelta = 60, **kwargs):
+    def trendingHist(self, name, title = None, cut = '', timeDelta = 60,
+                     **kwargs):
         """ Create a trending histogram.
         """
         xmin = self.startRun() - 1.e-3
         xmax = self.stopRun() + 1.e-3
         xbins = max(1, int(self.runDuration()/float(timeDelta) + 0.5))
-        h = self.hist1d('Timestamp', cut, xmin, xmax, xbins, **kwargs)
-        return h
+        hist = self.hist1d('Timestamp', cut, name, title, xmin, xmax, xbins,
+                           **kwargs)
+        hist.Sumw2()
+        hist.Scale(1./hist.GetBinWidth(1))
+        hist.SetXTitle('Time')
+        return hist
 
     def doMonitoring(self):
         """ Create the standard set of monitoring plots.
 
         TODO: this should properly configured via a configuration file.
         """
-        self.hist1d('Theta', self.TRACK_CUT,
+        self.hist1d('Theta', cut = self.TRACK_CUT,
                     xmin = 0., xmax = 70., xbins = 50,
                     XTitle = '#theta [#circ]')
-        self.hist1d('Phi', self.TRACK_CUT,
+        self.hist1d('Phi', cut = self.TRACK_CUT,
                     xmin = -180., xmax = 180., xbins = 50,
                     XTitle = '#phi [#circ]', Minimum = 0.)
         self.hist1d('DeltaTime',
-                    xmin = 0, xmax = 1, xbins = 100,
+                    xmin = 0, xmax = 0.5, xbins = 100,
                     XTitle = 'Time difference [s]')
-        self.hist1d('ChiSquare', self.TRACK_CUT,
+        self.hist1d('ChiSquare', cut = self.TRACK_CUT,
                     xmin = 0, xmax = 50, xbins = 100,
                     XTitle = '#chi^{2}')
-        self.hist1d('TimeOfFlight', self.TRACK_CUT,
+        self.hist1d('TimeOfFlight', cut = self.TRACK_CUT,
                     xmin = -10, xmax = 20, xbins = 100,
                     XTitle = 'Time of flight [ns]')
-        self.hist1d('TrackLength', self.TRACK_CUT,
+        self.hist1d('TrackLength', cut = self.TRACK_CUT,
                     xmin = 0, xmax = 300., xbins = 100,
                     XTitle = 'Track length [cm]')
 
     def doTrending(self):
         """ Create the trending plots/tree.
-        """
-        pass
 
+        TODO: this should be properly configurable from a configuration
+        file.
+        """
+        h = self.trendingHist('RateTrackEvents', cut = self.TRACK_CUT)
+        tree = E3DstTrendingTree()
+        for i in range(1, h.GetNbinsX() + 1):
+            tree.setValue('BinStart', h.GetBinLowEdge(i))
+            tree.setValue('BinEnd', h.GetBinLowEdge(i) + h.GetBinWidth(i))
+            tree.setValue('RateTrackEvents', h.GetBinContent(i))
+            tree.setValue('RateTrackEventsErr', h.GetBinError(i))
+            tree.Fill()
+        return tree
 
 
 def test():
