@@ -84,8 +84,8 @@ class E3DstEventTree(E3Tree):
     def trendingHist(self, cut = '', timeDelta = 60, **kwargs):
         """ Create a trending histogram.
         """
-        xmin = self.startRun() - 1e-3
-        xmax = self.stopRun() + 1e-3
+        xmin = self.startRun() - 1.e-3
+        xmax = self.stopRun() + 1.e-3
         xbins = max(1, int(self.runDuration()/float(timeDelta) + 0.5))
         h = self.hist1d('Timestamp', cut, xmin, xmax, xbins, **kwargs)
         return h
