@@ -70,6 +70,8 @@ class E3DstEventTree(E3Tree):
 
     def createMonitoringPlots(self):
         """ Create the standard set of monitoring plots.
+
+        TODO: this should properly configured via a configuration file.
         """
         self.hist1d('Theta', self.TRACK_CUT,
                     xmin = 0., xmax = 70., xbins = 50,
