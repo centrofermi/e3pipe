@@ -87,7 +87,7 @@ def tagPackage(mode, dryRun = False):
     (*) commit the modifications, tag and push.
     """
     __utils__.cmd('git pull', verbose = True, dryRun = dryRun)
-    __utils__.cmd('hg status', verbose = True, dryRun = dryRun)
+    __utils__.cmd('git status', verbose = True, dryRun = dryRun)
     tag = updateVersionInfo(mode, dryRun)
     updateReleaseNotes(tag, dryRun)
     msg = 'Prepare for tag %s.' % tag
@@ -119,8 +119,8 @@ if __name__ == '__main__':
             parser.error('Invalid tag mode %s (allowed: %s)' %\
                              (opts.tagmode, TAG_MODES))
         tagPackage(opts.tagmode, opts.dryrun)
-    if opts.src and not opts.dryrun:
-        distsrc()
+    #if opts.src and not opts.dryrun:
+    #    distsrc()
 
 
 
