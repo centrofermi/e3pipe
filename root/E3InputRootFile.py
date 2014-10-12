@@ -86,15 +86,15 @@ class E3InputRootFile(ROOT.TFile):
                 (obj.__class__.__name__, obj.GetName(), obj.GetTitle())
 
         text = ''
-        text += '### Annotation(s)\n'
+        text += '\n### Annotation(s)\n'
         for label in self.filter(ROOT.TNamed, strict = True):
             text += _format(label)
-        text += '### Tree(s)\n'
+        text += '\n### Tree(s)\n'
         for tree in self.filter(ROOT.TTree):
             text += _format(tree)
             for branch in tree.GetListOfBranches():
-                text += '** %s\n' % branch.GetTitle()
-        text += '### Histogram(s)\n'
+                text += '    * %s\n' % branch.GetTitle()
+        text += '\n### Histogram(s)\n'
         for hist in self.filter(ROOT.TH1):
             text += _format(hist)
         return text
