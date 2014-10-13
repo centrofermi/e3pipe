@@ -26,6 +26,8 @@ import os
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3InputRootFile import E3InputRootFile
 from e3pipe.root.E3Canvas import E3Canvas
+from e3pipe.dqm.E3Alarm import E3Alarm
+from e3pipe.dqm.E3HtmlOutputFile import E3HtmlOutputFile
 from e3pipe.__utils__ import createFolder
 
 
@@ -109,6 +111,16 @@ class E3DataQualityMonitor:
         if self.__OutputFolder is None:
             logger.info('No DQM output folder set, skipping report...')
             return
+        logger.info('Writing DQM report...')
+        filePath = os.path.join(self.__OutputFolder, 'dqmreport.html')
+        outputFile = E3HtmlOutputFile(filePath)
+        outputFile.write('<table>\n')
+        outputFile.write('%s\n' % E3Alarm.HTML_TABLE_HEADER)
+        for alarm in self.__AlarmList:
+            outputFile.write('%s\n' % alarm.htmlTableRow())
+        outputFile.write('</table>\n')
+        outputFile.close()
+        logger.info('Done.')
         
 
 

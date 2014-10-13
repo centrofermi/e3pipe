@@ -39,6 +39,7 @@ class E3Alarm:
     SUPPORTED_PARAMETERS = []
     SUPPORTED_CONDITIONS = []
     OUTPUT_DESCRIPTION = None
+    HTML_TABLE_HEADER = '<tr><td>ROOT object</td><td>Alarm</td><td>Status</td><td>Output</td><td>Limits</td></tr>'
     
     def __init__(self, rootObject, errMin, warnMin, warnMax, errMax):
         """ Constructor.
@@ -187,10 +188,17 @@ class E3Alarm:
         """
         pass
 
-    def htmlRow(self):
+    def htmlTableRow(self):
         """ Return an HTML row for the output report.
         """
-        pass
+        row = '<tr>'
+        row += '<td>%s</td>' % self.__RootObject.GetName()
+        row += '<td>%s</td>' % self.name()
+        row += '<td>%s</td>' % self.__Status
+        row += '<td>%s +- %s</td>' % (self.__Value, self.__Error)
+        row += '<td>%s</td>' % self.__Limits
+        row += '</tr>'
+        return row
 
     def __str__(self):
         """ String formatting.
