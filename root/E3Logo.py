@@ -34,7 +34,7 @@ class E3Logo:
     TLatex alignmnent for the relative positioning.
     """
 
-    def __init__(self, x = 0.75, y = 0.99, subtitle = 'Powered by e3py',
+    def __init__(self, x = 0.75, y = 0.99, subtitle = 'Powered by e3pipe',
                  color = ROOT.kBlue, shadowColor = ROOT.kGray):
         """
         """

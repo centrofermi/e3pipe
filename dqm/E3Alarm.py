@@ -147,6 +147,11 @@ class E3Alarm:
         """
         pass
 
+    def draw(self):
+        """ Do nothing method, to be reimplemented by the derived classes.
+        """
+        pass
+
     def htmlRow(self):
         """ Return an HTML row for the output report.
         """

@@ -66,7 +66,7 @@ class E3Canvas(ROOT.TCanvas, E3RootObject):
                           size = SMALLEST_TEXT_SIZE, align = 13)
         ROOT.TCanvas.Update(self)
         
-    def save(self, folderPath = None, formats = ['eps', 'pdf', 'png']):
+    def save(self, folderPath = None, formats = ['pdf', 'png']):
         """ Save the canvas.
         """
         for format in formats:
