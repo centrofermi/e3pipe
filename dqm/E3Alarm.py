@@ -51,6 +51,41 @@ class E3Alarm:
         self.__InfoDict = {'badness': None}
         self.validate()
 
+    def limits(self):
+        """ Return the alarm limits.
+        """
+        return self.__Limits
+
+    def warningMin(self):
+        """
+        """
+        return self.__Limits.WarningMin
+
+    def warningMax(self):
+        """
+        """
+        return self.__Limits.WarningMax
+
+    def errorMin(self):
+        """
+        """
+        return self.__Limits.ErrorMin
+
+    def errorMax(self):
+        """
+        """
+        return self.__Limits.ErrorMax
+
+    def value(self):
+        """
+        """
+        return self.__Value
+
+    def error(self):
+        """
+        """
+        return self.__Error
+
     def validate(self):
         """ Validate the alarm configuration.
         """

@@ -53,6 +53,26 @@ class alarm_x_average(E3Alarm):
             error = 0.
         self.setValue(value, error)
 
+    def draw(self):
+        """ Overloaded method.
+        """
+        import ROOT
+        from e3pipe.root.E3Line import E3Line, E3YellowLine, E3RedLine
+        ROOT.gPad.Update()
+        ymin = ROOT.gPad.GetUymin()
+        ymax = ROOT.gPad.GetUymax()
+        if ROOT.gPad.GetLogy():
+            ymin = 10**ymin
+            ymax = 10**ymax
+        for x in [self.warningMin(), self.warningMax()]:
+            l = E3YellowLine(x, ymin, x, ymax)
+            l.Draw()
+        for x in [self.errorMin(), self.errorMax()]:
+            l = E3RedLine(x, ymin, x, ymax)
+            l.Draw()
+        x = self.value()
+        l = E3Line(x, ymin, x, ymax, LineStyle = 7)
+        l.Draw()
 
 
 

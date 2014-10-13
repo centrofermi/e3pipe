@@ -59,6 +59,20 @@ class alarm_exp_fit_lambda(E3Alarm):
         error = self.__FitFunction.GetParError(1)
         self.setValue(value, error)
 
+    def draw(self):
+        """ Overloaded method.
+        """
+        import ROOT
+        _f = self.__FitFunction.Clone()
+        _f.SetLineWidth(2)
+        for par in [self.warningMin(), self.warningMax()]:
+            _f.SetParameter(1, par)
+            _f.SetLineColor(ROOT.kOrange)
+            _f.DrawCopy('same')
+        for par in [self.errorMin(), self.errorMax()]:
+            _f.SetParameter(1, par)
+            _f.SetLineColor(ROOT.kRed)
+            _f.DrawCopy('same')
 
 
 

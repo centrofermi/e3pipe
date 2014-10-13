@@ -55,6 +55,27 @@ class alarm_y_values(E3Alarm):
         self.setInfo('worst_value', worstValue)
         self.setInfo('worst_error', worstError)
 
+    def draw(self):
+        """ Overloaded method.
+        """
+        import ROOT
+        from e3pipe.root.E3Line import E3Line, E3YellowLine, E3RedLine
+        ROOT.gPad.Update()
+        ymin = self.errorMin()
+        ymax = self.errorMax()
+        self.rootObject().GetYaxis().SetRangeUser(ymin, ymax)
+        xmin = ROOT.gPad.GetUxmin()
+        xmax = ROOT.gPad.GetUxmax()
+        if ROOT.gPad.GetLogx():
+            xmin = 10**xmin
+            xmax = 10**xmax
+        for y in [self.warningMin(), self.warningMax()]:
+            l = E3YellowLine(xmin, y, xmax, y)
+            l.Draw()
+        for y in [self.errorMin(), self.errorMax()]:
+            l = E3RedLine(xmin, y, xmax, y)
+            l.Draw()
+
 
 
 def test():

@@ -80,7 +80,7 @@ class E3DataQualityMonitor:
         """
         self.draw('Phi')
         self.draw('Theta')
-        self.draw('ChiSquare', Logy = True)
+        self.alarm('ChiSquare', 'x_average', 1, 2, 6, 10, Logy = True)
         self.alarm('DeltaTime', 'exp_fit_lambda', 5, 10, 50, 75, Logy = True)
         self.draw('TimeOfFlight')
         self.draw('TrackLength')
