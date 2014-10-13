@@ -2,7 +2,7 @@
 # *********************************************************************
 # * Copyright (C) 2014 Luca Baldini (luca.baldini@pi.infn.it)         *
 # *                                                                   *
-# * For the license terms see the file LICENCE, distributed           *
+# * For the license terms see the file LICENSE, distributed           *
 # * along with this software.                                         *
 # *********************************************************************
 #
@@ -35,7 +35,7 @@ _AUTHOR = 'Luca Baldini'
 
 _AUTHOR_EMAIL = 'luca.baldini@pi.infn.it'
 
-_LICENCE = 'GNU General Public License v3 or later'
+_LICENSE = 'GNU General Public License v3 or later'
 
 _URL = 'https://bitbucket.org/lbaldini/e3pipe'
 
@@ -80,7 +80,7 @@ if __name__ == '__main__':
           version = TAG,
           author = _AUTHOR,
           author_email = _AUTHOR_EMAIL,
-          license = _LICENCE,
+          license = _LICENSE,
           url = _URL,
           packages = _PACKAGES,
           package_dir = _PACKAGE_DIR,
