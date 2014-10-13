@@ -24,6 +24,7 @@
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3InputRootFile import E3InputRootFile
 from e3pipe.root.E3Canvas import E3Canvas
+from e3pipe.__utils__ import createFolder
 
 
 
@@ -78,6 +79,8 @@ class E3DataQualityMonitor:
         TODO: this should be fully configurable from a file---possibly
         on a telescope-by-telescope basis.
         """
+        if self.__OutputFolder is not None:
+            createFolder(self.__OutputFolder)
         self.draw('Phi')
         self.draw('Theta')
         self.alarm('ChiSquare', 'x_average', 1, 2, 6, 10, Logy = True)

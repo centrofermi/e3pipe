@@ -30,7 +30,7 @@ parser = E3OptionParser(_usage, _synopsis)
 parser.add_option('-R', '--recreate-calib', action = 'store_true',
                   default = False, dest = 'recreate_calib',
                   help = 'recreate the eee_calib.txt file')
-parser.add_option('-s', '--output_suffix', type = str, default = None,
+parser.add_option('-s', '--output-suffix', type = str, default = None,
                   dest = 'output_suffix',
                   help = 'a text label to be attached to the output file names')
 (opts, args) = parser.parse_args()
