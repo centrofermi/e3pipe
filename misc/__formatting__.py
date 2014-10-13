@@ -63,8 +63,19 @@ def formatNumber(number):
 
 def formatValErr(value, error):
     """ Format a value/error pair.
+
+    From http://code.activestate.com/lists/python-list/616578/
     """
-    pass
+    import decimal
+    value = decimal.Decimal(value)
+    error = decimal.Decimal(error)
+    scale = error.adjusted()
+    scale += error.scaleb(-scale).to_integral().adjusted()
+    scale -= 1
+    quant = decimal.Decimal('1e%d' % scale)
+    value = value.quantize(quant)
+    error = error.quantize(quant)
+    return '%s +- %s' % (value, error)
 
 
 
@@ -72,3 +83,5 @@ if __name__ == '__main__':
     print formatFloat(36.7413853085702)
     print formatNumber(2)
     print formatNumber(2.001)
+    print formatValErr(3.638738276, 0.08557687)
+    print formatValErr(33623287.864298, 74587.7)

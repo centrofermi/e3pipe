@@ -23,7 +23,7 @@
 
 from e3pipe.__logging__ import logger, abort
 from e3pipe.dqm.E3AlarmLimits import E3AlarmLimits
-
+from e3pipe.misc.__formatting__ import formatNumber, formatValErr
 
 
 class E3Alarm:
@@ -120,22 +120,22 @@ class E3Alarm:
         """
         return self.__Status
 
-    def unset(self):
+    def isUnset(self):
         """ Return whether the alarm status is Unset.
         """
         return self.status() == self.STATUS_UNSET
 
-    def clean(self):
+    def isClean(self):
         """ Return whether the alarm status is Clean.
         """
         return self.status() == self.STATUS_CLEAN
 
-    def warning(self):
+    def isWarning(self):
         """ Return whether the alarm status is Warning.
         """
         return self.status() == self.STATUS_WARNING
 
-    def error(self):
+    def isError(self):
         """ Return whether the alarm status is Error.
         """
         return self.status() == self.STATUS_ERROR
@@ -178,6 +178,14 @@ class E3Alarm:
         else:
             self.__Status = self.STATUS_ERROR
 
+    def formattedValue(self):
+        """
+        """
+        if self.__Error is None:
+            return formatNumber(self.__Value)
+        else:
+            return formatValErr(self.__Value, self.__Error)
+
     def run(self):
         """ Do nothing method, to be reimplemented by the derived classes.
         """
@@ -195,7 +203,7 @@ class E3Alarm:
         row += '<td>%s</td>' % self.__RootObject.GetName()
         row += '<td>%s</td>' % self.name()
         row += '<td>%s</td>' % self.__Status
-        row += '<td>%s +- %s</td>' % (self.__Value, self.__Error)
+        row += '<td>%s</td>' % self.formattedValue()
         row += '<td>%s</td>' % self.__Limits
         row += '</tr>'
         return row
@@ -205,6 +213,6 @@ class E3Alarm:
         
         TODO: format the value/error pair properly.
         """
-        return '%s on %s -> %s +- %s %s (%s) %s' %\
-            (self.name(), self.__RootObject.GetName(), self.__Value,
-             self.__Error, self.__Limits, self.__Status, self.info())
+        return '%s on %s -> %s %s (%s) %s' %\
+            (self.name(), self.__RootObject.GetName(), self.formattedValue(),
+             self.__Limits, self.__Status, self.info())
