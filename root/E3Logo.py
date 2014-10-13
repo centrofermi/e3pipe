@@ -2,7 +2,7 @@
 # *********************************************************************
 # * Copyright (C) 2012 Luca Baldini (luca.baldini@pi.infn.it)         *
 # *                                                                   *
-# * For the license terms see the file LICENCE, distributed           *
+# * For the license terms see the file LICENSE, distributed           *
 # * along with this software.                                         *
 # *********************************************************************
 #
