@@ -1,5 +1,5 @@
 
-* Added initial data structures for the DQM.
+* First implementation of the DQM application.
 * Source distribution generation implemented in the release script (issue #5).
 * Minor modifications to the app structure.
 
