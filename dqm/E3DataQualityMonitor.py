@@ -21,12 +21,26 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import os
+
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3InputRootFile import E3InputRootFile
 from e3pipe.root.E3Canvas import E3Canvas
 from e3pipe.__utils__ import createFolder
 
 
+HTML_HEADER = \
+"""
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+          "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+  
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+    <title>EEE DQM report</title>
+  </head>
+"""
 
 class E3DataQualityMonitor:
 
@@ -37,6 +51,7 @@ class E3DataQualityMonitor:
         """ Constructor.
         """
         self.__InputFile = E3InputRootFile(filePath)
+        self.__Label = os.path.basename(filePath).replace('_dst.root', '')
         self.__OutputFolder = outputFolder
         self.__AlarmList = []
 
@@ -51,6 +66,7 @@ class E3DataQualityMonitor:
         _canvas = E3Canvas('c%s' % objName, **kwargs)
         _rootObject = self.__InputFile.Get(objName)
         _rootObject.Draw()
+        _canvas.annotate(0.1, 0.94, self.__Label)
         _canvas.Update()
         if self.__OutputFolder is not None:
             _canvas.save(self.__OutputFolder)
@@ -64,6 +80,7 @@ class E3DataQualityMonitor:
         _canvas = E3Canvas('c%s_%s' % (objName, alarmName), **kwargs)
         _rootObject = self.__InputFile.Get(objName)
         _rootObject.Draw()
+        _canvas.annotate(0.1, 0.94, self.__Label)
         _alarm = alarmClass(_rootObject, errMin, warnMin, warnMax, errMax)
         _alarm.run()
         _alarm.draw()
@@ -96,11 +113,15 @@ class E3DataQualityMonitor:
         self.alarm('ClusterMultMid', 'x_average', 0.5, 0.75, 2, 3, Logy = True)
         self.alarm('ClusterMultBot', 'x_average', 0.5, 0.75, 2, 3, Logy = True)
         self.alarm('ClusterMultTotal', 'x_average', 1.5, 2.5, 6, 9, Logy = True)
+        self.createReport()
 
     def createReport(self):
         """ Create the html report.
         """
-        pass
+        if self.__OutputFolder is None:
+            logger.info('No DQM output folder set, skipping report...')
+            return
+        
 
 
 
