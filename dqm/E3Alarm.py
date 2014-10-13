@@ -25,6 +25,7 @@ from e3pipe.__logging__ import logger, abort
 from e3pipe.dqm.E3AlarmLimits import E3AlarmLimits
 
 
+
 class E3Alarm:
 
     """ Utility class representing an alarm.
@@ -34,17 +35,30 @@ class E3Alarm:
     STATUS_CLEAN = 'Clean'
     STATUS_WARNING = 'Warning'
     STATUS_ERROR = 'Error'
+    SUPPORTED_ROOT_TYPES = []
+    SUPPORTED_PARAMETERS = []
+    SUPPORTED_CONDITIONS = []
+    OUTPUT_DESCRIPTION = None
     
-    def __init__(self, rootObject, algorithm, errMin, warnMin, warnMax, errMax):
+    def __init__(self, rootObject, errMin, warnMin, warnMax, errMax):
         """ Constructor.
         """
         self.__RootObject = rootObject
-        self.__Algorithm = algorithm
         self.__Limits = E3AlarmLimits(errMin, warnMin, warnMax, errMax)
         self.__Value = None
         self.__Error = None
         self.__Status = self.STATUS_UNSET
         self.__InfoDict = {}
+
+    def name(self):
+        """
+        """
+        return self.__class__.__name__.replace('alarm_', '')
+
+    def rootObject(self):
+        """ Return the underlying ROOT object.
+        """
+        return self.__RootObject
 
     def status(self):
         """ Return the alarm status.
@@ -87,3 +101,16 @@ class E3Alarm:
         else:
             self.__Status = self.STATUS_ERROR
 
+    def run(self):
+        """ Do nothing method, to be reimplemented by the derived classes.
+        """
+        pass
+
+    def __str__(self):
+        """ String formatting.
+        
+        TODO: format the value/error pair properly.
+        """
+        return '%s on %s -> %s +- %s %s (%s)' %\
+            (self.name(), self.__RootObject.GetName(),
+             self.__Value, self.__Error, self.__Limits, self.__Status)

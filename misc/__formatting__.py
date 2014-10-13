@@ -61,6 +61,11 @@ def formatNumber(number):
         except:
             return number
 
+def formatValErr(value, error):
+    """ Format a value/error pair.
+    """
+    pass
+
 
 
 if __name__ == '__main__':
