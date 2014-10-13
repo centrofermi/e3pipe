@@ -48,10 +48,29 @@ class E3Alarm:
         self.__Value = None
         self.__Error = None
         self.__Status = self.STATUS_UNSET
-        self.__InfoDict = {}
+        self.__InfoDict = {'badness': None}
+        self.validate()
+
+    def validate(self):
+        """ Validate the alarm configuration.
+        """
+        className = self.__RootObject.__class__.__name__
+        if not className in self.SUPPORTED_ROOT_TYPES:
+            abort('%s object not supported by alarm %s' %\
+                  (className, self.name()))
+
+    def setInfo(self, key, value):
+        """ Insert a key/value pair in the self.__InfoDict data member.
+        """
+        self.__InfoDict[key] = value
+
+    def info(self):
+        """ Return the info dictionary.
+        """
+        return self.__InfoDict
 
     def name(self):
-        """
+        """ Return the alarm algorithm name.
         """
         return self.__class__.__name__.replace('alarm_', '')
 
@@ -85,15 +104,37 @@ class E3Alarm:
         """
         return self.status() == self.STATUS_ERROR
 
-    def setValue(self, value, error = None):
+    def valueBadness(self, value, error = None):
+        """ Calculate the badness for a given value (and, possibly, the
+        associated error).
+
+        This method turns out to be handy when the algorithm does not
+        return a plain number in one step, but one has to loop explicitely,
+        e.g., over the bins of a histogram or the entries of a tree.
+        """
+        return self.__Limits.badness(value, error)
+
+    def badness(self):
+        """ Return the badness, as stored in the self.__InfoDict data member.
+        """
+        return self.__InfoDict['badness']
+
+    def setValue(self, value, error = None, badness = None):
         """ Set the alarm value (and error, if applicable).
 
         This is the main function, as it determines the alarm status too.
+
+        Note that in some case we already have the badness precalculated when
+        we call this function, e.g., if we have looped already on the 
+        bin contents of an histogram in alarm_y_values. In this case we
+        provide a third optional argument to pass the badness value from the
+        outside.
         """
         self.__Value = value
         self.__Error = error
-        badness = self.__Limits.badness(value, error)
-        self.__InfoDict['badness'] = badness
+        if badness is None:
+            badness = self.valueBadness(value, error)
+        self.setInfo('badness', badness)
         if badness <= E3AlarmLimits.WARNING_BADNESS:
             self.__Status = self.STATUS_CLEAN
         elif badness <= E3AlarmLimits.ERROR_BADNESS:
@@ -106,11 +147,16 @@ class E3Alarm:
         """
         pass
 
+    def htmlRow(self):
+        """ Return an HTML row for the output report.
+        """
+        pass
+
     def __str__(self):
         """ String formatting.
         
         TODO: format the value/error pair properly.
         """
-        return '%s on %s -> %s +- %s %s (%s)' %\
-            (self.name(), self.__RootObject.GetName(),
-             self.__Value, self.__Error, self.__Limits, self.__Status)
+        return '%s on %s -> %s +- %s %s (%s) %s' %\
+            (self.name(), self.__RootObject.GetName(), self.__Value,
+             self.__Error, self.__Limits, self.__Status, self.info())

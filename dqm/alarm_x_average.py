@@ -21,7 +21,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-import ROOT
 import math
 
 from e3pipe.dqm.E3Alarm import E3Alarm
@@ -30,16 +29,21 @@ from e3pipe.dqm.E3Alarm import E3Alarm
 
 class alarm_x_average(E3Alarm):
 
-    """
+    """ Derived class for setting alarm on the average x-value of a
+    histogram.
+
+    The value is retieved via the TH1::GetMean() method, while the error
+    is the root mean square of the average (i.e., the rms of the distribution
+    divided by the square root of the number of entries).
     """
 
-    SUPPORTED_ROOT_TYPES = [ROOT.TH1]
+    SUPPORTED_ROOT_TYPES = ['TH1I', 'TH1F', 'TH1D']
     SUPPORTED_PARAMETERS = []
     SUPPORTED_CONDITIONS = []
-    OUTPUT_DESCRIPTION = None
+    OUTPUT_DESCRIPTION = 'mean value on the x-axis'
 
     def run(self):
-        """
+        """ Overloaded method.
         """
         obj = self.rootObject()
         value = obj.GetMean()
@@ -55,6 +59,7 @@ class alarm_x_average(E3Alarm):
 def test():
     """ Test program.
     """
+    import ROOT
     h = ROOT.TH1F('h', 'h', 100, 0, 1)
     h.FillRandom('pol0', 100)
     a = alarm_x_average(h, 0.2, 0.49, 0.51, 0.8)
