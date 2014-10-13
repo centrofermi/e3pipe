@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (0.2.0) - Tue, 14 Oct 2014 00:20:12 +0200
+-------------------------------------------------------------------------------
 * First implementation of the DQM application.
 * Source distribution generation implemented in the release script (issue #5).
 * Minor modifications to the app structure.
