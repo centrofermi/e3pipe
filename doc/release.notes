@@ -1,5 +1,6 @@
 
 * Added E3Timestamp class (for coincidence search).
+* Improved alarm formatting (issue #10).
 
 -------------------------------------------------------------------------------
 e3pipe (0.2.0) - Tue, 14 Oct 2014 00:20:12 +0200
