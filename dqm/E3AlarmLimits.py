@@ -82,7 +82,6 @@ class E3AlarmLimits:
         - the badness (i.e. the function defined above) is calculated on
         the best value.
         """
-
         # Make the value float.
         value = float(value)
         # If the error is not, set it to zero. Make it float.
