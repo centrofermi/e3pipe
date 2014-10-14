@@ -23,7 +23,7 @@
 
 from e3pipe.root.__ROOT__ import *
 from e3pipe.root.E3RootObject import E3RootObject
-
+from e3pipe.dst.__time__ import E3_TIME_OFFSET
 
 
 class E3H1D(ROOT.TH1D, E3RootObject):
@@ -42,6 +42,13 @@ class E3H1D(ROOT.TH1D, E3RootObject):
         """
         ROOT.TH1D.Draw(self, opts)
         self.setupStatBox(**kwargs)
+
+    def SetTimeDisplay(self):
+        """
+        """
+        self.GetXaxis().SetTitle('')
+        self.GetXaxis().SetTimeDisplay(True)
+        self.GetXaxis().SetTimeOffset(E3_TIME_OFFSET)
 
     def setupStatBox(self, **kwargs):
         """ Set the stat box color, options and position.

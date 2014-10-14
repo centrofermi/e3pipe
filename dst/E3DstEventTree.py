@@ -128,6 +128,7 @@ class E3DstEventTree(E3Tree):
         file.
         """
         h = self.trendingHist('RateTrackEvents', cut = self.TRACK_CUT)
+        h.SetTimeDisplay()
         tree = E3DstTrendingTree()
         for i in range(1, h.GetNbinsX() + 1):
             tree.setValue('BinStart', h.GetBinLowEdge(i))

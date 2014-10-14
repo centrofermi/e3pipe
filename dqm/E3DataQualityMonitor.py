@@ -50,11 +50,20 @@ class E3DataQualityMonitor:
         """
         return self.__AlarmList
 
+    def setupTimeDisplay(self, plot):
+        """ Setup the x-axis labels for strip charts.
+        """
+        if plot.GetXaxis().GetTimeDisplay():
+            plot.GetXaxis().SetNdivisions(507)
+            plot.GetXaxis().SetLabelOffset(0.04)
+            plot.GetXaxis().SetTimeFormat('#splitline{%d/%m/%y}{%H:%M:%S}')
+
     def draw(self, objName, **kwargs):
         """ Draw a plot from the DST.
         """
         _canvas = E3Canvas('c%s' % objName, **kwargs)
         _rootObject = self.__InputFile.Get(objName)
+        self.setupTimeDisplay(_rootObject)
         _rootObject.Draw()
         _canvas.annotate(0.1, 0.94, self.__Label)
         _canvas.Update()
@@ -69,6 +78,7 @@ class E3DataQualityMonitor:
              (alarmName, alarmName))
         _canvas = E3Canvas('c%s_%s' % (objName, alarmName), **kwargs)
         _rootObject = self.__InputFile.Get(objName)
+        self.setupTimeDisplay(_rootObject)
         _rootObject.Draw()
         _canvas.annotate(0.1, 0.94, self.__Label)
         _alarm = alarmClass(_rootObject, errMin, warnMin, warnMax, errMax)
