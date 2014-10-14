@@ -21,4 +21,18 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-TELESCOPE_LIST = []
+TELESCOPE_LIST = ['ALTA-01',
+                  'BARI-01',
+                  'CAGL-01',
+                  'CAGL-02',
+                  'CATA-02',
+                  'FRAS-02',
+                  'GROS-01',
+                  'LECC-02',
+                  'PISA-01',
+                  'SAVO-01',
+                  'TORI-04',
+                  'TRAP-01',
+                  'TRIN-01',
+                  'VIAR-02'
+              ]
