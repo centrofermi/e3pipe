@@ -28,7 +28,8 @@ from e3pipe.root.E3InputRootFile import E3InputRootFile
 from e3pipe.root.E3Canvas import E3Canvas
 from e3pipe.dqm.E3Alarm import E3Alarm
 from e3pipe.dqm.E3HtmlOutputFile import E3HtmlOutputFile
-from e3pipe.__utils__ import createFolder
+from e3pipe.__utils__ import createFolder, cp
+from e3pipe.__package__ import E3PIPE_DQM
 
 
 
@@ -50,6 +51,14 @@ class E3DataQualityMonitor:
         """
         return self.__AlarmList
 
+    def canvasName(self, objName, alarmName = None):
+        """
+        """
+        name = 'c%s' % objName
+        if alarmName is not None:
+            name += '_%s' % alarmName
+        return name
+
     def setupTimeDisplay(self, plot):
         """ Setup the x-axis labels for strip charts.
         """
@@ -61,7 +70,7 @@ class E3DataQualityMonitor:
     def draw(self, objName, **kwargs):
         """ Draw a plot from the DST.
         """
-        _canvas = E3Canvas('c%s' % objName, **kwargs)
+        _canvas = E3Canvas(self.canvasName(objName), **kwargs)
         _rootObject = self.__InputFile.Get(objName)
         self.setupTimeDisplay(_rootObject)
         _rootObject.Draw()
@@ -76,7 +85,7 @@ class E3DataQualityMonitor:
         """
         exec('from e3pipe.dqm.alarm_%s import alarm_%s as alarmClass' %\
              (alarmName, alarmName))
-        _canvas = E3Canvas('c%s_%s' % (objName, alarmName), **kwargs)
+        _canvas = E3Canvas(self.canvasName(objName, alarmName), **kwargs)
         _rootObject = self.__InputFile.Get(objName)
         self.setupTimeDisplay(_rootObject)
         _rootObject.Draw()
@@ -117,18 +126,44 @@ class E3DataQualityMonitor:
 
     def createReport(self):
         """ Create the html report.
+
+        TODO: this is ugly. We should refector the code so that objects
+        encpsulating specific parts of the report (e.g., the Header TTree)
+        are self-aware and can format themselves for html.
+
+        TODO: we should be able to configure which plots end up on the top
+        of the page.
         """
         if self.__OutputFolder is None:
             logger.info('No DQM output folder set, skipping report...')
             return
+        cp(os.path.join(E3PIPE_DQM, 'e3pipe.css'), self.__OutputFolder)
         logger.info('Writing DQM report...')
-        filePath = os.path.join(self.__OutputFolder, 'dqmreport.html')
+        filePath = os.path.join(self.__OutputFolder, 'index.html')
         outputFile = E3HtmlOutputFile(filePath)
-        outputFile.write('<table>\n')
+        outputFile.write('<p></p>\n')
+        img = '%s.png' % self.canvasName('RateTrackEvents', 'y_values')
+        outputFile.image(img, width = '49%')
+        img = '%s.png' % self.canvasName('ChiSquare', 'x_average')
+        outputFile.image(img, width = '49%')
+        outputFile.section('Run summary')
+        header = self.__InputFile.Get('Header')
+        header.GetEntry(0)
+        outputFile.write('<p></p>\n')
+        outputFile.write('<ul>\n')
+        outputFile.li('DST file path: %s' % self.__InputFile.GetName())
+        outputFile.li('Run duration: %.3f s' % header.RunDuration)
+        outputFile.li('Number of events: %s' % header.NumEvents)
+        outputFile.li('Number of events with track(s): %s' %\
+                      header.NumTrackEvents)
+        outputFile.li('Number of GPS events: %s' % header.NumGpsEvents)
+        outputFile.write('</ul>\n')
+        outputFile.section('Alarm summary')
+        outputFile.write('\n<table width=100%>\n')
         outputFile.write('%s\n' % E3Alarm.HTML_TABLE_HEADER)
         for alarm in self.__AlarmList:
             outputFile.write('%s\n' % alarm.htmlTableRow())
-        outputFile.write('</table>\n')
+        outputFile.write('</table>\n<p></p>\n')
         outputFile.close()
         logger.info('Done.')
         
