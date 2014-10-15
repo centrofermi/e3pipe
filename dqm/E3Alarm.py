@@ -196,11 +196,16 @@ class E3Alarm:
         """
         pass
 
-    def htmlTableRow(self):
+    def htmlTableRow(self, linkPlot = True):
         """ Return an HTML row for the output report.
         """
         row = '<tr>'
-        row += '<td>%s</td>' % self.__RootObject.GetName()
+        objName = self.__RootObject.GetName()
+        if linkPlot:
+            plotName = 'c%s_%s.png' % (objName, self.name())
+            row += '<td><a href="%s">%s</a></td>' % (plotName, objName)
+        else:
+            row += '<td>%s</td>' % objName
         row += '<td>%s</td>' % self.name()
         row += '<td>%s</td>' % self.__Status
         row += '<td>%s</td>' % self.formattedValue()

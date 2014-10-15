@@ -34,6 +34,7 @@ HTML_HEADER = \
   <head>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <title>EEE DQM report</title>
+    <link rel="stylesheet" href="e3pipe.css" type="text/css" media="all">
   </head>
   <body>
 
