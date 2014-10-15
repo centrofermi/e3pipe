@@ -124,7 +124,7 @@ class E3RawDataInfo(dict):
         self['Year'], self['Month'], \
             self['Day'] = [int(item) for item in data[1:4]]
         self['RunString'] = data[4]
-        self['RunId'] = int(self.RunString)
+        self['RunNumber'] = int(self.RunString)
         self['Date'] = datetime.date(self.Year, self.Month, self.Day)
         self['DateString'] = '%s-%s-%s' % (self.Year, self.Month, self.Day)
         self['DstFilePath'] = dstFilePath(self)
