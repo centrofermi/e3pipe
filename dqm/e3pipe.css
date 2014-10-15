@@ -95,17 +95,17 @@ td.tableheader
 
 .warning
 {
-    color: #ff0;
+    color: #ffcc33;
 }
 
 .clean
 {
-    color: #0f0;
+    color: #009933;
 }
 
 .error
 {
-    color: #f00;
+    color: #ff0000;
 }
 
 #container
