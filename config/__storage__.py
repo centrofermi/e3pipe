@@ -137,7 +137,7 @@ class E3RawDataInfo(dict):
         """
         return self[key]
 
-    def age(self):
+    def daysSinceDataTaking(self):
         """ Return the age of the date in days.
         """
         delta = datetime.date.today() - self.Date
@@ -146,7 +146,13 @@ class E3RawDataInfo(dict):
     def takenToday(self):
         """ Return true if the data have been collected today.
         """
-        return self.age() == 0
+        return self.daysSinceDataTaking() == 0
+
+    def processed(self):
+        """ Return whether the output DST file exists in the location where
+        it is expected to be,
+        """
+        return os.path.exists(self.DstFilePath)
 
 
 
@@ -219,10 +225,11 @@ if __name__ == '__main__':
         if key.startswith('E3PIPE'):
             print '%s = %s' % (key, eval(key))
     filePath = '/data/ALTA-01/data/2014-10-11/ALTA-01-2014-10-11-00001.bin'
-    info = E3RawDataInfo(filePath)
-    print info
-    print info.age()
-    print info.takenToday()
+    runInfo = E3RawDataInfo(filePath)
+    print runInfo
+    print runInfo.daysSinceDataTaking()
+    print runInfo.takenToday()
+    print runInfo.processed()
     print filePath
     for location in dataProductLocations(filePath):
         print location
