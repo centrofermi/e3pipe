@@ -24,6 +24,7 @@
 from e3pipe.__logging__ import logger, abort
 from e3pipe.dqm.E3AlarmLimits import E3AlarmLimits
 from e3pipe.misc.__formatting__ import formatNumber, formatValErr
+from e3pipe.dqm.E3HtmlOutputFile import htmlTableHeader
 
 
 class E3Alarm:
@@ -39,7 +40,8 @@ class E3Alarm:
     SUPPORTED_PARAMETERS = []
     SUPPORTED_CONDITIONS = []
     OUTPUT_DESCRIPTION = None
-    HTML_TABLE_HEADER = '<tr><td>ROOT object</td><td>Alarm</td><td>Status</td><td>Output</td><td>Limits</td></tr>'
+    HTML_TABLE_HEADER = htmlTableHeader('ROOT object', 'Alarm', 'Status',
+                                        'Output', 'Limits')
     
     def __init__(self, rootObject, errMin, warnMin, warnMax, errMax):
         """ Constructor.
@@ -207,7 +209,7 @@ class E3Alarm:
         else:
             row += '<td>%s</td>' % objName
         row += '<td>%s</td>' % self.name()
-        row += '<td>%s</td>' % self.__Status
+        row += '<td class="%s">%s</td>' % (self.__Status.lower(), self.__Status)
         row += '<td>%s</td>' % self.formattedValue()
         row += '<td>%s</td>' % self.__Limits
         row += '</tr>'

@@ -63,6 +63,25 @@ Generated on %s.
 """
 
 
+def htmlAttributes(**kwargs):
+    """ Format a python dictionary as a collection of html attributes.
+    """
+    attributes = ''
+    for key, value in kwargs.items():
+        attributes += '%s = %s ' % (key, value)
+    return attributes.strip()
+
+def htmlTableHeader(*args, **kwargs):
+    """ Format a list of arguments as a html table header.
+    """
+    text = '<tr>'
+    for arg in args:
+        text += '<td class="tableheader">%s</td>' % arg
+    text += '</tr>'
+    return text
+
+
+
 class E3HtmlOutputFile(file):
 
     """ Utility class for html output.
@@ -82,14 +101,6 @@ class E3HtmlOutputFile(file):
         file.__init__(self, filePath, 'w')
         self.write(HTML_HEADER % (title, css, header))
 
-    def __attributes(self, **kwargs):
-        """ Format a python dictionary as a collection of html attributes.
-        """
-        attributes = ''
-        for key, value in kwargs.items():
-            attributes += '%s = %s ' % (key, value)
-        return attributes.strip()
-
     def section(self, title):
         """ Start a new section in the output file.
         """
@@ -98,14 +109,13 @@ class E3HtmlOutputFile(file):
     def li(self, text, **kwargs):
         """
         """
-        self.write('<li %s>%s</li>\n' %\
-                   (self.__attributes(**kwargs), text))
+        self.write('<li %s>%s</li>\n' % (htmlAttributes(**kwargs), text))
 
     def image(self, filePath, **kwargs):
         """ Add an image to the output file.
         """
         self.write('<a href="%s"><img %s src="%s"/></a>\n' %\
-                   (filePath, self.__attributes(**kwargs), filePath))
+                   (filePath, htmlAttributes(**kwargs), filePath))
 
     def close(self):
         """ Write the footer and close the file.

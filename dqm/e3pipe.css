@@ -86,6 +86,28 @@ a:hover
     text-decoration: underline;
 }
 
+td.tableheader
+{
+    color: #000;
+    font-variant: small-caps;
+    /*font-weight: bold;*/
+}
+
+.warning
+{
+    color: #ff0;
+}
+
+.clean
+{
+    color: #0f0;
+}
+
+.error
+{
+    color: #f00;
+}
+
 #container
 {
     margin: 0em auto;
