@@ -39,10 +39,10 @@ class E3RawDataCrawler:
                  endDate = datetime.date.today(), lookBack = 2):
         """ Constructor.
         """
-        logger.info('Starting raw data crawler...')
+        logger.info('Starting data crawler...')
         self.__RunList = []
         for telescope in telescopeList:
-            logger.info('Searching raw data for %s...' % telescope)
+            logger.info('Searching for raw data for %s...' % telescope)
             folders = rawDataFolders(telescope, endDate, lookBack)
             for folder in folders:
                 if os.path.exists(folder):
