@@ -26,7 +26,7 @@ import glob
 import os
 
 from e3pipe.config.__storage__ import E3RawDataInfo, rawDataFolders
-from e3pipe.config.__telescopes__ import TELESCOPE_LIST
+from e3pipe.config.__stations__ import STATION_LIST
 from e3pipe.__logging__ import logger, abort
 
 
@@ -36,15 +36,15 @@ class E3RawDataCrawler:
     """ Basic data crawler implementation.
     """
 
-    def __init__(self, telescopeList = TELESCOPE_LIST,
+    def __init__(self, stationList = STATION_LIST,
                  endDate = datetime.date.today(), lookBack = 2):
         """ Constructor.
         """
         logger.info('Starting data crawler...')
         self.__RunList = []
-        for telescope in telescopeList:
-            logger.info('Searching for raw data for %s...' % telescope)
-            folders = rawDataFolders(telescope, endDate, lookBack)
+        for station in stationList:
+            logger.info('Searching for raw data from station %s...' % station)
+            folders = rawDataFolders(station, endDate, lookBack)
             for folder in folders:
                 if os.path.exists(folder):
                     logger.info('Crawling into %s...' % folder)

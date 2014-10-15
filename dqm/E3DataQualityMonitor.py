@@ -94,7 +94,7 @@ class E3DataQualityMonitor:
         """ Run the data quality monitoring on a DST file.
 
         TODO: this should be fully configurable from a file---possibly
-        on a telescope-by-telescope basis.
+        on a station-by-station basis.
         """
         if self.__OutputFolder is not None:
             createFolder(self.__OutputFolder)
