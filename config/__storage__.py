@@ -117,16 +117,20 @@ class E3RawDataInfo(dict):
         if not filePath.endswith('.bin'):
             abort('%s does not look like a raw binary file' % filePath)
         dict.__init__(self)
-        self['filepath'] = filePath
-        self['dirname'], self['filename'] = os.path.split(filePath)
-        data = self['filename'].split('.')[0].rsplit('-', 4)
-        self['station'] = data[0]
-        self['year'], self['month'], \
-            self['day'] = [int(item) for item in data[1:4]]
-        self['runstr'] = data[4]
-        self['run'] = int(self.runstr)
-        self['date'] = datetime.date(self.year, self.month, self.day)
-        self['datestr'] = '%s-%s-%s' % (self.year, self.month, self.day)
+        self['FilePath'] = filePath
+        self['DirName'], self['FileName'] = os.path.split(filePath)
+        data = self['FileName'].split('.')[0].rsplit('-', 4)
+        self['Station'] = data[0]
+        self['Year'], self['Month'], \
+            self['Day'] = [int(item) for item in data[1:4]]
+        self['RunString'] = data[4]
+        self['RunId'] = int(self.RunString)
+        self['Date'] = datetime.date(self.Year, self.Month, self.Day)
+        self['DateString'] = '%s-%s-%s' % (self.Year, self.Month, self.Day)
+        self['DstFilePath'] = dstFilePath(self)
+        self['CalibFilePath'] = calibFilePath(self)
+        self['LogFilePath'] = logFilePath(self)
+        self['DqmFolderPath'] = dqmFolderPath(self)
 
     def __getattr__(self, key):
         """ Overloaded method to facilitate access to class members.
@@ -136,7 +140,7 @@ class E3RawDataInfo(dict):
     def age(self):
         """ Return the age of the date in days.
         """
-        delta = datetime.date.today() - self.date
+        delta = datetime.date.today() - self.Date
         return delta.days
 
     def takenToday(self):
@@ -172,40 +176,40 @@ def dstFilePath(rawFileInfo):
     """ Return the path to the output dst ROOT file corresponding to a given
     input binary raw data file (.bin).
     """
-    fileName = rawFileInfo.filename.replace('.bin', '_dst.root')
-    return os.path.join(E3PIPE_RECON_BASE, rawFileInfo.station,
-                        rawFileInfo.datestr, fileName)
+    fileName = rawFileInfo.FileName.replace('.bin', '_dst.root')
+    return os.path.join(E3PIPE_RECON_BASE, rawFileInfo.Station,
+                        rawFileInfo.DateString, fileName)
 
 def calibFilePath(rawFileInfo):
     """ Return the path to the calib file corresponding to a given input binary
     raw data file (.bin).
     """
-    fileName = rawFileInfo.filename.replace('.bin', '_eeecalib.txt')
-    return os.path.join(E3PIPE_CALIB_BASE, rawFileInfo.station,
-                        rawFileInfo.datestr, fileName)
+    fileName = rawFileInfo.FileName.replace('.bin', '_eeecalib.txt')
+    return os.path.join(E3PIPE_CALIB_BASE, rawFileInfo.Station,
+                        rawFileInfo.DateString, fileName)
 
-def dqmFilePath(rawFileInfo):
+def dqmFolderPath(rawFileInfo):
     """ Return the path to the output ROOT dqm file corresponding to a given
     input binary raw data file (.bin).
     """
-    fileName = rawFileInfo.filename.replace('.bin', '_dqm.root')
-    return os.path.join(E3PIPE_DQM_BASE, rawFileInfo.station,
-                        rawFileInfo.datestr, fileName)
+    folderName = rawFileInfo.FileName.replace('.bin', '')
+    return os.path.join(E3PIPE_DQM_BASE, rawFileInfo.Station,
+                        rawFileInfo.DateString, folderName)
 
 def logFilePath(rawFileInfo):
     """ Return the path to the log file corresponding to a given input binary
     raw data file (.bin).
     """
-    fileName = rawFileInfo.filename.replace('.bin', '.log')
-    return os.path.join(E3PIPE_LOG_BASE, rawFileInfo.station,
-                        rawFileInfo.datestr, fileName)
+    fileName = rawFileInfo.FileName.replace('.bin', '.log')
+    return os.path.join(E3PIPE_LOG_BASE, rawFileInfo.Station,
+                        rawFileInfo.DateString, fileName)
 
 def dataProductLocations(rawFilePath):
     """ Return the file paths for the relevant output files corresponding to
     a given input raw data (.bin) file path
     """
     info = E3RawDataInfo(rawFilePath)
-    return dstFilePath(info), calibFilePath(info), dqmFilePath(info),\
+    return dstFilePath(info), calibFilePath(info), dqmFolderPath(info),\
         logFilePath(info)
 
 
