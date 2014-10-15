@@ -211,7 +211,7 @@ class E3Alarm:
         row += '<td>%s</td>' % self.name()
         row += '<td class="%s">%s</td>' % (self.__Status.lower(), self.__Status)
         row += '<td>%s</td>' % self.formattedValue()
-        row += '<td>%s</td>' % self.__Limits
+        row += '<td>%s</td>' % self.__Limits.html()
         row += '</tr>'
         return row
 

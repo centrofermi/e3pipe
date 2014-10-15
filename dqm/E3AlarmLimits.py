@@ -156,10 +156,17 @@ class E3AlarmLimits:
                     badness = self.ERROR_BADNESS + self.DELTA_BADNESS + db
         return badness
 
+    def html(self):
+        """ Html formatting.
+        """
+        return '[<font class="error">%s</font> / <font class="warning">%s</font> &ndash; <font class="warning">%s</font> / <font class="error">%s</font>]'%\
+            (formatNumber(self.ErrorMin), formatNumber(self.WarningMin),
+             formatNumber(self.WarningMax), formatNumber(self.ErrorMax))
+
     def __str__(self):
         """ String formatting.
         """
-        return '[%s / %s --- %s / %s]'%\
+        return '[%s / %s -- %s / %s]'%\
             (formatNumber(self.ErrorMin), formatNumber(self.WarningMin),
              formatNumber(self.WarningMax), formatNumber(self.ErrorMax))
 
