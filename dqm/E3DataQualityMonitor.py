@@ -27,6 +27,7 @@ from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3InputRootFile import E3InputRootFile
 from e3pipe.root.E3Canvas import E3Canvas
 from e3pipe.dqm.E3Alarm import E3Alarm
+from e3pipe.dqm.E3AlarmSummary import E3AlarmSummary
 from e3pipe.dqm.E3HtmlOutputFile import E3HtmlOutputFile
 from e3pipe.__utils__ import createFolder, cp
 from e3pipe.__package__ import E3PIPE_DQM
@@ -123,6 +124,18 @@ class E3DataQualityMonitor:
         self.alarm('ClusterMultBot', 'x_average', 0.5, 0.75, 2, 3, Logy = True)
         self.alarm('ClusterMultTotal', 'x_average', 1.5, 2.5, 6, 9, Logy = True)
         self.createReport()
+        self.createSummary()
+
+    def createSummary(self):
+        """ Create the alarm summary.
+        """
+        summary = E3AlarmSummary()
+        for alarm in self.__AlarmList:
+            summary.fill(alarm)
+        logger.info(summary)
+        if self.__OutputFolder is not None:
+            filePath = os.path.join(self.__OutputFolder, '.summary')
+            summary.write(filePath)
 
     def createReport(self):
         """ Create the html report.
