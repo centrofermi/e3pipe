@@ -85,7 +85,8 @@ except KeyError:
     E3PIPE_TEMP = os.path.expanduser(os.path.join('~', 'eeetmp'))
 
 
-"""
+""" Base folder on the centrofermi server to make the output of the dqm
+public.
 """
 E3PIPE_DQM_PUB_BASE = 'www.centrofermi.it:/var/www/html_eee/dqm/'
 
