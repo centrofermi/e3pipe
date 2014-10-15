@@ -34,6 +34,7 @@ via environmental variables.
 
 
 import os
+import time
 import datetime
 import copy
 
@@ -117,9 +118,9 @@ class E3RawDataInfo(dict):
         if not filePath.endswith('.bin'):
             abort('%s does not look like a raw binary file' % filePath)
         dict.__init__(self)
-        self['FilePath'] = filePath
-        self['DirName'], self['FileName'] = os.path.split(filePath)
-        data = self['FileName'].split('.')[0].rsplit('-', 4)
+        self['RawFilePath'] = filePath
+        self['RawDirName'], self['RawFileName'] = os.path.split(filePath)
+        data = self['RawFileName'].split('.')[0].rsplit('-', 4)
         self['Station'] = data[0]
         self['Year'], self['Month'], \
             self['Day'] = [int(item) for item in data[1:4]]
@@ -148,6 +149,22 @@ class E3RawDataInfo(dict):
         """
         return self.daysSinceDataTaking() == 0
 
+    def lastSynch(self):
+        """ Return the last modification time (and nicely formatted, too)
+        of the raw data file.
+        """
+        return time.ctime(os.path.getmtime(self.RawFilePath))
+
+    def secondsSinceSynch(self):
+        """ Return the seconds since the last modification time.
+        """
+        return time.time() - os.path.getmtime(self.RawFilePath)
+
+    def hoursSinceSynch(self):
+        """ Return the hours since the last modification time.
+        """
+        return self.secondsSinceLastSynch()/3600.
+    
     def processed(self):
         """ Return whether the output DST file exists in the location where
         it is expected to be,
@@ -164,7 +181,7 @@ def rawDataFolder(station, date = datetime.date.today()):
     return os.path.join(E3PIPE_RAW_BASE, station, 'data',
                         '%s-%s-%s' % (date.year, date.month, date.day))
 
-def rawDataFolders(station, endDate = datetime.date.today(), lookBack = 2):
+def rawDataFolders(station, endDate = datetime.date.today(), daysSpanned = 2):
     """ Return a list of folders with the raw data for a given station
     and a given time span.
 
@@ -173,7 +190,7 @@ def rawDataFolders(station, endDate = datetime.date.today(), lookBack = 2):
     The default is to look back two days from today.
     """
     folders = [rawDataFolder(station, endDate)]
-    for i in range(1, lookBack + 1):
+    for i in range(1, daysSpanned + 1):
         date = endDate - datetime.timedelta(i)
         folders.append(rawDataFolder(station, date))
     return folders
@@ -182,7 +199,7 @@ def dstFilePath(rawFileInfo):
     """ Return the path to the output dst ROOT file corresponding to a given
     input binary raw data file (.bin).
     """
-    fileName = rawFileInfo.FileName.replace('.bin', '_dst.root')
+    fileName = rawFileInfo.RawFileName.replace('.bin', '_dst.root')
     return os.path.join(E3PIPE_RECON_BASE, rawFileInfo.Station,
                         rawFileInfo.DateString, fileName)
 
@@ -190,7 +207,7 @@ def calibFilePath(rawFileInfo):
     """ Return the path to the calib file corresponding to a given input binary
     raw data file (.bin).
     """
-    fileName = rawFileInfo.FileName.replace('.bin', '_eeecalib.txt')
+    fileName = rawFileInfo.RawFileName.replace('.bin', '_eeecalib.txt')
     return os.path.join(E3PIPE_CALIB_BASE, rawFileInfo.Station,
                         rawFileInfo.DateString, fileName)
 
@@ -198,7 +215,7 @@ def dqmFolderPath(rawFileInfo):
     """ Return the path to the output ROOT dqm file corresponding to a given
     input binary raw data file (.bin).
     """
-    folderName = rawFileInfo.FileName.replace('.bin', '')
+    folderName = rawFileInfo.RawFileName.replace('.bin', '')
     return os.path.join(E3PIPE_DQM_BASE, rawFileInfo.Station,
                         rawFileInfo.DateString, folderName)
 
@@ -206,7 +223,7 @@ def logFilePath(rawFileInfo):
     """ Return the path to the log file corresponding to a given input binary
     raw data file (.bin).
     """
-    fileName = rawFileInfo.FileName.replace('.bin', '.log')
+    fileName = rawFileInfo.RawFileName.replace('.bin', '.log')
     return os.path.join(E3PIPE_LOG_BASE, rawFileInfo.Station,
                         rawFileInfo.DateString, fileName)
 
@@ -235,3 +252,6 @@ if __name__ == '__main__':
         print location
     print rawDataFolder('ALTA-01')
     print rawDataFolders('ALTA-01')
+    runInfo = E3RawDataInfo('../data/CERN-01-2014-05-16-00003.bin')
+    print runInfo.lastSynch()
+    print runInfo.hoursSinceSynch()

@@ -37,21 +37,23 @@ class E3RawDataCrawler:
     """
 
     def __init__(self, stationList = STATION_LIST,
-                 endDate = datetime.date.today(), lookBack = 2):
+                 endDate = datetime.date.today(), daysSpanned = 2,
+                 minHoursSinceSynch = 2.):
         """ Constructor.
         """
         logger.info('Starting data crawler...')
         self.__RunList = []
         for station in stationList:
             logger.info('Searching for raw data from station %s...' % station)
-            folders = rawDataFolders(station, endDate, lookBack)
+            folders = rawDataFolders(station, endDate, daysSpanned)
             for folder in folders:
                 if os.path.exists(folder):
                     logger.info('Crawling into %s...' % folder)
                     fileList = glob.glob(os.path.join(folder, '*.bin'))
                     for filePath in fileList:
                         runInfo = E3RawDataInfo(filePath)
-                        if not runInfo.processed():
+                        if not runInfo.processed() and \
+                           runInfo.hoursSinceSynch() < minHoursSinceSynch:
                             self.__RunList.append(runInfo)
 
     def runList(self):
