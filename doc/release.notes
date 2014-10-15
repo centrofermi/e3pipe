@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (0.3.0) - Wed, 15 Oct 2014 22:14:00 +0200
+-------------------------------------------------------------------------------
 * Added config folder.
 * First implementation of the DQM html report.
 * Alarm summary written in the dqm output folder.
