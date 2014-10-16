@@ -174,8 +174,8 @@ class E3DataQualityMonitor:
         outputFile.section('Alarm summary')
         outputFile.write('\n<table width=100%>\n')
         outputFile.write('%s\n' % E3Alarm.HTML_TABLE_HEADER)
-        for alarm in self.__AlarmList:
-            outputFile.write('%s\n' % alarm.htmlTableRow())
+        for i, alarm in enumerate(self.__AlarmList):
+            outputFile.write('%s\n' % alarm.htmlTableRow(True, i))
         outputFile.write('</table>\n<p></p>\n')
         outputFile.close()
         logger.info('Done.')

@@ -11,7 +11,7 @@ body
     margin: 0;
     padding: 0;
     font: 90% Lucida Grande,Lucida Sans,Arial,sans-serif;
-    color: #666;
+    color: #333;
 }
 
 p.code
@@ -44,7 +44,7 @@ p.code
 h1
 {
     font: 175% sans-serif;
-    color: #ff9900;
+    color: orange;
 }
 
 h2
@@ -52,7 +52,7 @@ h2
     font: 125% sans-serif;
     font-variant: small-caps;
     /*font-weight: bold;*/
-    color: #ff9900;
+    color: orange;
 }
 
 h3
@@ -60,7 +60,7 @@ h3
     font: 110% sans-serif;
     font-variant: small-caps;
     /*font-weight: bold;*/
-    color: #ff9900;
+    color: orange;
 }
 
 h4
@@ -86,13 +86,6 @@ a:hover
     text-decoration: underline;
 }
 
-td.tableheader
-{
-    color: #000;
-    font-variant: small-caps;
-    /*font-weight: bold;*/
-}
-
 .warning
 {
     color: orange;
@@ -107,6 +100,27 @@ td.tableheader
 {
     color: red;
 }
+
+
+th
+{
+    background-color: orange;
+    color: #000;
+    font-variant: small-caps;
+    /*font-weight: bold;*/
+}
+
+tr.odd
+{
+    background-color: #fff;
+}
+
+
+tr.even
+{
+    background-color: #eee;
+}
+
 
 #container
 {
@@ -168,7 +182,7 @@ td.tableheader
 
 #menu ul li:before
 {
-    color: #ff9900;
+    color: orange;
     content: "> ";
 }
 

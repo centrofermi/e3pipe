@@ -198,10 +198,16 @@ class E3Alarm:
         """
         pass
 
-    def htmlTableRow(self, linkPlot = True):
+    def htmlTableRow(self, linkPlot = True, index = None):
         """ Return an HTML row for the output report.
         """
-        row = '<tr>'
+        if index is not None:
+            if index % 2:
+                row = '<tr class="even">'
+            else:
+                row = '<tr class="odd">'
+        else:
+            row = '<tr>'
         objName = self.__RootObject.GetName()
         if linkPlot:
             plotName = 'c%s_%s.png' % (objName, self.name())

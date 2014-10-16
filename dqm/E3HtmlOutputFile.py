@@ -74,9 +74,9 @@ def htmlAttributes(**kwargs):
 def htmlTableHeader(*args, **kwargs):
     """ Format a list of arguments as a html table header.
     """
-    text = '<tr>'
+    text = '<tr class="tableheader">'
     for arg in args:
-        text += '<td class="tableheader">%s</td>' % arg
+        text += '<th>%s</th>' % arg
     text += '</tr>'
     return text
 
