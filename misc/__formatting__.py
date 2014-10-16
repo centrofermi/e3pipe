@@ -23,6 +23,7 @@
 
 import types
 import math
+import decimal
 
 
 def formatFloat(number):
@@ -61,14 +62,31 @@ def formatNumber(number):
         except:
             return number
 
+def float_to_decimal(f):
+    """
+    Convert a floating point number to a Decimal with no loss of information
+
+    This is essentially a nuisance in order to be able to deal with
+    python 2.6 on the CNAF machine and is taken from:
+    https://docs.python.org/release/2.6.7/library/decimal.html#decimal-faq
+    """
+    n, d = f.as_integer_ratio()
+    numerator, denominator = decimal.Decimal(n), decimal.Decimal(d)
+    ctx = decimal.Context(prec=60)
+    result = ctx.divide(numerator, denominator)
+    while ctx.flags[decimal.Inexact]:
+        ctx.flags[decimal.Inexact] = False
+        ctx.prec *= 2
+        result = ctx.divide(numerator, denominator)
+    return result
+
 def formatValErr(value, error):
     """ Format a value/error pair.
 
     From http://code.activestate.com/lists/python-list/616578/
     """
-    import decimal
-    value = decimal.Decimal(value)
-    error = decimal.Decimal(error)
+    value = float_to_decimal(value)
+    error = float_to_decimal(error)
     scale = error.adjusted()
     scale += error.scaleb(-scale).to_integral().adjusted()
     scale -= 1
