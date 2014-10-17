@@ -69,12 +69,15 @@ def programInstalled(programName):
         absPath = None
     return (exists, absPath)
 
-def cp(source, dest):
+def cp(source, dest, createTree = False):
     """ Copy a file.
 
     Return 0 upon succesfull operation, 1 otherwise.
     """
     logger.info('About to copy %s to %s...' % (source, dest))
+    destFolder = os.path.dirname(dest)
+    if not os.path.exists(destFolder) and createTree:
+        createFolder(destFolder)
     try:
         shutil.copy(source, dest)
         logger.info('File succesfully copied.')
