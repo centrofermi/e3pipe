@@ -58,16 +58,6 @@ def versionInfo():
 E3PIPE_RELEASE_NOTES_PATH = os.path.join(E3PIPE_DOC, 'release.notes')
 
 
-""" Name of the calibration file that is created on the fly by the analysis
-program.
-"""
-E3CALIB_FILE_NAME = 'eee_calib.txt'
-
-
-""" Extensions of the output files produced by the analyzer.
-"""
-E3ANALYZER_OUTPUTS = ['.2tt', '.out', '.sum', '.tim']
-
 
 if __name__ == '__main__':
     print('E3PIPE_ROOT: %s' % E3PIPE_ROOT)

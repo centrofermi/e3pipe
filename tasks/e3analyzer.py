@@ -25,14 +25,9 @@ import os
 import e3pipe.__utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
-from e3pipe.__package__ import E3ANALYZER_OUTPUTS
 from e3pipe.misc.E3Chrono import E3Chrono
-
-
-""" TODO: need to think about how to make this configurable.
-"""
-E3_ANALYZER_PATH = '/opt/eee/bin/EEE_Analyzer'
-E3_ANALYZER_TMP_FOLDER = '/opt/eee/temp'
+from e3pip3.confifg.__storage__ import E3PIPE_TEMP
+from e3pip3.confifg.__analyzer__ import E3_ANALYZER, E3_ANALYZER_OUTPUTS
 
 
 def e3analyzer(binFilePath, outputSuffix = None):
@@ -51,15 +46,15 @@ def e3analyzer(binFilePath, outputSuffix = None):
         return 1
     logger.info('Processing run data file %s...' % binFilePath)
     binFileName = os.path.basename(binFilePath)
-    tmpFilePath = os.path.join(E3_ANALYZER_TMP_FOLDER, binFileName)
+    tmpFilePath = os.path.join(E3PIPE_TEMP, binFileName)
     e3pipe.__utils__.cp(binFilePath, tmpFilePath)
-    sc = e3pipe.__utils__.cmd('%s %s' % (E3_ANALYZER_PATH, tmpFilePath))
+    sc = e3pipe.__utils__.cmd('%s %s' % (E3_ANALYZER, tmpFilePath))
     if sc:
         return None
     logger.info('Run processed in %.3f s.' % chrono.stop())
     baseFilePath = tmpFilePath.replace('.bin', '')
     if outputSuffix is not None:
-        for extension in E3ANALYZER_OUTPUTS:
+        for extension in E3_ANALYZER_OUTPUTS:
             src = '%s%s' % (baseFilePath, extension)
             dest = '%s_%s%s' % (baseFilePath, outputSuffix, extension)
             e3pipe.__utils__.mv(src, dest)
