@@ -24,15 +24,15 @@
 STATION_LIST = ['ALTA-01',
                 'BARI-01',
                 'CAGL-01',
-                #'CAGL-02',
+                'CAGL-02',
                 'CATA-02',
                 'FRAS-02',
                 'GROS-01',
                 'LECC-02',
                 'PISA-01',
-                #'SAVO-01',
+                'SAVO-01',
                 'TORI-04',
-                #'TRAP-01',
+                'TRAP-01',
                 'TRIN-01',
                 'VIAR-02'
             ]
