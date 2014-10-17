@@ -38,7 +38,10 @@ import time
 import datetime
 import copy
 
+import e3pipe.__utils__ as __utils__
+
 from e3pipe.__logging__ import logger, abort
+
 
 """ Base folder for the raw data.
 """
@@ -79,11 +82,20 @@ except KeyError:
 
 Note this is user-specific, and we do cleanup the folder after the
 reconstruction has run.
+
+We also do create the folder on the fly (if it does not exists) when
+the module is imported.
 """
 try:
     E3PIPE_TEMP = os.environ['E3PIPE_TEMP']
 except KeyError:
     E3PIPE_TEMP = os.path.expanduser(os.path.join('~', 'eeetmp'))
+__utils__.createFolder(E3PIPE_TEMP)
+
+def cleanupTemp():
+    """ Cleanup the temp folder.
+    """
+    __utils__.cleanup(E3PIPE_TEMP)
 
 
 """ Base folder on the centrofermi server to make the output of the dqm
@@ -163,7 +175,7 @@ class E3RawDataInfo(dict):
     def hoursSinceSynch(self):
         """ Return the hours since the last modification time.
         """
-        return self.secondsSinceLastSynch()/3600.
+        return self.secondsSinceSynch()/3600.
     
     def processed(self):
         """ Return whether the output DST file exists in the location where

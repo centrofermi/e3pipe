@@ -22,12 +22,14 @@
 
 
 import os
-import e3pipe.__utils__
+
+import e3pipe.__utils__ as __utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
 from e3pipe.misc.E3Chrono import E3Chrono
-from e3pip3.confifg.__storage__ import E3PIPE_TEMP
-from e3pip3.confifg.__analyzer__ import E3_ANALYZER, E3_ANALYZER_OUTPUTS
+from e3pipe.config.__storage__ import E3PIPE_TEMP, cleanupTemp
+from e3pipe.config.__analyzer__ import E3_ANALYZER, E3_CALIB_FILE_NAME,\
+    E3_ANALYZER_OUTPUTS
 
 
 def e3analyzer(binFilePath, outputSuffix = None):
@@ -39,26 +41,33 @@ def e3analyzer(binFilePath, outputSuffix = None):
     """
     chrono = E3Chrono()
     if not os.path.exists(binFilePath):
-        logger.error('Could not find %s, giving up...' % binFilePath)
-        return 1
+        abort('Could not find %s, giving up...' % binFilePath)
     if not binFilePath.endswith('.bin'):
-        logger.error('%s not a .bin file, giving up...' % binFilePath)
-        return 1
+        abort('%s not a .bin file, giving up...' % binFilePath)
+    cleanupTemp()
+    logger.info('Content of %s: %s' % (E3PIPE_TEMP,os.listdir(E3PIPE_TEMP)))
     logger.info('Processing run data file %s...' % binFilePath)
     binFileName = os.path.basename(binFilePath)
-    tmpFilePath = os.path.join(E3PIPE_TEMP, binFileName)
-    e3pipe.__utils__.cp(binFilePath, tmpFilePath)
-    sc = e3pipe.__utils__.cmd('%s %s' % (E3_ANALYZER, tmpFilePath))
+    copyFilePath = os.path.join(E3PIPE_TEMP, binFileName)
+    __utils__.cp(binFilePath, copyFilePath)
+    _cmd = 'cd %s; %s %s' % (E3PIPE_TEMP, E3_ANALYZER, copyFilePath)
+    logger.info('Generating the calibration file...')
+    sc = __utils__.cmd(_cmd)
+    if sc:
+        return None
+    logger.info('Running the EEE Analizer for real!')
+    sc = __utils__.cmd(_cmd)
     if sc:
         return None
     logger.info('Run processed in %.3f s.' % chrono.stop())
-    baseFilePath = tmpFilePath.replace('.bin', '')
+    baseFilePath = copyFilePath.replace('.bin', '')
     if outputSuffix is not None:
         for extension in E3_ANALYZER_OUTPUTS:
             src = '%s%s' % (baseFilePath, extension)
             dest = '%s_%s%s' % (baseFilePath, outputSuffix, extension)
-            e3pipe.__utils__.mv(src, dest)
+            __utils__.mv(src, dest)
         baseFilePath = '%s_%s' % (baseFilePath, outputSuffix)
+    logger.info('Returning base path: "%s".' % baseFilePath)
     return baseFilePath
 
 

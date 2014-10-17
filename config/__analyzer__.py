@@ -24,12 +24,19 @@
 import os
 
 
-""" Path to the official EEE analyzer. 
+""" Path to the official EEE analyzer.
+
+A little bit of history, here (last updated on October 7, 2014).
+* /opt/eee/bin/EEE_Analyzer_V0 was the original analyzer program
+  when the work on the wrapper started.
+* /opt/eee/bin/EEE_Analyzer is currently pointing to a slightly
+  modified version where Richard is writing a complete row (with dummy
+  values) for the GPS events and the events with no track in general.
 """
 try:
     E3_ANALYZER  = os.environ['E3_ANALYZER']
 except KeyError:
-    E3_ANALYZER = '/opt/eee/bin/EEE_Analyzer'
+    E3_ANALYZER = '/opt/eee/bin/EEE_Analyzer_V0'
 
 
 """ Name of the calibration file that is created on the fly by the analysis
