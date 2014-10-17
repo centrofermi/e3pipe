@@ -45,9 +45,9 @@ from e3pipe.tasks.e3dst import e3dst
 
 # Mind that we have to pass the base path (with no extension) to the
 # task, so we strip the extension itself, here, if necessary.
-from e3pipe.__package__ import E3ANALYZER_OUTPUTS
+from e3pipe.config.__analyzer__ import E3_ANALYZER_OUTPUTS
 basePath = args[0]
-for ext in E3ANALYZER_OUTPUTS:
+for ext in E3_ANALYZER_OUTPUTS:
     if basePath.endswith(ext):
         basePath = basePath.replace(ext, '')
 
