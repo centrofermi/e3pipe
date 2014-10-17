@@ -23,9 +23,12 @@
 
 import datetime
 
+import e3pipe.__utils__ as __utils__
+
 from e3pipe.misc.E3RawDataCrawler import E3RawDataCrawler
 from e3pipe.config.__stations__ import STATION_LIST
 from e3pipe.__logging__ import logger, abort
+
 
 
 def e3crawl(endDate = None, daysSpanned = 2, minHoursSinceSynch = 2.,
@@ -36,7 +39,11 @@ def e3crawl(endDate = None, daysSpanned = 2, minHoursSinceSynch = 2.,
         endDate = datetime.date.today()
     crawler = E3RawDataCrawler(STATION_LIST, endDate, daysSpanned,
                                minHoursSinceSynch)
+    logger.info('%s binary file(s) to be processed found.' %\
+                    len(crawler.runList()))
     for runInfo in crawler.runList():
-        print runInfo.RawFilePath
+        _cmd = 'e3recon.py %s' % runInfo.RawFilePath
+        __utils__.cmd(_cmd, verbose = True, dryRun = dryRun)
+
 
 

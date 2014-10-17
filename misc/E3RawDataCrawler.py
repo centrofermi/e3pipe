@@ -50,11 +50,16 @@ class E3RawDataCrawler:
                 if os.path.exists(folder):
                     logger.info('Crawling into %s...' % folder)
                     fileList = glob.glob(os.path.join(folder, '*.bin'))
+                    logger.info('%d candidate binary file(s) found...' %\
+                                    len(fileList))
+                    n = 0
                     for filePath in fileList:
                         runInfo = E3RawDataInfo(filePath)
                         if not runInfo.processed() and \
                            runInfo.hoursSinceSynch() > minHoursSinceSynch:
                             self.__RunList.append(runInfo)
+                            n += 1
+                    logger.info('%d of which are ready to be processed.' % n)
 
     def runList(self):
         """ Return the list of runs.
