@@ -37,6 +37,6 @@ def e3crawl(endDate = None, daysSpanned = 2, minHoursSinceSynch = 2.,
     crawler = E3RawDataCrawler(STATION_LIST, endDate, daysSpanned,
                                minHoursSinceSynch)
     for runInfo in crawler.runList():
-        print runInfo
+        print runInfo.RawFilePath
 
 

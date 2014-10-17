@@ -53,7 +53,7 @@ class E3RawDataCrawler:
                     for filePath in fileList:
                         runInfo = E3RawDataInfo(filePath)
                         if not runInfo.processed() and \
-                           runInfo.hoursSinceSynch() < minHoursSinceSynch:
+                           runInfo.hoursSinceSynch() > minHoursSinceSynch:
                             self.__RunList.append(runInfo)
 
     def runList(self):

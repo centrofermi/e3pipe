@@ -227,8 +227,8 @@ def rawDataFolder(station, date = datetime.date.today()):
     """ Return the base folder with the raw data for a given station and
     date.
     """
-    return os.path.join(E3PIPE_RAW_BASE, station, 'data',
-                        '%s-%s-%s' % (date.year, date.month, date.day))
+    datestr = date.strftime('%Y-%m-%d')
+    return os.path.join(E3PIPE_RAW_BASE, station, 'data', datestr)
 
 def rawDataFolders(station, endDate = datetime.date.today(), daysSpanned = 2):
     """ Return a list of folders with the raw data for a given station
