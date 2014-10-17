@@ -1,5 +1,8 @@
 
 * Minor fix for python 2.6 (nuisance in the Decimal module.)
+* Major refactoring of the tasks and apps to have everything up and running on
+  the actual eee analysis machine at CNAF.
+* Data crawler task and app added.
 
 -------------------------------------------------------------------------------
 e3pipe (0.3.1) - Thu, 16 Oct 2014 10:43:07 +0200
