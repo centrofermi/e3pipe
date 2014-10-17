@@ -41,9 +41,12 @@ def e3crawl(endDate = None, daysSpanned = 2, minHoursSinceSynch = 2.,
                                minHoursSinceSynch)
     logger.info('%s binary file(s) to be processed found.' %\
                     len(crawler.runList()))
+    if dryRun:
+        logger.info('Just kidding, dry run :-)')
+        return 
     for runInfo in crawler.runList():
         _cmd = 'e3recon.py %s' % runInfo.RawFilePath
-        __utils__.cmd(_cmd, verbose = True, dryRun = dryRun)
+        __utils__.cmd(_cmd)
 
 
 
