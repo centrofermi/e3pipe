@@ -45,4 +45,4 @@ startmsg()
 from e3pipe.tasks.e3recon import e3recon
 
 # And now we are ready to go.
-e3recon(rawFilePath, opts.suffix)
+e3recon(rawFilePath, True, opts.suffix)

@@ -21,22 +21,40 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import os
+
 import e3pipe.__utils__ as __utils__
 
+from e3pipe.__logging__ import logger
 from e3pipe.tasks.e3analyzer import e3analyzer
 from e3pipe.tasks.e3dst import e3dst
 from e3pipe.tasks.e3dqm import e3dqm
-from e3pipe.config.__storage__ import *
+from e3pipe.config.__storage__ import E3PIPE_TEMP, E3RawDataInfo
+from e3pipe.config.__analyzer__ import E3_CALIB_FILE_NAME
 
 
 
-def e3recon(binFilePath, copyFiles = True, suffix = None):
+def e3recon(rawFilePath, copyFiles = True, suffix = None):
     """ Run the analyzer, build the DST and run the DQM (i.e., effectively
     run the full reconstruction for one single run).
+
+    TODO: we should add some protection to make sure that everything
+    went fine before we actually try and copy the output files over.
+
+    TODO: we are instantiating a E3RawDataInfo object, here, and therefore
+    we are in principle recalculating all the path, which the crawler might
+    have already done. While this is not elegant, I don't think we'll ever
+    notice the overhead.
     """
-    baseFilePath = e3analyzer(binFilePath, suffix)
+    baseFilePath = e3analyzer(rawFilePath, suffix)
     dstFilePath = e3dst(baseFilePath)
-    dqmFolder = '%s-DQM' % baseFilePath
-    e3dqm(dstFilePath, dqmFolder)
-    #if copyFiles:
-    #    src = os.path.join()
+    dqmFolderPath = '%s_DQM' % baseFilePath
+    e3dqm(dstFilePath, dqmFolderPath)
+    if copyFiles:
+        logger.info('Setting up to copy files...')
+        runInfo = E3RawDataInfo(rawFilePath)
+        logger.info(runInfo)
+        calibFilePath = os.path.join(E3PIPE_TEMP, E3_CALIB_FILE_NAME)
+        __utils__.cp(calibFilePath, runInfo.CalibFilePath, True)
+        __utils__.cp(dstFilePath, runInfo.DstFilePath, True)
+        __utils__.cp(dqmFolderPath, runInfo.DqmFolderPath, True)
