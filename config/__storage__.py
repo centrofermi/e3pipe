@@ -145,15 +145,47 @@ class E3RawDataInfo(dict):
         self['RunNumber'] = int(self.RunString)
         self['Date'] = datetime.date(self.Year, self.Month, self.Day)
         self['DateString'] = '%s-%s-%s' % (self.Year, self.Month, self.Day)
-        self['DstFilePath'] = dstFilePath(self)
-        self['CalibFilePath'] = calibFilePath(self)
-        self['LogFilePath'] = logFilePath(self)
-        self['DqmFolderPath'] = dqmFolderPath(self)
+        self['DstFilePath'] = self.__dstFilePath()
+        self['CalibFilePath'] = self.__calibFilePath()
+        self['DqmFolderPath'] = self.__dqmFolderPath()
+        self['LogFilePath'] = self.__logFilePath()
 
     def __getattr__(self, key):
         """ Overloaded method to facilitate access to class members.
         """
         return self[key]
+
+    def __dstFilePath(self):
+        """ Return the path to the output dst ROOT file corresponding to a given
+        input binary raw data file (.bin).
+        """
+        fileName = self.RawFileName.replace('.bin', '_dst.root')
+        return os.path.join(E3PIPE_RECON_BASE, self.Station, self.DateString,
+                            fileName)
+
+    def __calibFilePath(self):
+        """ Return the path to the calib file corresponding to a given input
+        binary raw data file (.bin).
+        """
+        fileName = self.RawFileName.replace('.bin', '_eeecalib.txt')
+        return os.path.join(E3PIPE_CALIB_BASE, self.Station, self.DateString,
+                            fileName)
+
+    def __dqmFolderPath(self):
+        """ Return the path to the output ROOT dqm file corresponding to a given
+        input binary raw data file (.bin).
+        """
+        folderName = self.RawFileName.replace('.bin', '')
+        return os.path.join(E3PIPE_DQM_BASE, self.Station, self.DateString,
+                            folderName)
+
+    def __logFilePath(self):
+        """ Return the path to the log file corresponding to a given input
+        binary raw data file (.bin).
+        """
+        fileName = self.RawFileName.replace('.bin', '.log')
+        return os.path.join(E3PIPE_LOG_BASE, self.Station, self.DateString,
+                            fileName)
 
     def daysSinceDataTaking(self):
         """ Return the age of the date in days.
@@ -212,45 +244,13 @@ def rawDataFolders(station, endDate = datetime.date.today(), daysSpanned = 2):
         folders.append(rawDataFolder(station, date))
     return folders
 
-def dstFilePath(rawFileInfo):
-    """ Return the path to the output dst ROOT file corresponding to a given
-    input binary raw data file (.bin).
-    """
-    fileName = rawFileInfo.RawFileName.replace('.bin', '_dst.root')
-    return os.path.join(E3PIPE_RECON_BASE, rawFileInfo.Station,
-                        rawFileInfo.DateString, fileName)
-
-def calibFilePath(rawFileInfo):
-    """ Return the path to the calib file corresponding to a given input binary
-    raw data file (.bin).
-    """
-    fileName = rawFileInfo.RawFileName.replace('.bin', '_eeecalib.txt')
-    return os.path.join(E3PIPE_CALIB_BASE, rawFileInfo.Station,
-                        rawFileInfo.DateString, fileName)
-
-def dqmFolderPath(rawFileInfo):
-    """ Return the path to the output ROOT dqm file corresponding to a given
-    input binary raw data file (.bin).
-    """
-    folderName = rawFileInfo.RawFileName.replace('.bin', '')
-    return os.path.join(E3PIPE_DQM_BASE, rawFileInfo.Station,
-                        rawFileInfo.DateString, folderName)
-
-def logFilePath(rawFileInfo):
-    """ Return the path to the log file corresponding to a given input binary
-    raw data file (.bin).
-    """
-    fileName = rawFileInfo.RawFileName.replace('.bin', '.log')
-    return os.path.join(E3PIPE_LOG_BASE, rawFileInfo.Station,
-                        rawFileInfo.DateString, fileName)
-
 def dataProductLocations(rawFilePath):
     """ Return the file paths for the relevant output files corresponding to
     a given input raw data (.bin) file path
     """
     info = E3RawDataInfo(rawFilePath)
-    return dstFilePath(info), calibFilePath(info), dqmFolderPath(info),\
-        logFilePath(info)
+    return info.DstFilePath, info.CalibFilePath, info.DqmFolderPath,\
+        info.LogFilePath
 
 
 
