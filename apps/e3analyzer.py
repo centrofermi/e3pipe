@@ -45,4 +45,4 @@ startmsg()
 from e3pipe.tasks.e3analyzer import e3analyzer
 
 # And now we are ready to go.
-e3analyzer(rawFilePath, opts.output_suffix)
+e3analyzer(rawFilePath, opts.suffix)
