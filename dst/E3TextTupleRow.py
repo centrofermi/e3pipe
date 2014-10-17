@@ -49,7 +49,7 @@ class E3TextTupleRow(dict):
         dict.__init__(self)
         for field, datum in zip(self.FIELDS, data.split()):
             self[field.Name] = field.Type(datum)
-    
+
     def values(self):
         """ Return an ordered list of the field values.
 
