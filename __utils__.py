@@ -136,13 +136,6 @@ def cleanup(folderPath):
     filePath = os.path.join(folderPath, '*')
     cmd('rm -rf %s' % filePath)
 
-def cleanupTmpFileDir():
-    """ Cleanup the tmp directory.
-    """
-    from plasduino.__cfgparse__ import TOP_LEVEL_CONFIGURATION
-    folderPath = TOP_LEVEL_CONFIGURATION.get('daq.tmp-file-dir')
-    cleanup(folderPath)
-
 def createFolder(folderPath):
     """ Create a folder (unless it already exists).
 
