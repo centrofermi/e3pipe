@@ -51,6 +51,15 @@ def test(filePath):
                 except KeyError:
                     emptyEventsMult[_acc] = 1
             _acc = 0
+    outFile.close()
+    endmarkMult = {}
+    for line in open(filePath):
+        if 'hit' in line:
+            endmark = line.split()[-1]
+            try:
+                endmarkMult[endmark] += 1
+            except KeyError:
+                endmarkMult[endmark] = 1
     logger.info('Number of events: %d' % numEvents)
     logger.info('Number of empty events: %d' % numEmptyEvents)
     logger.info('Empty event multiplicity: %s' % emptyEventsMult)
@@ -59,6 +68,7 @@ def test(filePath):
         multSum += key*value
     logger.info('Sum of multiplicities (for cross check): %d' % multSum)
     logger.info('Isolated empy events: %s' % isolatedEmptyEvents)
+    logger.info('Endmark multiplicity: %s' % endmarkMult)
     sumFilePath = filePath.replace('.out', '.sum')
     if os.path.exists(sumFilePath):
         sumFile = E3AnalyzerSumFile(sumFilePath)
