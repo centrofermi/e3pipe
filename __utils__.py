@@ -79,7 +79,10 @@ def cp(source, dest, createTree = False):
     if not os.path.exists(destFolder) and createTree:
         createFolder(destFolder)
     try:
-        shutil.copy(source, dest)
+        if os.path.isdir(source):
+            shutil.copytree(source, dest)
+        else:
+            shutil.copy(source, dest)
         logger.info('File succesfully copied.')
         status = 0
     except Exception as e:
