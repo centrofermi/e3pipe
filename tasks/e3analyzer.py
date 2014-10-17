@@ -27,12 +27,12 @@ import e3pipe.__utils__ as __utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
 from e3pipe.misc.E3Chrono import E3Chrono
-from e3pipe.config.__storage__ import E3PIPE_TEMP, cleanupTemp
+from e3pipe.config.__storage__ import E3PIPE_TEMP, cleanupTemp, listTemp
 from e3pipe.config.__analyzer__ import E3_ANALYZER, E3_CALIB_FILE_NAME,\
     E3_ANALYZER_OUTPUTS
 
 
-def e3analyzer(binFilePath, outputSuffix = None):
+def e3analyzer(binFilePath, suffix = None):
     """ Run the official EEE analyzer.
 
     Mind we are not doing anything, at this level, to make sure that you do
@@ -45,7 +45,7 @@ def e3analyzer(binFilePath, outputSuffix = None):
     if not binFilePath.endswith('.bin'):
         abort('%s not a .bin file, giving up...' % binFilePath)
     cleanupTemp()
-    logger.info('Content of %s: %s' % (E3PIPE_TEMP,os.listdir(E3PIPE_TEMP)))
+    listTemp()
     logger.info('Processing run data file %s...' % binFilePath)
     binFileName = os.path.basename(binFilePath)
     copyFilePath = os.path.join(E3PIPE_TEMP, binFileName)
@@ -61,13 +61,14 @@ def e3analyzer(binFilePath, outputSuffix = None):
         return None
     logger.info('Run processed in %.3f s.' % chrono.stop())
     baseFilePath = copyFilePath.replace('.bin', '')
-    if outputSuffix is not None:
+    if suffix is not None:
         for extension in E3_ANALYZER_OUTPUTS:
             src = '%s%s' % (baseFilePath, extension)
-            dest = '%s_%s%s' % (baseFilePath, outputSuffix, extension)
+            dest = '%s_%s%s' % (baseFilePath, suffix, extension)
             __utils__.mv(src, dest)
-        baseFilePath = '%s_%s' % (baseFilePath, outputSuffix)
-    logger.info('Returning base path: "%s".' % baseFilePath)
+        baseFilePath = '%s_%s' % (baseFilePath, suffix)
+    listTemp()
+    logger.info('Returning base path: "%s"...' % baseFilePath)
     return baseFilePath
 
 

@@ -22,47 +22,27 @@
 
 
 _usage = 'usage: %prog [options] binfile1 ... binfileN'
-_synopsis = 'Process one or more .bin files and create the correposnding DST'
+_synopsis = 'Run the full EEE analysis, from the binary files to the dqm'
 
 # Set up the command-line switches.
 from e3pipe.misc.E3OptionParser import E3OptionParser
 parser = E3OptionParser(_usage, _synopsis)
-parser.add_option('-R', '--recreate-calib', action = 'store_true',
-                  default = False, dest = 'recreate_calib',
-                  help = 'recreate the eee_calib.txt file')
-parser.add_option('-F', '--fortran', action = 'store_true',
-                  default = False, dest = 'use_fortran',
-                  help = 'use the fortran analyzer (for compatibility)')
-parser.add_option('-D', '--delete-ascii', action = 'store_true',
-                  default = False, dest = 'delete_ascii',
-                  help = 'delete the ASCII files created by the analyzer')
-parser.add_option('-s', '--output_suffix', type = str, default = None,
-                  dest = 'output_suffix',
+parser.add_option('-s', '--suffix', type = str, default = None, dest = 'suffix',
                   help = 'a text label to be attached to the output file names')
 (opts, args) = parser.parse_args()
 
 # Make sure we are passing some argument.
-if not len(args):
+if not len(args) == 1:
     parser.print_help()
-    parser.error('Please provide at least an input file.')
+    parser.error('Please provide a single input file.')
+rawFilePath = args[0]
 
 # Print the start message.
 from e3pipe.__logging__ import startmsg
 startmsg()
 
 # Import the necessary stuff.
-import e3pipe.__utils__
-import os
-from e3pipe.__package__ import E3CALIB_FILE_NAME
 from e3pipe.tasks.e3recon import e3recon
-from e3pipe.tasks.e3runAnalyzer import e3runAnalyzer
-
-# If we are recreating the eee_calib.txt file we need to remove the old one
-# and run the analyzer on the very first file.
-if opts.recreate_calib:
-    e3pipe.__utils__.rm(E3CALIB_FILE_NAME)
-    e3runAnalyzer(args[0])
 
 # And now we are ready to go.
-for arg in args:
-    e3recon(arg, opts.delete_ascii, opts.use_fortran, opts.output_suffix)
+e3recon(rawFilePath, opts.suffix)

@@ -97,6 +97,11 @@ def cleanupTemp():
     """
     __utils__.cleanup(E3PIPE_TEMP)
 
+def listTemp():
+    """ List the content of the temp folder.
+    """
+    logger.info('Content of %s: %s' % (E3PIPE_TEMP, os.listdir(E3PIPE_TEMP)))
+
 
 """ Base folder on the centrofermi server to make the output of the dqm
 public.

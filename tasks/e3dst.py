@@ -32,6 +32,7 @@ from e3pipe.dst.E3DstEventTree import E3DstEventTree
 from e3pipe.dst.E3DstHeaderTree import E3DstHeaderTree
 from e3pipe.root.E3OutputRootFile import E3OutputRootFile
 from e3pipe.misc.E3Chrono import E3Chrono
+from e3pipe.config.__storage__ import listTemp
 
 
 def data2hist(data, key, xmin = -0.5, xmax = 50.5, xbins = 51):
@@ -100,6 +101,8 @@ def e3dst(baseFilePath):
     outFile.close()
     sumFile.close()
     logger.info('DST created in %.3f s.' % chrono.stop())
+    listTemp()
+    logger.info('Returning DST path: %s...' % dstFilePath)
     return dstFilePath
 
 

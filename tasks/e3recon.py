@@ -21,21 +21,22 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-import e3pipe.__utils__
+import e3pipe.__utils__ as __utils__
 
-from e3pipe.tasks.e3runAnalyzer import e3runAnalyzer
-from e3pipe.tasks.e3buildDst import e3buildDst
-from e3pipe.__package__ import E3ANALYZER_OUTPUTS
+from e3pipe.tasks.e3analyzer import e3analyzer
+from e3pipe.tasks.e3dst import e3dst
+from e3pipe.tasks.e3dqm import e3dqm
+from e3pipe.config.__storage__ import *
 
 
-def e3recon(binFilePath, deleteAscii = False, useFortran = False,
-            outputSuffix = None):
-    """ Run the analyzer and build the DST (i.e., run the full
-    reconstruction).
+
+def e3recon(binFilePath, copyFiles = True, suffix = None):
+    """ Run the analyzer, build the DST and run the DQM (i.e., effectively
+    run the full reconstruction for one single run).
     """
-    baseFilePath = e3runAnalyzer(binFilePath, useFortran, outputSuffix)
-    dstFilePath = e3buildDst(baseFilePath)
-    if deleteAscii:
-        for extension in E3ANALYZER_OUTPUTS:
-            e3pipe.__utils__.rm('%s%s' % (baseFilePath, extension))
-    return dstFilePath
+    baseFilePath = e3analyzer(binFilePath, suffix)
+    dstFilePath = e3dst(baseFilePath)
+    dqmFolder = '%s-DQM' % baseFilePath
+    e3dqm(dstFilePath, dqmFolder)
+    #if copyFiles:
+    #    src = os.path.join()
