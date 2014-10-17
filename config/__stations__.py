@@ -36,4 +36,3 @@ STATION_LIST = ['ALTA-01',
                 'TRIN-01',
                 'VIAR-02'
             ]
-
