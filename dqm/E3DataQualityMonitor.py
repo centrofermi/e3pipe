@@ -180,7 +180,7 @@ class E3DataQualityMonitor:
                 row += '<td><a href="%s">%s</a></td>' % (plotName, objName)
             else:
                 row += '<td>%s</td>' % objName
-            row += ('<td></td>' * 4)
+            row += ('<td>-</td>' * 4)
             row += '</tr>'
             return row
         
