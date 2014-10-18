@@ -55,9 +55,8 @@ class E3RawDataCrawler:
                     n = 0
                     for filePath in fileList:
                         runInfo = E3RawDataInfo(filePath)
-                        ready = not runInfo.processed() \
-                            and runInfo.hoursSinceSynch() > minHoursSinceSynch
-                        if ready or overwrite:
+                        new = runInfo.hoursSinceSynch() < minHoursSinceSynch
+                        if (not runInfo.processed() or overwrite) and not new:
                             self.__RunList.append(runInfo)
                             n += 1
                     logger.info('%d of which will be processed (overwrite = %s).' %\
