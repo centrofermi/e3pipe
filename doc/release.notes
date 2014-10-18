@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (0.5.1) - Sat, 18 Oct 2014 08:18:07 +0200
+-------------------------------------------------------------------------------
 * Added switches to the data crawler to be able to overwrite runs that had
   been previously processed, select specific lists of stations and select the
   end date of the time spanned.
