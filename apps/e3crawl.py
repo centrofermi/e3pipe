@@ -36,6 +36,9 @@ parser.add_option('-s', '--days-spanned', type = int, default = 2,
 parser.add_option('-H', '--min-hours', type = int, default = 2,
                   dest = 'hours',
                   help = 'the minimum time (in hours) since the rsynch')
+parser.add_option('-f', '--force-overwrite', action = 'store_true',
+                  default = False, dest = 'overwrite',
+                  help = 'overwrite runs that are already processed')
 parser.add_option('-d', '--dry-run', action = 'store_true',
                   default = False, dest = 'dry',
                   help = 'do not process (only populate the file list)')
@@ -54,4 +57,4 @@ startmsg()
 from e3pipe.tasks.e3crawl import e3crawl
 
 # And now we are ready to go.
-e3crawl(None, opts.span, opts.hours, opts.dry)
+e3crawl(None, opts.span, opts.hours, opts.overwrite, opts.dry)

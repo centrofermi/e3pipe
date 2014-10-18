@@ -33,13 +33,13 @@ from e3pipe.misc.E3Chrono import E3Chrono
 
 
 def e3crawl(endDate = None, daysSpanned = 2, minHoursSinceSynch = 2.,
-            dryRun = False):
+            overwrite = False, dryRun = False):
     """ Crawl the raw data and process the files.
     """
     if endDate is None:
         endDate = datetime.date.today()
     crawler = E3RawDataCrawler(STATION_LIST, endDate, daysSpanned,
-                               minHoursSinceSynch)
+                               minHoursSinceSynch, overwrite)
     logger.info('%s binary file(s) to be processed found.' %\
                     len(crawler.runList()))
     if dryRun:

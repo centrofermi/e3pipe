@@ -38,7 +38,7 @@ class E3RawDataCrawler:
 
     def __init__(self, stationList = STATION_LIST,
                  endDate = datetime.date.today(), daysSpanned = 2,
-                 minHoursSinceSynch = 2.):
+                 minHoursSinceSynch = 2., overwrite = False):
         """ Constructor.
         """
         logger.info('Starting data crawler...')
@@ -55,11 +55,13 @@ class E3RawDataCrawler:
                     n = 0
                     for filePath in fileList:
                         runInfo = E3RawDataInfo(filePath)
-                        if not runInfo.processed() and \
-                           runInfo.hoursSinceSynch() > minHoursSinceSynch:
+                        ready = not runInfo.processed() \
+                            and runInfo.hoursSinceSynch() > minHoursSinceSynch
+                        if ready or overwrite:
                             self.__RunList.append(runInfo)
                             n += 1
-                    logger.info('%d of which are ready to be processed.' % n)
+                    logger.info('%d of which will be processed (overwrite = %s).' %\
+                                    (n, overwrite))
 
     def runList(self):
         """ Return the list of runs.
