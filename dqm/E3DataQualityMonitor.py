@@ -66,7 +66,7 @@ class E3DataQualityMonitor:
         """ Setup the x-axis labels for strip charts.
         """
         if plot.GetXaxis().GetTimeDisplay():
-            plot.GetXaxis().SetNdivisions(507)
+            plot.GetXaxis().SetNdivisions(504)
             plot.GetXaxis().SetLabelOffset(0.04)
             plot.GetXaxis().SetTimeFormat('#splitline{%d/%m/%y}{%H:%M:%S}')
             plot.SetStats(False)
