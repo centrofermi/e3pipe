@@ -25,17 +25,24 @@ _usage = 'usage: %prog [options]'
 _synopsis = 'Crawl the raw data and process the files'
 
 
+import datetime
+
+
 # Set up the command-line switches.
 from e3pipe.misc.E3OptionParser import E3OptionParser
 parser = E3OptionParser(_usage, _synopsis)
-#parser.add_option('-e', '--end-date', type = str, default = None, dest = 'end',
-#                  help = 'the end date for the time span of interest')
-parser.add_option('-s', '--days-spanned', type = int, default = 2,
-                  dest = 'span',
+parser.add_option('-E', '--end-date', type = str,
+                  default = None, dest = 'end',
+                  help = 'the end date for the time span of interest')
+parser.add_option('-N', '--days-spanned', type = int,
+                  default = 2, dest = 'span',
                   help = 'the duration (in days) of the time span of interest')
-parser.add_option('-H', '--min-hours', type = int, default = 2,
-                  dest = 'hours',
+parser.add_option('-H', '--min-hours', type = int,
+                  default = 2, dest = 'hours',
                   help = 'the minimum time (in hours) since the rsynch')
+parser.add_option('-s', '--station', action = 'append', type = str,
+                  default = None, dest = 'stations',
+                  help = 'the station(s) to be processed')
 parser.add_option('-f', '--force-overwrite', action = 'store_true',
                   default = False, dest = 'overwrite',
                   help = 'overwrite runs that are already processed')
@@ -57,4 +64,9 @@ startmsg()
 from e3pipe.tasks.e3crawl import e3crawl
 
 # And now we are ready to go.
-e3crawl(None, opts.span, opts.hours, opts.overwrite, opts.dry)
+end = opts.end
+if end is None:
+    end = datetime.date.today()
+else:
+    end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
+e3crawl(opts.stations, end, opts.span, opts.hours, opts.overwrite, opts.dry)
