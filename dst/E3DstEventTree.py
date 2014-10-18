@@ -24,6 +24,8 @@
 from e3pipe.root.E3Tree import E3Tree
 from e3pipe.root.E3BranchDescriptor import E3BranchDescriptor
 from e3pipe.dst.E3DstTrendingTree import E3DstTrendingTree
+from e3pipe.config.__dqm__ import MAX_GOOD_CHISQUARE
+from e3pipe.root.E3H1D import E3H1D
 
 
 
@@ -50,6 +52,7 @@ class E3DstEventTree(E3Tree):
                   'Theta'    : '57.29577951308232*acos(ZDir)',
                   'Phi'      : '57.29577951308232*atan2(YDir, XDir)'}
     TRACK_CUT = 'ChiSquare >= 0'
+    GOOD_TRACK_CUT = 'ChiSquare >= 0 && ChiSquare < %.3f' % MAX_GOOD_CHISQUARE
 
     def __init__(self):
         """ Constructor.
@@ -148,15 +151,38 @@ class E3DstEventTree(E3Tree):
 
         TODO: this should be properly configurable from a configuration
         file.
+
+        Note that you do have to call the TH1::SetTimeDisplay() method
+        after the call to TH1::Divide(), otherwise the number of bins
+        in the histograms is doubles. ROOT is weird.
         """
-        h = self.trendingHist('RateTrackEvents', cut = self.TRACK_CUT)
-        h.SetTimeDisplay()
+        _name = 'RateTrackEvents'
+        _cut = self.TRACK_CUT
+        _ytitle = 'Rate of tracks [Hz]'
+        h1 = self.trendingHist(_name, cut = _cut, YTitle = _ytitle)
+        _name = 'RateGoodTrackEvents'
+        _cut = self.GOOD_TRACK_CUT
+        _ytitle = 'Rate of tracks with #chi^{2} < %.1f [Hz]' %\
+                  MAX_GOOD_CHISQUARE
+        h2 = self.trendingHist(_name, cut = _cut, YTitle = _ytitle)
+        _name = 'FractionGoodTrackEvents'
+        _cut = self.GOOD_TRACK_CUT
+        _ytitle = 'Fraction of tracks with #chi^{2} < %.1f' %\
+                  MAX_GOOD_CHISQUARE
+        h3 = self.trendingHist(_name, cut = _cut, YTitle = _ytitle)
+        h3.Divide(h2, h1, 1., 1., 'B')
+        for h in [h1, h2, h3]:
+            h.SetTimeDisplay()
         tree = E3DstTrendingTree()
-        for i in range(1, h.GetNbinsX() + 1):
-            tree.setValue('BinStart', h.GetBinLowEdge(i))
-            tree.setValue('BinEnd', h.GetBinLowEdge(i) + h.GetBinWidth(i))
-            tree.setValue('RateTrackEvents', h.GetBinContent(i))
-            tree.setValue('RateTrackEventsErr', h.GetBinError(i))
+        for i in range(1, h1.GetNbinsX() + 1):
+            tree.setValue('BinStart', h1.GetBinLowEdge(i))
+            tree.setValue('BinEnd', h1.GetBinLowEdge(i) + h1.GetBinWidth(i))
+            tree.setValue('RateTrackEvents', h1.GetBinContent(i))
+            tree.setValue('RateTrackEventsErr', h1.GetBinError(i))
+            tree.setValue('RateGoodTrackEvents', h2.GetBinContent(i))
+            tree.setValue('RateGoodTrackEventsErr', h2.GetBinError(i))
+            tree.setValue('FractionGoodTrackEvents', h3.GetBinContent(i))
+            tree.setValue('FractionGoodTrackEventsErr', h3.GetBinError(i))
             tree.Fill()
         return tree
 

@@ -35,6 +35,10 @@ class E3DstTrendingTree(E3Tree):
                 E3BranchDescriptor('BinEnd', 'F'),
                 E3BranchDescriptor('RateTrackEvents', 'F'),
                 E3BranchDescriptor('RateTrackEventsErr', 'F'),
+                E3BranchDescriptor('RateGoodTrackEvents', 'F'),
+                E3BranchDescriptor('RateGoodTrackEventsErr', 'F'),
+                E3BranchDescriptor('FractionGoodTrackEvents', 'F'),
+                E3BranchDescriptor('FractionGoodTrackEventsErr', 'F')
             ]
 
     def __init__(self):

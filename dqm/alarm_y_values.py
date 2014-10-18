@@ -61,8 +61,9 @@ class alarm_y_values(E3Alarm):
         import ROOT
         from e3pipe.root.E3Line import E3Line, E3YellowLine, E3RedLine
         ROOT.gPad.Update()
-        ymin = self.errorMin()
-        ymax = self.errorMax()
+        pad = 0.1*(self.errorMax() - self.errorMin())
+        ymin = self.errorMin() - pad
+        ymax = self.errorMax() + pad
         self.rootObject().GetYaxis().SetRangeUser(ymin, ymax)
         xmin = ROOT.gPad.GetUxmin()
         xmax = ROOT.gPad.GetUxmax()

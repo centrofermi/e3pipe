@@ -1,5 +1,8 @@
 
 * DQM configuration moved to a separate file: config/__dqm__.py (issue #7).
+* Added a few trending quantities (rate and fraction of good tracks).
+* More plots added to the report.
+* Some improvements in the report appearance.
 
 -------------------------------------------------------------------------------
 e3pipe (0.5.2) - Sat, 18 Oct 2014 08:23:54 +0200

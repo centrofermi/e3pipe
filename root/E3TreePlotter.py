@@ -35,6 +35,11 @@ class E3TreePlotter:
         """
         self.__PlotDict = {}
 
+    def store(self, plot):
+        """ Store a plot.
+        """
+        self.__PlotDict[plot.GetName()] = plot
+
     def plot(self, name):
         """ Return a specific plot.
         """
@@ -64,7 +69,7 @@ class E3TreePlotter:
             xmax = _xmax + xpad*_xrange
         hist = E3H1D(name, title, xbins, xmin, xmax, **kwargs)
         self.Project(name, expression, cut)
-        self.__PlotDict[hist.GetName()] = hist
+        self.store(hist)
         return hist
 
     def hist2d(self, expression, cut = '', **kwargs):

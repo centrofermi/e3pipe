@@ -52,7 +52,7 @@ HTML_FOOTER = \
 
 <div id="footer">
 Extreme Energy Events (EEE) is powered by
-<a href="https://github.com/centrofermi/e3pipe">e3pipe</a>.<br>
+<a href="https://github.com/centrofermi/e3pipe">e3pipe</a> version %s.<br>
 This page validates as
 <a href="http://validator.w3.org/check?uri=referer">HTML 4.01 strict</a> and 
 <a href="http://jigsaw.w3.org/css-validator/check/referer">css level 3</a>.<br>
@@ -120,5 +120,7 @@ class E3HtmlOutputFile(file):
     def close(self):
         """ Write the footer and close the file.
         """
-        self.write(HTML_FOOTER % time.strftime('%A, %B %d %Y at %H:%M (%z)'))
+        from e3pipe.__version__ import TAG
+        self.write(HTML_FOOTER %\
+                   (TAG, time.strftime('%A, %B %d %Y at %H:%M (%z)')))
         file.close(self)

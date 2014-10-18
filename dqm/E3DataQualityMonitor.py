@@ -30,7 +30,7 @@ from e3pipe.dqm.E3Alarm import E3Alarm
 from e3pipe.dqm.E3AlarmSummary import E3AlarmSummary
 from e3pipe.dqm.E3HtmlOutputFile import E3HtmlOutputFile
 from e3pipe.config.__dqm__ import DQM_BASELINE_PLOT_LIST,\
-    DQM_BASELINE_ALARM_LIST
+    DQM_BASELINE_ALARM_LIST, TOP_IMAGES
 from e3pipe.__utils__ import createFolder, cp
 from e3pipe.__package__ import E3PIPE_DQM
 
@@ -69,6 +69,7 @@ class E3DataQualityMonitor:
             plot.GetXaxis().SetNdivisions(507)
             plot.GetXaxis().SetLabelOffset(0.04)
             plot.GetXaxis().SetTimeFormat('#splitline{%d/%m/%y}{%H:%M:%S}')
+            plot.SetStats(False)
 
     def draw(self, objName, **kwargs):
         """ Draw a plot from the DST.
@@ -145,10 +146,9 @@ class E3DataQualityMonitor:
         filePath = os.path.join(self.__OutputFolder, 'index.html')
         outputFile = E3HtmlOutputFile(filePath)
         outputFile.write('<p></p>\n')
-        img = '%s.png' % self.canvasName('RateTrackEvents', 'y_values')
-        outputFile.image(img, width = '49%')
-        img = '%s.png' % self.canvasName('ChiSquare', 'x_average')
-        outputFile.image(img, width = '49%')
+        for objName, alarmName in TOP_IMAGES:
+            img = '%s.png' % self.canvasName(objName, alarmName)
+            outputFile.image(img, width = '49%')
         outputFile.section('Run summary')
         header = self.__InputFile.Get('Header')
         header.GetEntry(0)
@@ -164,8 +164,30 @@ class E3DataQualityMonitor:
         outputFile.section('Alarm summary')
         outputFile.write('\n<table width=100%>\n')
         outputFile.write('%s\n' % E3Alarm.HTML_TABLE_HEADER)
-        for i, alarm in enumerate(self.__AlarmList):
-            outputFile.write('%s\n' % alarm.htmlTableRow(True, i))
+
+        def _htmlTableRow(objName, linkPlot = True, index = None):
+            """ Embedded function to make a table row on the fly.
+            """
+            if index is not None:
+                if index % 2:
+                    row = '<tr class="even">'
+                else:
+                    row = '<tr class="odd">'
+            else:
+                row = '<tr>'
+            if linkPlot:
+                plotName = 'c%s.png' % objName
+                row += '<td><a href="%s">%s</a></td>' % (plotName, objName)
+            else:
+                row += '<td>%s</td>' % objName
+            row += ('<td></td>' * 4)
+            row += '</tr>'
+            return row
+        
+        for i, (objName, kwargs) in enumerate(DQM_BASELINE_PLOT_LIST):
+            outputFile.write('%s\n' % _htmlTableRow(objName, True, i))
+        for j, alarm in enumerate(self.__AlarmList):
+                outputFile.write('%s\n' % alarm.htmlTableRow(True, i + j + 1))
         outputFile.write('</table>\n<p></p>\n')
         outputFile.close()
         logger.info('Done.')

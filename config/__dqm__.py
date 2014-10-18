@@ -21,6 +21,13 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+MAX_GOOD_CHISQUARE = 10.
+
+TOP_IMAGES = [
+    ('RateTrackEvents', 'y_values'),
+    ('FractionGoodTrackEvents', 'y_values')
+]
+
 DQM_BASELINE_PLOT_LIST = [
     ('Phi', dict()),
     ('Theta', dict()),
@@ -28,11 +35,12 @@ DQM_BASELINE_PLOT_LIST = [
     ('TrackLength', dict())
 ]
 
-
 DQM_BASELINE_ALARM_LIST = [
     ('ChiSquare', 'x_average', 1, 2, 6, 10, dict(Logy = True)),
     ('DeltaTime', 'exp_fit_lambda', 5, 10, 50, 75, dict(Logy = True)),
-    ('RateTrackEvents', 'y_values', 5, 10, 50, 75, dict()),
+    ('RateTrackEvents', 'y_values', 10, 20, 60, 80, dict()),
+    ('RateGoodTrackEvents', 'y_values', 10, 20, 60, 80, dict()),
+    ('FractionGoodTrackEvents', 'y_values', 0.75, 0.8, 1, 1, dict()),
     ('HitMultTop', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
     ('HitMultMid', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
     ('HitMultBot', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
