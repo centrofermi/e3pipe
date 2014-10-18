@@ -28,6 +28,7 @@ import e3pipe.__utils__ as __utils__
 from e3pipe.misc.E3RawDataCrawler import E3RawDataCrawler
 from e3pipe.config.__stations__ import STATION_LIST
 from e3pipe.__logging__ import logger, abort
+from e3pipe.misc.E3Chrono import E3Chrono
 
 
 
@@ -45,8 +46,9 @@ def e3crawl(endDate = None, daysSpanned = 2, minHoursSinceSynch = 2.,
         logger.info('Just kidding, dry run :-)')
         return 
     for runInfo in crawler.runList():
+        chrono = E3Chrono()
         _cmd = 'e3recon.py %s' % runInfo.RawFilePath
         __utils__.cmd(_cmd)
-
+        logger.info('Run processed in %.3f s.' % chrono.stop())
 
 
