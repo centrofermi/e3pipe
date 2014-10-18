@@ -65,13 +65,35 @@ class E3DstEventTree(E3Tree):
 
     def startRun(self):
         """ Return the timestamp of the first event.
+
+        Mind that we have to make sure that the first event is not a GPS event,
+        otherwise we're screwed.
+
+        TODO: and this might change again if we eventually get the timestamp
+        information for the GPS events. 
         """
-        return self.timestamp(0)
+        entry = 0
+        while 1:
+            t = self.timestamp(entry)
+            if t > 0:
+                return t
+            entry += 1
 
     def stopRun(self):
         """ Return the timestamp of the last event.
+
+        Mind that we have to make sure that the first event is not a GPS event,
+        otherwise we're screwed.
+
+        TODO: and this might change again if we eventually get the timestamp
+        information for the GPS events. 
         """
-        return self.timestamp(self.GetEntries() - 1)
+        entry = self.GetEntries() - 1
+        while 1:
+            t = self.timestamp(entry)
+            if t > 0:
+                return t
+            entry -= 1
 
     def runDuration(self):
         """ Return the run duration.
