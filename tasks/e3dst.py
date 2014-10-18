@@ -35,9 +35,10 @@ from e3pipe.misc.E3Chrono import E3Chrono
 from e3pipe.config.__storage__ import listTemp
 
 
-def data2hist(data, key, xmin = -0.5, xmax = 50.5, xbins = 51):
+def data2hist(data, key, xmin = -0.5, xmax = 35.5):
     """ TODO: move this to the sumfile class?
     """
+    xbins = int(xmax - xmin + 0.5)
     name = key
     title = key.replace('Mult', ' multiplicity ')
     logger.info('Filling histogram %s...' % name)
@@ -91,10 +92,12 @@ def e3dst(baseFilePath):
     headerTree.fillRow(data)
     headerTree.Write()
     logger.info('Creating histograms...')
-    for key in ['HitMultBot', 'HitMultMid', 'HitMultTop', 'HitMultTotal',
-                'ClusterMultBot', 'ClusterMultMid', 'ClusterMultTop',
-                'ClusterMultTotal']:
-        h = data2hist(data, key)
+    for key in ['HitMultBot', 'HitMultMid', 'HitMultTop',
+                'ClusterMultBot', 'ClusterMultMid', 'ClusterMultTop']:
+        h = data2hist(data, key, xmax = 15.5)
+        h.Write()
+    for key in ['HitMultTotal', 'ClusterMultTotal']:
+        h = data2hist(data, key, xmax = 35.5)
         h.Write()
     logger.info('Closing files...')
     rootFile.Close()

@@ -73,6 +73,7 @@ class alarm_x_average(E3Alarm):
         x = self.value()
         l = E3Line(x, ymin, x, ymax, LineStyle = 7)
         l.Draw()
+        self.rootObject().Draw('same')
 
 
 
