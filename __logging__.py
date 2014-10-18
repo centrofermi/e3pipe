@@ -103,7 +103,7 @@ def startmsg():
           '    This is free software, and you are welcome to redistribute '
           'it under certain\n'
           '    conditions. See the LICENSE file for details.\n\n'
-          '    Visit https://bitbucket.org/lbaldini/e3pipe for '
+          '    Visit https://github.com/centrofermi/e3pipe '
           'more information.\n')
 
 
