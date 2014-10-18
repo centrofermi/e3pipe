@@ -22,17 +22,17 @@
 
 
 DQM_BASELINE_PLOT_LIST = [
-    'Phi',
-    'Theta',
-    'TimeOfFlight',
-    'TrackLength'
+    ('Phi', dict()),
+    ('Theta', dict()),
+    ('TimeOfFlight', dict()),
+    ('TrackLength', dict())
 ]
 
 
 DQM_BASELINE_ALARM_LIST = [
     ('ChiSquare', 'x_average', 1, 2, 6, 10, dict(Logy = True)),
     ('DeltaTime', 'exp_fit_lambda', 5, 10, 50, 75, dict(Logy = True)),
-    ('RateTrackEvents', 'y_values', 5, 10, 50, 75),
+    ('RateTrackEvents', 'y_values', 5, 10, 50, 75, dict()),
     ('HitMultTop', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
     ('HitMultMid', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
     ('HitMultBot', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),

@@ -29,6 +29,8 @@ from e3pipe.root.E3Canvas import E3Canvas
 from e3pipe.dqm.E3Alarm import E3Alarm
 from e3pipe.dqm.E3AlarmSummary import E3AlarmSummary
 from e3pipe.dqm.E3HtmlOutputFile import E3HtmlOutputFile
+from e3pipe.config.__dqm__ import DQM_BASELINE_PLOT_LIST,\
+    DQM_BASELINE_ALARM_LIST
 from e3pipe.__utils__ import createFolder, cp
 from e3pipe.__package__ import E3PIPE_DQM
 
@@ -102,27 +104,15 @@ class E3DataQualityMonitor:
 
     def run(self):
         """ Run the data quality monitoring on a DST file.
-
-        TODO: this should be fully configurable from a file---possibly
-        on a station-by-station basis.
         """
         if self.__OutputFolder is not None:
             createFolder(self.__OutputFolder)
-        self.draw('Phi')
-        self.draw('Theta')
-        self.alarm('ChiSquare', 'x_average', 1, 2, 6, 10, Logy = True)
-        self.alarm('DeltaTime', 'exp_fit_lambda', 5, 10, 50, 75, Logy = True)
-        self.draw('TimeOfFlight')
-        self.draw('TrackLength')
-        self.alarm('RateTrackEvents', 'y_values', 5, 10, 50, 75)
-        self.alarm('HitMultTop', 'x_average', 0.5, 0.75, 2, 3, Logy = True)
-        self.alarm('HitMultMid', 'x_average', 0.5, 0.75, 2, 3, Logy = True)
-        self.alarm('HitMultBot', 'x_average', 0.5, 0.75, 2, 3, Logy = True)
-        self.alarm('HitMultTotal', 'x_average', 1.5, 2.5, 6, 9, Logy = True)
-        self.alarm('ClusterMultTop', 'x_average', 0.5, 0.75, 2, 3, Logy = True)
-        self.alarm('ClusterMultMid', 'x_average', 0.5, 0.75, 2, 3, Logy = True)
-        self.alarm('ClusterMultBot', 'x_average', 0.5, 0.75, 2, 3, Logy = True)
-        self.alarm('ClusterMultTotal', 'x_average', 1.5, 2.5, 6, 9, Logy = True)
+        for plotName, kwargs in DQM_BASELINE_PLOT_LIST:
+            self.draw(plotName, **kwargs)
+        for objName, alarmName, errMin, warnMin, warnMax, errMax, kwargs in \
+            DQM_BASELINE_ALARM_LIST:
+            self.alarm(objName, alarmName, errMin, warnMin, warnMax, errMax,
+                       **kwargs)
         self.createReport()
         self.createSummary()
 
