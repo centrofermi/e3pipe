@@ -239,7 +239,7 @@ def rawDataFolders(station, endDate = datetime.date.today(), daysSpanned = 2):
     The default is to look back two days from today.
     """
     folders = [rawDataFolder(station, endDate)]
-    for i in range(1, daysSpanned + 1):
+    for i in range(1, daysSpanned):
         date = endDate - datetime.timedelta(i)
         folders.append(rawDataFolder(station, date))
     return folders
