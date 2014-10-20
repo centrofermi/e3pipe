@@ -47,6 +47,7 @@ def data2hist(data, key, xmin = -0.5, xmax = 35.5):
     content = data[key]
     for value, weight in content.items():
         h.Fill(value, weight)
+    h.SetEntries(h.GetSumOfWeights())
     return h
 
 
