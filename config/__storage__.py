@@ -109,6 +109,16 @@ public.
 E3PIPE_DQM_PUB_BASE = 'www.centrofermi.it:/var/www/html_eee/dqm/'
 
 
+""" The format string for the dates used throughout.
+"""
+DATE_FMT_STRING = '%Y-%m-%d'
+
+
+def date2str(date):
+    """
+    """
+    return date.strftime(DATE_FMT_STRING)
+
 
 class E3RawDataInfo(dict):
 
@@ -144,7 +154,7 @@ class E3RawDataInfo(dict):
         self['RunString'] = data[4]
         self['RunNumber'] = int(self.RunString)
         self['Date'] = datetime.date(self.Year, self.Month, self.Day)
-        self['DateString'] = '%s-%s-%s' % (self.Year, self.Month, self.Day)
+        self['DateString'] = date2str(self.Date)
         self['DstFilePath'] = self.__dstFilePath()
         self['CalibFilePath'] = self.__calibFilePath()
         self['DqmFolderPath'] = self.__dqmFolderPath()
@@ -227,8 +237,7 @@ def rawDataFolder(station, date = datetime.date.today()):
     """ Return the base folder with the raw data for a given station and
     date.
     """
-    datestr = date.strftime('%Y-%m-%d')
-    return os.path.join(E3PIPE_RAW_BASE, station, 'data', datestr)
+    return os.path.join(E3PIPE_RAW_BASE, station, 'data', date2str(date))
 
 def rawDataFolders(station, endDate = datetime.date.today(), daysSpanned = 2):
     """ Return a list of folders with the raw data for a given station
