@@ -61,7 +61,9 @@ class E3AnalyzerSumFile(E3InputFile):
         logger.info('Parsing file content...')
         self.__add('NumEvents', self.nextval(int))
         self.__add('NumGpsEvents', self.nextval(int))
-        for i in range(5):
+        self.next()
+        self.__add('NumNoHitsEvents', self.nextval(int))
+        for i in range(3):
             line = self.next()
         # Hit multiplicity chamber BOTTOM.
         line = self.next()
