@@ -84,6 +84,11 @@ def test():
     """
     crawler = E3RawFileCrawler()
     print crawler
+    numFiles = len(crawler)
+    curFile = 1
+    for filePath in crawler:
+        print 'File %d/%d: %s' % (curFile, numFiles, filePath)
+        curFile += 1 
 
 
 if __name__ == '__main__':

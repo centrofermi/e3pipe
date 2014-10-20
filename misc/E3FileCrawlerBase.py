@@ -74,6 +74,11 @@ class E3FileCrawlerBase:
         except IndexError:
             raise StopIteration()
 
+    def __len__(self):
+        """ Return the length of the underlying file list.
+        """
+        return len(self.__FileList)
+
     def __crawl(self):
         """ Crawl into the directory structure and fill the file list.
 
