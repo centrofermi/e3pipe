@@ -21,7 +21,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-_usage = 'usage: %prog [options] binfile1 ... binfileN'
+_usage = 'usage: %prog [options] binfile'
 _synopsis = 'Run the full EEE analysis, from the binary files to the dqm'
 
 # Set up the command-line switches.
