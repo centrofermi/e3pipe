@@ -50,11 +50,10 @@ def e3exportDQM(dqmFolderPath):
         return 
     relPath = dqmFolderPath.replace('/dqm/', '')
     target = os.path.join(E3CENTRO_FERMI_DQM_BASE, relPath)
-    __utils__.cmd('ssh %s mkdir -p %s' % (E3CENTRO_FERMI_SERVER, target),
-                  dryRun = True)
+    __utils__.cmd('ssh %s mkdir -p %s' % (E3CENTRO_FERMI_SERVER, target))
     source = os.path.join(dqmFolderPath, '*')
     dest = '%s:%s' % (E3CENTRO_FERMI_SERVER, target)
-    __utils__.cmd('scp -r %s %s' % (source, dest), dryRun = True)
+    __utils__.cmd('scp -r %s %s' % (source, dest))
 
 
 
