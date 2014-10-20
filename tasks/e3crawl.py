@@ -38,8 +38,7 @@ def e3crawl(stations = None, endDate = None, daysSpanned = 2,
     """
     crawler = E3RawFileCrawler(stations, endDate, daysSpanned,
                                minHoursSinceSynch, overwrite)
-    logger.info('%s binary file(s) to be processed found.' %\
-                    len(crawler.fileList()))
+    logger.info(crawler)
     if dryRun:
         logger.info('Just kidding, dry run :-)')
         return 
