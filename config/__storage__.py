@@ -106,7 +106,9 @@ def listTemp():
 """ Base folder on the centrofermi server to make the output of the dqm
 public.
 """
-E3PIPE_DQM_PUB_BASE = 'www.centrofermi.it:/var/www/html_eee/dqm/'
+E3CENTRO_FERMI_SERVER = 'www.centrofermi.it'
+E3CENTRO_FERMI_DQM_BASE = '/var/www/html_eee/dqm/'
+E3PIPE_DQM_PUB_BASE = '%s:%s' % (E3CENTRO_FERMI_SERVER, E3CENTRO_FERMI_DQM_BASE)
 
 
 """ The format string for the dates used throughout.

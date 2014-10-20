@@ -29,12 +29,35 @@ from e3pipe.__logging__ import logger
 from e3pipe.tasks.e3analyzer import e3analyzer
 from e3pipe.tasks.e3dst import e3dst
 from e3pipe.tasks.e3dqm import e3dqm
-from e3pipe.config.__storage__ import E3PIPE_TEMP, E3RawDataInfo
+from e3pipe.config.__storage__ import E3PIPE_TEMP, E3RawDataInfo,\
+    E3CENTRO_FERMI_SERVER, E3CENTRO_FERMI_DQM_BASE, E3PIPE_DQM_PUB_BASE
 from e3pipe.config.__analyzer__ import E3_CALIB_FILE_NAME
 
 
 
-def e3recon(rawFilePath, copyFiles = True, suffix = None):
+def e3exportDQM(dqmFolderPath):
+    """
+    We want something along the lines of:
+    ssh www.centrofermi.it mkdir -p /var/www/html_eee/dqm/FRAS-02/2014-10-20/FRAS-02-2014-10-20-00001/
+    scp -r /dqm/FRAS-02/2014-10-20/FRAS-02-2014-10-20-00001/* www.centrofermi.it:/var/www/html_eee/dqm/FRAS-02/2014-10-20/FRAS-02-2014-10-20-00001/
+
+    And we only want to do that when we run as the analisi user, i.e. when
+    E3PIPE_DQM_BASE is /dqm
+    """
+    if E3PIPE_DQM_BASE != '/dqm':
+        logger.info('E3PIPE_DQM_BASE is not /dqm, skipping export')
+        return 
+    relPath = dqmFolderPath.replace('/dqm/', '')
+    target = os.path.join(E3CENTRO_FERMI_DQM_BASE, relPath)
+    __utils__.cmd('ssh %s mkdir -p %s' % (E3CENTRO_FERMI_SERVER, target),
+                  dryRun = True)
+    source = os.path.join(dqmFolderPath, '*')
+    dest = '%s:%s' % (E3CENTRO_FERMI_SERVER, target)
+    __utils__.cmd('scp -r %s %s' % (source, dest), dryRun = True)
+
+
+
+def e3recon(rawFilePath, copyFiles = True, suffix = None, exportDQM = False):
     """ Run the analyzer, build the DST and run the DQM (i.e., effectively
     run the full reconstruction for one single run).
 
@@ -58,3 +81,7 @@ def e3recon(rawFilePath, copyFiles = True, suffix = None):
         __utils__.cp(calibFilePath, runInfo.CalibFilePath, True)
         __utils__.cp(dstFilePath, runInfo.DstFilePath, True)
         __utils__.cp(dqmFolderPath, runInfo.DqmFolderPath, True)
+    if exportDQM:
+        e3exportDQM(dqmFolderPath)
+
+        
