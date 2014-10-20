@@ -246,6 +246,8 @@ def rawDataFolders(station, endDate = datetime.date.today(), daysSpanned = 2):
     The time span is given as the end date and a look-back period in days.
     
     The default is to look back two days from today.
+
+    OBSOLETE: this is now in the crawler base class.
     """
     folders = [rawDataFolder(station, endDate)]
     for i in range(1, daysSpanned):
