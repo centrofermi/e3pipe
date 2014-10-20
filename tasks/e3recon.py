@@ -85,6 +85,6 @@ def e3recon(rawFilePath, copyFiles = True, suffix = None, exportDQM = False):
             __utils__.rmdir(runInfo.DqmFolderPath)
         __utils__.cp(dqmFolderPath, runInfo.DqmFolderPath, True)
     if exportDQM:
-        e3exportDQM(dqmFolderPath)
+        e3exportDQM(runInfo.DqmFolderPath)
 
         
