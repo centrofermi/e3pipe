@@ -29,8 +29,7 @@ from e3pipe.root.E3Canvas import E3Canvas
 from e3pipe.dqm.E3Alarm import E3Alarm
 from e3pipe.dqm.E3AlarmSummary import E3AlarmSummary
 from e3pipe.dqm.E3HtmlOutputFile import E3HtmlOutputFile
-from e3pipe.config.__dqm__ import DQM_BASELINE_PLOT_LIST,\
-    DQM_BASELINE_ALARM_LIST, TOP_IMAGES
+from e3pipe.config.__dqm__ import DQM_BASELINE_LIST, TOP_IMAGES
 from e3pipe.__utils__ import createFolder, cp
 from e3pipe.__package__ import E3PIPE_DQM
 
@@ -47,12 +46,12 @@ class E3DataQualityMonitor:
         self.__InputFile = E3InputRootFile(filePath)
         self.__Label = os.path.basename(filePath).replace('_dst.root', '')
         self.__OutputFolder = outputFolder
-        self.__AlarmList = []
+        self.__ObjectList = []
 
-    def alarms(self):
+    def objects(self):
         """ Return the list of active alarms.
         """
-        return self.__AlarmList
+        return self.__ObjectList
 
     def canvasName(self, objName, alarmName = None):
         """
@@ -82,6 +81,7 @@ class E3DataQualityMonitor:
         _canvas.Update()
         if self.__OutputFolder is not None:
             _canvas.save(self.__OutputFolder)
+        self.__ObjectList.append(objName)
 
     def alarm(self, objName, alarmName, errMin, warnMin, warnMax, errMax,
               **kwargs):
@@ -100,20 +100,28 @@ class E3DataQualityMonitor:
         _canvas.Update()
         if self.__OutputFolder is not None:
             _canvas.save(self.__OutputFolder)
-        self.__AlarmList.append(_alarm)
+        self.__ObjectList.append(_alarm)
         logger.info(_alarm)
 
     def run(self):
         """ Run the data quality monitoring on a DST file.
+
+        TODO: the way we distinguish between plots and alarms is actually ugly,
+        we need to find a better way to handle this.
         """
         if self.__OutputFolder is not None:
             createFolder(self.__OutputFolder)
-        for plotName, kwargs in DQM_BASELINE_PLOT_LIST:
-            self.draw(plotName, **kwargs)
-        for objName, alarmName, errMin, warnMin, warnMax, errMax, kwargs in \
-            DQM_BASELINE_ALARM_LIST:
-            self.alarm(objName, alarmName, errMin, warnMin, warnMax, errMax,
-                       **kwargs)
+        for item in DQM_BASELINE_LIST:
+            if item is None:
+                self.__ObjectList.append(item)
+            elif len(item) == 2:
+                plotName, kwargs = item
+                self.draw(plotName, **kwargs)
+            elif len(item) == 7:
+                objName, alarmName, errMin, warnMin, warnMax, errMax,\
+                    kwargs = item
+                self.alarm(objName, alarmName, errMin, warnMin, warnMax, errMax,
+                           **kwargs)
         self.createReport()
         self.createSummary()
 
@@ -121,8 +129,9 @@ class E3DataQualityMonitor:
         """ Create the alarm summary.
         """
         summary = E3AlarmSummary()
-        for alarm in self.__AlarmList:
-            summary.fill(alarm)
+        for alarm in self.__ObjectList:
+            if isinstance(alarm, E3Alarm):
+                summary.fill(alarm)
         logger.info(summary)
         if self.__OutputFolder is not None:
             filePath = os.path.join(self.__OutputFolder, '.summary')
@@ -180,14 +189,18 @@ class E3DataQualityMonitor:
                 row += '<td><a href="%s">%s</a></td>' % (plotName, objName)
             else:
                 row += '<td>%s</td>' % objName
-            row += ('<td>-</td>' * 4)
+            row += ('<td></td>' * 4)
             row += '</tr>'
             return row
-        
-        for i, (objName, kwargs) in enumerate(DQM_BASELINE_PLOT_LIST):
-            outputFile.write('%s\n' % _htmlTableRow(objName, True, i))
-        for j, alarm in enumerate(self.__AlarmList):
-                outputFile.write('%s\n' % alarm.htmlTableRow(True, i + j + 1))
+
+        for i, item in enumerate(self.__ObjectList):
+            print item
+            if item is None:
+                outputFile.write('%s\n' % _htmlTableRow('', False, i))
+            if isinstance(item, E3Alarm):
+                outputFile.write('%s\n' % item.htmlTableRow(True, i))
+            elif isinstance(item, str):
+                outputFile.write('%s\n' % _htmlTableRow(item, True, i))
         outputFile.write('</table>\n<p></p>\n')
         outputFile.close()
         logger.info('Done.')
