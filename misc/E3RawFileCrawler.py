@@ -55,7 +55,7 @@ class E3RawFileCrawler(E3FileCrawlerBase):
     def crawlFolder(self, folderPath):
         """  Overloaded class method.
         """
-        runList = []
+        fileList = []
         numTotal = 0
         numNew = 0
         numProcessed = 0
@@ -72,10 +72,10 @@ class E3RawFileCrawler(E3FileCrawlerBase):
             else:
                 numReady += 1
             if (not _processed or self.__Overwrite) and not _new:
-                runList.append(runInfo)
+                fileList.append(runInfo.RawFilePath)
         logger.info('%d file(s), %d ready, %d processed, %d new.' %\
                     (numTotal, numReady, numProcessed, numNew))
-        return runList
+        return fileList
 
 
     

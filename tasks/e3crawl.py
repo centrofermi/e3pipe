@@ -25,29 +25,27 @@ import datetime
 
 import e3pipe.__utils__ as __utils__
 
-from e3pipe.misc.E3RawDataCrawler import E3RawDataCrawler
+from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
 from e3pipe.config.__stations__ import E3_ACTIVE_STATIONS
 from e3pipe.__logging__ import logger, abort
 from e3pipe.misc.E3Chrono import E3Chrono
 
 
 
-def e3crawl(stationList = None, endDate = None, daysSpanned = 2,
+def e3crawl(stations = None, endDate = None, daysSpanned = 2,
             minHoursSinceSynch = 2., overwrite = False, dryRun = False):
     """ Crawl the raw data and process the files.
     """
-    stationList = stationList or E3_ACTIVE_STATIONS
-    endDate = endDate or datetime.date.today()
-    crawler = E3RawDataCrawler(stationList, endDate, daysSpanned,
+    crawler = E3RawFileCrawler(stations, endDate, daysSpanned,
                                minHoursSinceSynch, overwrite)
     logger.info('%s binary file(s) to be processed found.' %\
-                    len(crawler.runList()))
+                    len(crawler.fileList()))
     if dryRun:
         logger.info('Just kidding, dry run :-)')
         return 
-    for runInfo in crawler.runList():
+    for filePath in crawler.fileList():
         chrono = E3Chrono()
-        _cmd = 'e3recon.py %s' % runInfo.RawFilePath
+        _cmd = 'e3recon.py %s' % filePath
         __utils__.cmd(_cmd)
         logger.info('Run processed in %.3f s.' % chrono.stop())
 
