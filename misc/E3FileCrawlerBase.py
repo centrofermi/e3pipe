@@ -66,13 +66,15 @@ class E3FileCrawlerBase:
         list sorted in ascending time order.
         """
         startDate = self.endDate() - datetime.timedelta(self.daysSpanned() - 1)
-        logger.info('Data crawler started for time range [%s--%s].' %\
-                    (startDate, self.endDate()))
+        logger.info('Data crawler started.')
+        logger.info('Root directory: %s' % self.ROOT_FOLDER)
+        logger.info('Time range: %s--%s' % (startDate, self.endDate()))
         dates = [startDate + datetime.timedelta(i) for \
                  i in range(self.daysSpanned())]
         for station in self.stations():
             self.__FileDict[station] = []
-            logger.info('Searching data products for station %s...' % station)
+            logger.info('Searching for data products for station %s...' %\
+                        station)
             for date in dates:
                 folderPath = self.folderPath(station, date)
                 logger.info('Crawling %s...' % folderPath)
