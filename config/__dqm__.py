@@ -23,7 +23,7 @@
 
 TOP_IMAGES = [
     ('RateTrackEvents', 'y_values'),
-    ('FractionGoodTrackEvents', 'y_values')
+    ('FractionTrackEvents', 'y_values')
 ]
 
 DQM_BASELINE_LIST = [
