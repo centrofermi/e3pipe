@@ -50,5 +50,5 @@ def e3crawl(stations = None, endDate = None, daysSpanned = 2,
         _cmd = 'e3recon.py %s' % filePath
         __utils__.cmd(_cmd)
         logger.info('Run processed in %.3f s.' % chrono.stop())
-
+        curFile += 1
 
