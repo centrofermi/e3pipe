@@ -73,7 +73,7 @@ def test():
     """ Test program.
     """
     crawler = E3RawDataCrawler()
-    print crawler.runList()
+    print len(crawler.runList())
 
 
 

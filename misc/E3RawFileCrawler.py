@@ -26,7 +26,7 @@ import os
 
 
 from e3pipe.misc.E3FileCrawlerBase import E3FileCrawlerBase
-from e3pipe.config.__storage__ import E3PIPE_RAW_BASE
+from e3pipe.config.__storage__ import E3PIPE_RAW_BASE, E3RawDataInfo
 from e3pipe.config.__storage__ import date2str
 from e3pipe.__logging__ import logger
 
@@ -43,9 +43,9 @@ class E3RawFileCrawler(E3FileCrawlerBase):
                  minHoursSinceSynch = 2., overwrite = False):
         """ Constructor.
         """
-        E3FileCrawlerBase.__init__(self, stations, endDate, daysSpanned)
         self.__MinHoursSinceSynch = minHoursSinceSynch
         self.__Overwrite = overwrite
+        E3FileCrawlerBase.__init__(self, stations, endDate, daysSpanned)
 
     def folderPath(self, station, date):
         """ Overloaded class method.
@@ -56,6 +56,7 @@ class E3RawFileCrawler(E3FileCrawlerBase):
         """  Overloaded class method.
         """
         runList = []
+        numTotal = 0
         numNew = 0
         numProcessed = 0
         numReady = 0
@@ -63,16 +64,17 @@ class E3RawFileCrawler(E3FileCrawlerBase):
             runInfo = E3RawDataInfo(filePath)
             _new = runInfo.hoursSinceSynch() < self.__MinHoursSinceSynch
             _processed = runInfo.processed()
+            numTotal += 1
             if _new:
                 numNew += 1
             elif _processed:
                 numProcessed += 1
             else:
                 numReady += 1
-            if (not _processed() or self.__Overwrite) and not new:
+            if (not _processed or self.__Overwrite) and not _new:
                 runList.append(runInfo)
-        logger.info('%d file(s) ready, %d processed, %d new.' %\
-                    (numReady, numProcessed, numNew))
+        logger.info('%d file(s), %d ready, %d processed, %d new.' %\
+                    (numTotal, numReady, numProcessed, numNew))
         return runList
 
 
