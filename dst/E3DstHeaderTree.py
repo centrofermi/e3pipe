@@ -34,9 +34,9 @@ class E3DstHeaderTree(E3Tree):
     NAME = 'Header'
     BRANCHES = [E3BranchDescriptor('RunNumber', 'i'),
                 E3BranchDescriptor('RunDuration', 'F'),
-                E3BranchDescriptor('NumEvents', 'i'),
-                E3BranchDescriptor('NumTrackEvents', 'i'),
-                E3BranchDescriptor('NumGpsEvents', 'i')
+                E3BranchDescriptor('NumEvents', 'i')#,
+                #E3BranchDescriptor('NumTrackEvents', 'i'),
+                #E3BranchDescriptor('NumGpsEvents', 'i')
             ]
 
     def __init__(self):

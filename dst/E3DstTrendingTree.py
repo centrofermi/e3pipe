@@ -33,12 +33,12 @@ class E3DstTrendingTree(E3Tree):
     NAME = 'Trending'
     BRANCHES = [E3BranchDescriptor('BinStart', 'F'),
                 E3BranchDescriptor('BinEnd', 'F'),
+                E3BranchDescriptor('RateNonGpsEvents', 'F'),
+                E3BranchDescriptor('RateNonGpsEventsErr', 'F'),
                 E3BranchDescriptor('RateTrackEvents', 'F'),
                 E3BranchDescriptor('RateTrackEventsErr', 'F'),
-                E3BranchDescriptor('RateGoodTrackEvents', 'F'),
-                E3BranchDescriptor('RateGoodTrackEventsErr', 'F'),
-                E3BranchDescriptor('FractionGoodTrackEvents', 'F'),
-                E3BranchDescriptor('FractionGoodTrackEventsErr', 'F')
+                E3BranchDescriptor('FractionTrackEvents', 'F'),
+                E3BranchDescriptor('FractionTrackEventsErr', 'F')
             ]
 
     def __init__(self):

@@ -88,7 +88,7 @@ def e3dst(baseFilePath):
     # sum file.
     data['RunNumber'] = row['RunNumber']
     data['RunDuration'] = eventTree.runDuration()
-    data['NumTrackEvents'] = eventTree.numTrackEvents()
+    #data['NumTrackEvents'] = eventTree.numTrackEvents()
     headerTree.fillRow(data)
     headerTree.Write()
     logger.info('Creating histograms...')

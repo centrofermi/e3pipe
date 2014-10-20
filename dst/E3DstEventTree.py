@@ -24,7 +24,8 @@
 from e3pipe.root.E3Tree import E3Tree
 from e3pipe.root.E3BranchDescriptor import E3BranchDescriptor
 from e3pipe.dst.E3DstTrendingTree import E3DstTrendingTree
-from e3pipe.config.__dqm__ import MAX_GOOD_CHISQUARE
+from e3pipe.config.__dst__ import MAX_GOOD_CHISQUARE, CUT_NO_GPS,\
+    CUT_GOOD_TRACK
 from e3pipe.root.E3H1D import E3H1D
 
 
@@ -51,8 +52,6 @@ class E3DstEventTree(E3Tree):
     ALIAS_DICT = {'Timestamp': 'Seconds + 1.e-9*Nanoseconds',
                   'Theta'    : '57.29577951308232*acos(ZDir)',
                   'Phi'      : '57.29577951308232*atan2(YDir, XDir)'}
-    TRACK_CUT = 'ChiSquare >= 0'
-    GOOD_TRACK_CUT = 'ChiSquare >= 0 && ChiSquare < %.3f' % MAX_GOOD_CHISQUARE
 
     def __init__(self):
         """ Constructor.
@@ -103,11 +102,6 @@ class E3DstEventTree(E3Tree):
         """
         return self.stopRun() - self.startRun()
 
-    def numTrackEvents(self):
-        """ Return the number of events with tracks.
-        """
-        return self.GetEntries(self.TRACK_CUT)
-
     def trendingHist(self, name, title = None, cut = '', timeDelta = 60,
                      **kwargs):
         """ Create a trending histogram.
@@ -127,22 +121,22 @@ class E3DstEventTree(E3Tree):
 
         TODO: this should properly configured via a configuration file.
         """
-        self.hist1d('Theta', cut = self.TRACK_CUT,
+        self.hist1d('Theta', cut = CUT_GOOD_TRACK,
                     xmin = 0., xmax = 70., xbins = 50,
                     XTitle = '#theta [#circ]')
-        self.hist1d('Phi', cut = self.TRACK_CUT,
+        self.hist1d('Phi', cut = CUT_GOOD_TRACK,
                     xmin = -180., xmax = 180., xbins = 50,
                     XTitle = '#phi [#circ]', Minimum = 0.)
-        self.hist1d('DeltaTime',
+        self.hist1d('DeltaTime', cut = CUT_NO_GPS,
                     xmin = 0, xmax = 0.5, xbins = 100,
                     XTitle = 'Time difference [s]')
-        self.hist1d('ChiSquare', cut = self.TRACK_CUT,
+        self.hist1d('ChiSquare', cut = CUT_NO_GPS,
                     xmin = 0, xmax = 50, xbins = 100,
                     XTitle = '#chi^{2}')
-        self.hist1d('TimeOfFlight', cut = self.TRACK_CUT,
+        self.hist1d('TimeOfFlight', cut = CUT_GOOD_TRACK,
                     xmin = -10, xmax = 20, xbins = 100,
                     XTitle = 'Time of flight [ns]')
-        self.hist1d('TrackLength', cut = self.TRACK_CUT,
+        self.hist1d('TrackLength', cut = CUT_GOOD_TRACK,
                     xmin = 0, xmax = 300., xbins = 100,
                     XTitle = 'Track length [cm]')
 
@@ -156,17 +150,17 @@ class E3DstEventTree(E3Tree):
         after the call to TH1::Divide(), otherwise the number of bins
         in the histograms is doubles. ROOT is weird.
         """
-        _name = 'RateTrackEvents'
-        _cut = self.TRACK_CUT
-        _ytitle = 'Rate of tracks [Hz]'
+        _name = 'RateNonGpsEvents'
+        _cut = CUT_NO_GPS
+        _ytitle = 'Rate of non-GPS events [Hz]'
         h1 = self.trendingHist(_name, cut = _cut, YTitle = _ytitle)
-        _name = 'RateGoodTrackEvents'
-        _cut = self.GOOD_TRACK_CUT
+        _name = 'RateTrackEvents'
+        _cut = CUT_GOOD_TRACK
         _ytitle = 'Rate of tracks with #chi^{2} < %.1f [Hz]' %\
                   MAX_GOOD_CHISQUARE
         h2 = self.trendingHist(_name, cut = _cut, YTitle = _ytitle)
-        _name = 'FractionGoodTrackEvents'
-        _cut = self.GOOD_TRACK_CUT
+        _name = 'FractionTrackEvents'
+        _cut = CUT_GOOD_TRACK
         _ytitle = 'Fraction of tracks with #chi^{2} < %.1f' %\
                   MAX_GOOD_CHISQUARE
         h3 = self.trendingHist(_name, cut = _cut, YTitle = _ytitle)
@@ -177,12 +171,12 @@ class E3DstEventTree(E3Tree):
         for i in range(1, h1.GetNbinsX() + 1):
             tree.setValue('BinStart', h1.GetBinLowEdge(i))
             tree.setValue('BinEnd', h1.GetBinLowEdge(i) + h1.GetBinWidth(i))
-            tree.setValue('RateTrackEvents', h1.GetBinContent(i))
-            tree.setValue('RateTrackEventsErr', h1.GetBinError(i))
-            tree.setValue('RateGoodTrackEvents', h2.GetBinContent(i))
-            tree.setValue('RateGoodTrackEventsErr', h2.GetBinError(i))
-            tree.setValue('FractionGoodTrackEvents', h3.GetBinContent(i))
-            tree.setValue('FractionGoodTrackEventsErr', h3.GetBinError(i))
+            tree.setValue('RateNonGpsEvents', h1.GetBinContent(i))
+            tree.setValue('RateNonGpsEventsErr', h1.GetBinError(i))
+            tree.setValue('RateTrackEvents', h2.GetBinContent(i))
+            tree.setValue('RateTrackEventsErr', h2.GetBinError(i))
+            tree.setValue('FractionTrackEvents', h3.GetBinContent(i))
+            tree.setValue('FractionTrackEventsErr', h3.GetBinError(i))
             tree.Fill()
         return tree
 

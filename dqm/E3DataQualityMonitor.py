@@ -157,9 +157,9 @@ class E3DataQualityMonitor:
         outputFile.li('DST file path: %s' % self.__InputFile.GetName())
         outputFile.li('Run duration: %.3f s' % header.RunDuration)
         outputFile.li('Number of events: %s' % header.NumEvents)
-        outputFile.li('Number of events with track(s): %s' %\
-                      header.NumTrackEvents)
-        outputFile.li('Number of GPS events: %s' % header.NumGpsEvents)
+        #outputFile.li('Number of events with track(s): %s' %\
+        #              header.NumTrackEvents)
+        #outputFile.li('Number of GPS events: %s' % header.NumGpsEvents)
         outputFile.write('</ul>\n')
         outputFile.section('Alarm summary')
         outputFile.write('\n<table width=100%>\n')
