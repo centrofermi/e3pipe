@@ -26,7 +26,7 @@ import glob
 import os
 
 from e3pipe.config.__storage__ import E3RawDataInfo, rawDataFolders
-from e3pipe.config.__stations__ import STATION_LIST
+from e3pipe.config.__stations__ import E3_ACTIVE_STATIONS
 from e3pipe.__logging__ import logger, abort
 
 
@@ -36,7 +36,7 @@ class E3RawDataCrawler:
     """ Basic data crawler implementation.
     """
 
-    def __init__(self, stationList = STATION_LIST,
+    def __init__(self, stationList = E3_ACTIVE_STATIONS,
                  endDate = datetime.date.today(), daysSpanned = 2,
                  minHoursSinceSynch = 2., overwrite = False):
         """ Constructor.

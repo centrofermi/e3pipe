@@ -26,17 +26,17 @@ import datetime
 import e3pipe.__utils__ as __utils__
 
 from e3pipe.misc.E3RawDataCrawler import E3RawDataCrawler
-from e3pipe.config.__stations__ import STATION_LIST
+from e3pipe.config.__stations__ import E3_ACTIVE_STATIONS
 from e3pipe.__logging__ import logger, abort
 from e3pipe.misc.E3Chrono import E3Chrono
 
 
 
-def e3crawl(stationList = None, endDate = None, daysSpanned = 2, minHoursSinceSynch = 2.,
-            overwrite = False, dryRun = False):
+def e3crawl(stationList = None, endDate = None, daysSpanned = 2,
+            minHoursSinceSynch = 2., overwrite = False, dryRun = False):
     """ Crawl the raw data and process the files.
     """
-    stationList = stationList or STATION_LIST
+    stationList = stationList or E3_ACTIVE_STATIONS
     endDate = endDate or datetime.date.today()
     crawler = E3RawDataCrawler(stationList, endDate, daysSpanned,
                                minHoursSinceSynch, overwrite)
