@@ -30,7 +30,8 @@ from e3pipe.tasks.e3analyzer import e3analyzer
 from e3pipe.tasks.e3dst import e3dst
 from e3pipe.tasks.e3dqm import e3dqm
 from e3pipe.config.__storage__ import E3PIPE_TEMP, E3RawDataInfo,\
-    E3CENTRO_FERMI_SERVER, E3CENTRO_FERMI_DQM_BASE, E3PIPE_DQM_PUB_BASE
+    E3CENTRO_FERMI_SERVER, E3CENTRO_FERMI_DQM_BASE, E3PIPE_DQM_PUB_BASE,\
+    E3PIPE_DQM_BASE
 from e3pipe.config.__analyzer__ import E3_CALIB_FILE_NAME
 
 
