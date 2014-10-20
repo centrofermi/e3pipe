@@ -41,8 +41,11 @@ def e3crawl(stations = None, endDate = None, daysSpanned = 2,
     logger.info(crawler)
     if dryRun:
         logger.info('Just kidding, dry run :-)')
-        return 
-    for filePath in crawler.fileList():
+        return
+    numFiles = len(crawler)
+    curFile = 1
+    for filePath in crawler:
+        logger.info('Processing file %d/%d: %s' % (curFile, numFiles, filePath))
         chrono = E3Chrono()
         _cmd = 'e3recon.py %s' % filePath
         __utils__.cmd(_cmd)
