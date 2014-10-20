@@ -196,7 +196,6 @@ class E3DataQualityMonitor:
             return row
 
         for i, item in enumerate(self.__ObjectList):
-            print item
             if item is None:
                 outputFile.write('%s\n' % _htmlTableRow('', False, i))
             if isinstance(item, E3Alarm):
