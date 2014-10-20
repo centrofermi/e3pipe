@@ -56,7 +56,23 @@ class E3FileCrawlerBase:
         self.__DaysSpanned = daysSpanned
         self.__FileList = []
         self.__FileDict = {}
+        self.__Index = 0
         self.__crawl()
+
+    def __iter__(self):
+        """ Overloaded methos to make the object iterable.
+        """
+        return self
+
+    def next(self):
+        """ Iterator next() method.
+        """
+        try:
+            filePath = self.__FileList[self.__Index]
+            self.__Index += 1
+            return filePath
+        except IndexError:
+            raise StopIteration()
 
     def __crawl(self):
         """ Crawl into the directory structure and fill the file list.
