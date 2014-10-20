@@ -65,7 +65,7 @@ class E3DstEventTree(E3Tree):
             self.GetEntry(entry)
         return self.value('Seconds') + 1.e-9*self.value('Nanoseconds')
 
-    def startRun(self):
+    def runStart(self):
         """ Return the timestamp of the first event.
 
         Mind that we have to make sure that the first event is not a GPS event,
@@ -81,7 +81,7 @@ class E3DstEventTree(E3Tree):
                 return t
             entry += 1
 
-    def stopRun(self):
+    def runStop(self):
         """ Return the timestamp of the last event.
 
         Mind that we have to make sure that the first event is not a GPS event,
@@ -100,14 +100,14 @@ class E3DstEventTree(E3Tree):
     def runDuration(self):
         """ Return the run duration.
         """
-        return self.stopRun() - self.startRun()
+        return self.runStop() - self.runStart()
 
     def trendingHist(self, name, title = None, cut = '', timeDelta = 60,
                      **kwargs):
         """ Create a trending histogram.
         """
-        xmin = self.startRun() - 1.e-3
-        xmax = self.stopRun() + 1.e-3
+        xmin = self.runStart() - 1.e-3
+        xmax = self.runStop() + 1.e-3
         xbins = max(1, int(self.runDuration()/float(timeDelta) + 0.5))
         hist = self.hist1d('Timestamp', cut, name, title, xmin, xmax, xbins,
                            **kwargs)

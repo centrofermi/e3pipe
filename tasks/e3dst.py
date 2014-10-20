@@ -87,8 +87,12 @@ def e3dst(baseFilePath):
     # information that we want in the header is really coming from the
     # sum file.
     data['RunNumber'] = row['RunNumber']
+    data['RunStart'] = eventTree.runStart()
+    data['RunStop'] = eventTree.runStop()
     data['RunDuration'] = eventTree.runDuration()
-    #data['NumTrackEvents'] = eventTree.numTrackEvents()
+    eventStat = outFile.eventStat()
+    data['NumGpsEvents'] = eventStat['no_hits']
+    data['NumNoHitsEvents'] = eventStat['no_hit']
     headerTree.fillRow(data)
     headerTree.Write()
     logger.info('Creating histograms...')

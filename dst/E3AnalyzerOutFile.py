@@ -71,7 +71,13 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         """
         E3TextTupleBase.__init__(self, filePath, '.out')
         self.__LastTimestamp = None
+        self.__EventStat = {'total': 0, 'no_hits': 0, 'no_hit': 0}
         file.next(self)
+
+    def eventStat(self):
+        """
+        """
+        return self.__EventStat
 
     def next(self):
         """ Overloaded next() method.
@@ -83,6 +89,11 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         And we also add the delta event time :-)
         """
         data = file.next(self)
+        self.__EventStat['total'] += 1
+        if data.endswith('no hits\n'):
+            self.__EventStat['no_hits'] += 1
+        if data.endswith('no hit\n'):
+            self.__EventStat['no_hit'] += 1  
         if self.NO_TRACK_MARKER in data:
             data = data.split(self.NO_TRACK_MARKER)[0]
             for field in self.ROW_DESCRIPTOR.FIELDS[2:]:
