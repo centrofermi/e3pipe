@@ -77,11 +77,8 @@ except KeyError:
 
 """ Base folder for the log files.
 """
-try:
-    E3PIPE_LOG_BASE = os.environ['E3PIPE_LOG_BASE']
-except KeyError:
-    E3PIPE_LOG_BASE = os.path.expanduser(os.path.join('~', 'eeelog'))
-    __utils__.createFolder(E3PIPE_LOG_BASE)
+E3PIPE_LOG_BASE = os.path.expanduser(os.path.join('~', 'eeelog'))
+__utils__.createFolder(E3PIPE_LOG_BASE)
 
 
 """ Base folder to keep track of the failed runs.

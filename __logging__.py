@@ -49,7 +49,7 @@ class E3FileFormatter(logging.Formatter):
                                   time.localtime(record.created))
         ms = 1000*(record.created - int(record.created))
         timestamp = '%s.%d' % (timestamp, ms)
-        text = '---%s (from %s--%s)\n[%s] %s\n' %\
+        text = '---%s (from %s.%s)\n[%s] %s\n' %\
             (timestamp, record.module, record.funcName, record.levelname,
              record.msg)
         return text

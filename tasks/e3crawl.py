@@ -21,14 +21,16 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import os
 import datetime
 
 import e3pipe.__utils__ as __utils__
 
 from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
 from e3pipe.config.__stations__ import E3_ACTIVE_STATIONS
-from e3pipe.__logging__ import logger, abort
+from e3pipe.__logging__ import logger, abort, E3FileHandler
 from e3pipe.misc.E3Chrono import E3Chrono
+from e3pipe.config.__storage__ import E3PIPE_LOG_BASE, date2str
 
 
 
@@ -36,6 +38,13 @@ def e3crawl(stations = None, endDate = None, daysSpanned = 2,
             minHoursSinceSynch = 2., overwrite = False, dryRun = False):
     """ Crawl the raw data and process the files.
     """
+    logDate = datetime.datetime.today()
+    datestr = date2str(logDate)
+    timestr = logDate.strftime('%Y-%m-%d-%H-%M-%S-%f')
+    logFilePath = os.path.join(E3PIPE_LOG_BASE, datestr, '%s.log' % timestr)
+    logFolder = os.path.dirname(logFilePath)
+    __utils__.createFolder(logFolder)
+    logFileHandler = E3FileHandler(logFilePath)
     crawler = E3RawFileCrawler(stations, endDate, daysSpanned,
                                minHoursSinceSynch, overwrite)
     logger.info(crawler)
@@ -51,4 +60,5 @@ def e3crawl(stations = None, endDate = None, daysSpanned = 2,
         __utils__.cmd(_cmd)
         logger.info('Run processed in %.3f s.' % chrono.stop())
         curFile += 1
+    logFileHandler.close()
 
