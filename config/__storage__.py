@@ -125,6 +125,20 @@ E3PIPE_DQM_PUB_BASE = '%s:%s' % (E3CENTRO_FERMI_SERVER, E3CENTRO_FERMI_DQM_BASE)
 
 
 
+def splitFilePath(filePath):
+    """ Split a file path into the its basic pieces.
+    """
+    return os.path.basename(filePath).split('.')[0].rsplit('-', 4)
+
+
+def filePath2date(filePath):
+    """ Extract the date from a file path.
+    """
+    year, month, date = [int(item) for item in splitFilePath(filePath)[1:4]]
+    return datetime.date(year, month, day)
+
+
+
 class E3RawDataInfo(dict):
 
     """ Small utility class to encapsulate the information about a
