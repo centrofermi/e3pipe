@@ -30,7 +30,8 @@ from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
 from e3pipe.config.__stations__ import E3_ACTIVE_STATIONS
 from e3pipe.__logging__ import logger, abort, E3FileHandler
 from e3pipe.misc.E3Chrono import E3Chrono
-from e3pipe.config.__storage__ import E3PIPE_LOG_BASE, date2str
+from e3pipe.config.__storage__ import E3PIPE_LOG_BASE
+from e3pipe.dst.__time__ import date2str
 
 
 

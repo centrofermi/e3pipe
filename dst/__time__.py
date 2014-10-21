@@ -22,6 +22,24 @@
 
 
 import ROOT
+import datetime
 
 E3_DATE_OFFSET = ROOT.TDatime(2007,01,01,00,00,00)
 E3_TIME_OFFSET = E3_DATE_OFFSET.Convert(True)
+
+
+""" The format string for the dates used throughout.
+"""
+DATE_FMT_STRING = '%Y-%m-%d'
+
+
+def date2str(date):
+    """ Convert a date to string.
+    """
+    return date.strftime(DATE_FMT_STRING)
+
+
+def str2date(string):
+    """ Convert a string to date.
+    """
+    return datetime.datetime.strptime(string, DATE_FMT_STRING).date()

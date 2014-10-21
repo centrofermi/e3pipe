@@ -27,7 +27,7 @@ import os
 
 from e3pipe.misc.E3FileCrawlerBase import E3FileCrawlerBase
 from e3pipe.config.__storage__ import E3PIPE_RAW_BASE, E3RawDataInfo
-from e3pipe.config.__storage__ import date2str
+from e3pipe.dst.__time__ import date2str
 from e3pipe.__logging__ import logger
 
 

@@ -26,7 +26,7 @@ import glob
 import os
 
 from e3pipe.config.__stations__ import E3_ACTIVE_STATIONS
-from e3pipe.config.__storage__ import date2str
+from e3pipe.dst.__time__ import date2str
 from e3pipe.__logging__ import logger
 
 

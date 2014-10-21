@@ -27,6 +27,8 @@ _synopsis = 'Crawl the raw data and process the files'
 
 import datetime
 
+from e3pipe.dst.__time__ import str2date
+
 
 # Set up the command-line switches.
 from e3pipe.misc.E3OptionParser import E3OptionParser
@@ -68,5 +70,5 @@ end = opts.end
 if end is None:
     end = datetime.date.today()
 else:
-    end = datetime.datetime.strptime(end, "%Y-%m-%d").date()
+    end = str2date(end)
 e3crawl(opts.stations, end, opts.span, opts.hours, opts.overwrite, opts.dry)

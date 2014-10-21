@@ -41,6 +41,7 @@ import copy
 import e3pipe.__utils__ as __utils__
 
 from e3pipe.__logging__ import logger, abort
+from e3pipe.dst.__time__ import date2str
 
 
 """ Base folder for the raw data.
@@ -122,16 +123,6 @@ E3CENTRO_FERMI_SERVER = 'www.centrofermi.it'
 E3CENTRO_FERMI_DQM_BASE = '/var/www/html_eee/dqm/'
 E3PIPE_DQM_PUB_BASE = '%s:%s' % (E3CENTRO_FERMI_SERVER, E3CENTRO_FERMI_DQM_BASE)
 
-
-""" The format string for the dates used throughout.
-"""
-DATE_FMT_STRING = '%Y-%m-%d'
-
-
-def date2str(date):
-    """
-    """
-    return date.strftime(DATE_FMT_STRING)
 
 
 class E3RawDataInfo(dict):
