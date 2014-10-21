@@ -45,13 +45,14 @@ class E3FileFormatter(logging.Formatter):
     def format(self, record):
         """ Overloaded format method.
         """
-        timestamp = time.strftime('%d %b %Y @ %H:%M:%S',
-                                  time.localtime(record.created))
-        ms = 1000*(record.created - int(record.created))
-        timestamp = '%s.%d' % (timestamp, ms)
-        text = '---%s (from %s.%s)\n[%s] %s\n' %\
-            (timestamp, record.module, record.funcName, record.levelname,
-             record.msg)
+        #timestamp = time.strftime('%d %b %Y @ %H:%M:%S',
+        #                          time.localtime(record.created))
+        #ms = 1000*(record.created - int(record.created))
+        #timestamp = '%s.%d' % (timestamp, ms)
+        #text = '---%s (from %s.%s)\n[%s] %s\n' %\
+        #    (timestamp, record.module, record.funcName, record.levelname,
+        #     record.msg)
+        text = '[%s] %s' % (record.levelname, record.msg)
         return text
 
 
