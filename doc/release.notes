@@ -1,4 +1,8 @@
 
+* Lock file mechanism in place (issue #33).
+* PISA-01 removed from the list of the active stations (need to fix the file
+  naming convention first).
+
 -------------------------------------------------------------------------------
 e3pipe (0.12.0) - Tue, 21 Oct 2014 11:00:38 +0200
 -------------------------------------------------------------------------------
