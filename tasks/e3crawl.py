@@ -53,7 +53,7 @@ def e3crawl(stations = None, endDate = None, daysSpanned = 2,
     if dryRun:
         logger.info('Just kidding, dry run :-)')
         return
-    numFiles = len(crawler)
+    numFiles = maxNumRuns or len(crawler)
     curFile = 1
     for filePath in crawler:
         logger.info('Processing file %d/%d: %s' % (curFile, numFiles, filePath))
