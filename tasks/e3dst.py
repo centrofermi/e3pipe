@@ -23,7 +23,7 @@
 
 import os
 import ROOT
-import e3pipe.__utils__
+import e3pipe.__utils__ as __utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
 from e3pipe.dst.E3AnalyzerOutFile import E3AnalyzerOutFile
@@ -68,6 +68,18 @@ def e3dst(baseFilePath):
     for row in outFile:
         eventTree.fillRow(row)
     eventStat = outFile.eventStat()
+    # If we have less than two good events there is nothing we could
+    # possibly do, here.
+    # Close all files and remove the output dst ROOT file so that
+    # we know the run has not been processed.
+    if eventStat['good'] < 2:
+        logger.info('Closing all files...')
+        rootFile.Close()
+        outFile.close()
+        sumFile.close()
+        __utils__.rm(dstFilePath)
+        logger.info('Exiting after %.3f s.' % chrono.stop())
+        abort('No good events in the run')
     logger.info('Event stats: %s' % eventStat)
     eventTree.Write()
     logger.info('Done, %d event(s) filled in.' % eventTree.GetEntries())
@@ -107,7 +119,7 @@ def e3dst(baseFilePath):
     for key in ['HitMultTotal', 'ClusterMultTotal']:
         h = data2hist(data, key, xmax = 35.5)
         h.Write()
-    logger.info('Closing files...')
+    logger.info('Closing all files...')
     rootFile.Close()
     outFile.close()
     sumFile.close()
