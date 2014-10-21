@@ -22,6 +22,7 @@
 
 
 import os
+import sys
 import ROOT
 import e3pipe.__utils__ as __utils__
 
