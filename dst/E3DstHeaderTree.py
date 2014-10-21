@@ -37,8 +37,10 @@ class E3DstHeaderTree(E3Tree):
                 E3BranchDescriptor('RunStop', 'F'),
                 E3BranchDescriptor('RunDuration', 'F'),
                 E3BranchDescriptor('NumEvents', 'i'),
+                E3BranchDescriptor('NumGoodEvents', 'i'),
                 E3BranchDescriptor('NumGpsEvents', 'i'),
-                E3BranchDescriptor('NumNoHitsEvents', 'i')
+                E3BranchDescriptor('NumNoHitsEvents', 'i'),
+                E3BranchDescriptor('NumMalformedEvents', 'i')
             ]
 
     def __init__(self):

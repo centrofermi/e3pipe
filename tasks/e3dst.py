@@ -93,8 +93,10 @@ def e3dst(baseFilePath):
     data['RunStart'] = eventTree.runStart()
     data['RunStop'] = eventTree.runStop()
     data['RunDuration'] = eventTree.runDuration()
+    data['NumGoodEvents'] = eventStat['good']
     data['NumGpsEvents'] = eventStat['no_hits']
     data['NumNoHitsEvents'] = eventStat['no_hit']
+    data['NumMalformedEvents'] = eventStat['malformed']
     headerTree.fillRow(data)
     headerTree.Write()
     logger.info('Creating histograms...')
