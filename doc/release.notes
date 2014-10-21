@@ -3,6 +3,8 @@
 * PISA-01 removed from the list of the active stations (need to fix the file
   naming convention first).
 * e3crawl.py now writing log files (issue #9).
+* Command-line switch added to e3crawl.py to limit the number of files to
+  be processed (issue #31).
 
 -------------------------------------------------------------------------------
 e3pipe (0.12.0) - Tue, 21 Oct 2014 11:00:38 +0200
