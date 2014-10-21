@@ -50,12 +50,14 @@ try:
 except KeyError:
     E3PIPE_RAW_BASE = '/data'
 
+
 """ Base folder for the output DST ROOT files.
 """
 try:
     E3PIPE_RECON_BASE = os.environ['E3PIPE_RECON_BASE']
 except KeyError:
     E3PIPE_RECON_BASE = '/recon'
+
 
 """ Base folder for the eee_calib.txt files.
 """
@@ -64,6 +66,7 @@ try:
 except KeyError:
     E3PIPE_CALIB_BASE = '/calib'
 
+
 """ Base folder for the output dqm folders.
 """
 try:
@@ -71,12 +74,24 @@ try:
 except KeyError:
     E3PIPE_DQM_BASE = '/dqm'
 
+
 """ Base folder for the log files.
 """
 try:
     E3PIPE_LOG_BASE = os.environ['E3PIPE_LOG_BASE']
 except KeyError:
-    E3PIPE_LOG_BASE = '/log'
+    E3PIPE_LOG_BASE = os.path.expanduser(os.path.join('~', 'eeelog'))
+    __utils__.createFolder(E3PIPE_LOG_BASE)
+
+
+""" Base folder to keep track of the failed runs.
+"""
+try:
+    E3PIPE_LOCK_BASE = os.environ['E3PIPE_LOCK_BASE']
+except KeyError:
+    E3PIPE_LOCK_BASE = os.path.expanduser(os.path.join('~', 'eeelock'))
+    __utils__.createFolder(E3PIPE_LOCK_BASE)
+
 
 """ Temporary folder we run the reconstruction in.
 
