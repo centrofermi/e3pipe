@@ -30,7 +30,7 @@ from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
 from e3pipe.config.__stations__ import E3_ACTIVE_STATIONS
 from e3pipe.__logging__ import logger, abort, E3FileHandler
 from e3pipe.misc.E3Chrono import E3Chrono
-from e3pipe.config.__storage__ import E3PIPE_LOG_BASE
+from e3pipe.config.__storage__ import E3PIPE_LOG_BASE, E3RawDataInfo
 from e3pipe.dst.__time__ import date2str
 
 
@@ -58,8 +58,16 @@ def e3crawl(stations = None, endDate = None, daysSpanned = 2,
         logger.info('Processing file %d/%d: %s' % (curFile, numFiles, filePath))
         chrono = E3Chrono()
         _cmd = 'e3recon.py %s' % filePath
-        __utils__.cmd(_cmd)
-        logger.info('Run processed in %.3f s.' % chrono.stop())
+        if __utils__.cmd(_cmd):
+            runInfo = E3RawDataInfo(filePath)
+            lockFilePath = runInfo.LockFilePath
+            __utils__.createFolder(os.path.dirname(lockFilePath))
+            logger.info('Writing lock file %s...' % lockFilePath)
+            open(lockFilePath, 'w').write('%s\n' % logFilePath)
+            logger.info('Done.')
+            logger.error('Processing terminated after %.3f s.' % chrono.stop())
+        else:
+            logger.info('Run processed in %.3f s.' % chrono.stop())
         curFile += 1
     logFileHandler.close()
 
