@@ -259,6 +259,12 @@ class E3RawDataInfo(dict):
         """
         return os.path.exists(self.DstFilePath)
 
+    def locked(self):
+        """ Return true if the file is locked (i.e., we could not process it
+        properly and we are currently skipping it).
+        """
+        return os.path.exists(self.LockFilePath)
+
 
 
 

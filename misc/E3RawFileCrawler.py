@@ -54,28 +54,39 @@ class E3RawFileCrawler(E3FileCrawlerBase):
 
     def crawlFolder(self, folderPath):
         """  Overloaded class method.
+
+        Mind that here we skip the last file, after we sorted the list,
+        as that (though older than self.__MinHoursSinceSynch) might still
+        being transferred from the school.
         """
         fileList = []
         numTotal = 0
         numNew = 0
         numProcessed = 0
+        numLocked = 0
         numReady = 0
         for filePath in glob.glob(os.path.join(folderPath, '*.bin')):
             runInfo = E3RawDataInfo(filePath)
             _new = runInfo.hoursSinceSynch() < self.__MinHoursSinceSynch
             _processed = runInfo.processed()
+            _locked = runInfo.locked()
             numTotal += 1
             if _new:
                 numNew += 1
             elif _processed:
                 numProcessed += 1
+            elif _locked:
+                numLocked += 1
             else:
                 numReady += 1
-            if (not _processed or self.__Overwrite) and not _new:
+            if (not _processed or self.__Overwrite) and \
+               not _new and not _locked:
                 fileList.append(runInfo.RawFilePath)
-        logger.info('%d file(s), %d ready, %d processed, %d new.' %\
-                    (numTotal, numReady, numProcessed, numNew))
-        return fileList
+        logger.info('%d file(s), %d ready, %d processed, %d locked, %d new, '
+                    'skipping last ready...' %\
+                    (numTotal, numReady, numProcessed, numLocked, numNew))
+        fileList.sort()
+        return fileList[:-1]
 
 
     

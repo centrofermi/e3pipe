@@ -82,9 +82,9 @@ class E3FileCrawlerBase:
     def __crawl(self):
         """ Crawl into the directory structure and fill the file list.
 
-        Note that here we kind of revert the logic and start crawling from the
-        oldest folder, so that it's more efficient to have the output file
-        list sorted in ascending time order.
+        Note that we don't do anything clever with the file list returned
+        by the crawlFolder() method---i.e., if you want it to be sorted you
+        should do it in the derived classes.
         """
         startDate = self.endDate() - datetime.timedelta(self.daysSpanned() - 1)
         logger.info('Data crawler started.')
@@ -100,7 +100,6 @@ class E3FileCrawlerBase:
                 folderPath = self.folderPath(station, date)
                 logger.info('Crawling %s...' % folderPath)
                 fileList = self.crawlFolder(folderPath)
-                fileList.sort()
                 logger.info('%d file(s) found.' % len(fileList))
                 self.__FileDict[station] += fileList
                 self.__FileList += fileList
