@@ -176,6 +176,7 @@ class E3RawDataInfo(dict):
         self['CalibFilePath'] = self.__calibFilePath()
         self['DqmFolderPath'] = self.__dqmFolderPath()
         self['LogFilePath'] = self.__logFilePath()
+        self['LockFilePath'] = self.__lockFilePath()
 
     def __getattr__(self, key):
         """ Overloaded method to facilitate access to class members.
@@ -212,6 +213,17 @@ class E3RawDataInfo(dict):
         """
         fileName = self.RawFileName.replace('.bin', '.log')
         return os.path.join(E3PIPE_LOG_BASE, self.Station, self.DateString,
+                            fileName)
+
+    def __lockFilePath(self):
+        """ Return the path to the lock file corresponding to a given input
+        binary raw data file (.bin).
+        
+        If this file exists the raw data crawler will skip the corresponding
+        .bin file (i.e., effectively the run won't be processed). 
+        """
+        fileName = self.RawFileName.replace('.bin', '.lock')
+        return os.path.join(E3PIPE_LOCK_BASE, self.Station, self.DateString,
                             fileName)
 
     def daysSinceDataTaking(self):
