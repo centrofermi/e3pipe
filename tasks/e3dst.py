@@ -78,8 +78,9 @@ def e3dst(baseFilePath):
         outFile.close()
         sumFile.close()
         __utils__.rm(dstFilePath)
-        logger.info('Exiting after %.3f s.' % chrono.stop())
-        abort('No good events in the run')
+        logger.info('No events with hits, processing terminated %.3f s.' %\
+                    chrono.stop())
+        sys.exit(1)
     logger.info('Event stats: %s' % eventStat)
     eventTree.Write()
     logger.info('Done, %d event(s) filled in.' % eventTree.GetEntries())
