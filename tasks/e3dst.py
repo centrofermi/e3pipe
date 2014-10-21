@@ -67,6 +67,8 @@ def e3dst(baseFilePath):
     logger.info('Filling event tree...')
     for row in outFile:
         eventTree.fillRow(row)
+    eventStat = outFile.eventStat()
+    logger.info('Event stats: %s' % eventStat)
     eventTree.Write()
     logger.info('Done, %d event(s) filled in.' % eventTree.GetEntries())
     if eventTree.GetEntries() == 0:
@@ -91,7 +93,6 @@ def e3dst(baseFilePath):
     data['RunStart'] = eventTree.runStart()
     data['RunStop'] = eventTree.runStop()
     data['RunDuration'] = eventTree.runDuration()
-    eventStat = outFile.eventStat()
     data['NumGpsEvents'] = eventStat['no_hits']
     data['NumNoHitsEvents'] = eventStat['no_hit']
     headerTree.fillRow(data)

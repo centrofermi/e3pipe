@@ -24,6 +24,7 @@
 from e3pipe.dst.E3TextTupleField import E3TextTupleField
 from e3pipe.dst.E3TextTupleRow import E3TextTupleRow
 from e3pipe.dst.E3TextTupleBase import E3TextTupleBase
+from e3pipe.__logging__ import logger
 
 
 class E3AnalyzerOutRow(E3TextTupleRow):
@@ -70,12 +71,18 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         beginning, to skip the file header.
         """
         E3TextTupleBase.__init__(self, filePath, '.out')
+        self.__CurrentLine = 1
         self.__LastTimestamp = None
-        self.__EventStat = {'total': 0, 'no_hits': 0, 'no_hit': 0}
+        self.__EventStat = {'total'    : 0, 
+                            'good'     : 0,
+                            'malformed': 0,
+                            'no_hits'  : 0,
+                            'no_hit'   : 0
+                            }
         file.next(self)
 
     def eventStat(self):
-        """
+        """ Return the event statistics.
         """
         return self.__EventStat
 
@@ -89,17 +96,32 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         And we also add the delta event time :-)
         """
         data = file.next(self)
+        self.__CurrentLine += 1
         self.__EventStat['total'] += 1
-        if data.endswith('no hits\n'):
-            self.__EventStat['no_hits'] += 1
-        if data.endswith('no hit\n'):
-            self.__EventStat['no_hit'] += 1  
+        # Is this a line with either "no hit" or "no hits".
         if self.NO_TRACK_MARKER in data:
+            if data.endswith('no hits\n'):
+                self.__EventStat['no_hits'] += 1
+            if data.endswith('no hit\n'):
+                self.__EventStat['no_hit'] += 1  
             data = data.split(self.NO_TRACK_MARKER)[0]
             for field in self.ROW_DESCRIPTOR.FIELDS[2:]:
                 data += '  %s' % field.Default
             return self.ROW_DESCRIPTOR(data)
-        data = self.ROW_DESCRIPTOR(data)
+        # If no go ahead and try and parse it.
+        try:
+            data = self.ROW_DESCRIPTOR(data)
+        except:
+            logger.error('Line %d of the .out file is malformed:\n->%s' %\
+                             (self.__CurrentLine, data.strip('\n')))
+            self.__EventStat['malformed'] += 1
+            runId, evtId = data.split()[:2]
+            data = '%s %s' % (runId, evtId)
+            for field in self.ROW_DESCRIPTOR.FIELDS[2:]:
+                data += '  %s' % field.Default
+            return self.ROW_DESCRIPTOR(data)
+        # The event looks good!
+        self.__EventStat['good'] += 1
         timestamp = data.timestamp()
         if self.__LastTimestamp is None:
             deltaTime = -1.
