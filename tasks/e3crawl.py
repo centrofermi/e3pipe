@@ -36,7 +36,8 @@ from e3pipe.dst.__time__ import date2str
 
 
 def e3crawl(stations = None, endDate = None, daysSpanned = 2,
-            minHoursSinceSynch = 2., overwrite = False, dryRun = False):
+            minHoursSinceSynch = 2., overwrite = False, maxNumRuns = None,
+            dryRun = False):
     """ Crawl the raw data and process the files.
     """
     logDate = datetime.datetime.today()
@@ -68,6 +69,8 @@ def e3crawl(stations = None, endDate = None, daysSpanned = 2,
             logger.error('Processing terminated after %.3f s.' % chrono.stop())
         else:
             logger.info('Run processed in %.3f s.' % chrono.stop())
+        if maxNumRuns is not None and curFile >= maxNumRuns:
+            break
         curFile += 1
     logFileHandler.close()
 

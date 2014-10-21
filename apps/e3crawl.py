@@ -42,6 +42,9 @@ parser.add_option('-N', '--days-spanned', type = int,
 parser.add_option('-H', '--min-hours', type = int,
                   default = 2, dest = 'hours',
                   help = 'the minimum time (in hours) since the rsynch')
+parser.add_option('-m', '--max-runs', type = int,
+                  default = None, dest = 'maxruns',
+                  help = 'the maximum number of runs to be processed')
 parser.add_option('-s', '--station', action = 'append', type = str,
                   default = None, dest = 'stations',
                   help = 'the station(s) to be processed')
@@ -71,4 +74,5 @@ if end is None:
     end = datetime.date.today()
 else:
     end = str2date(end)
-e3crawl(opts.stations, end, opts.span, opts.hours, opts.overwrite, opts.dry)
+e3crawl(opts.stations, end, opts.span, opts.hours, opts.overwrite,\
+        opts.maxruns, opts.dry)
