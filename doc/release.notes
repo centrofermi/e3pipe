@@ -1,4 +1,7 @@
 
+* Removed the automatic export to Centro Fermi, as this is now handled
+  externally via an rsync (issue #25).
+
 -------------------------------------------------------------------------------
 e3pipe (0.9.0) - Tue, 21 Oct 2014 00:31:56 +0200
 -------------------------------------------------------------------------------
