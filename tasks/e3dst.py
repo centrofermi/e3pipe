@@ -73,7 +73,7 @@ def e3dst(baseFilePath):
     # possibly do, here.
     # Close all files and remove the output dst ROOT file so that
     # we know the run has not been processed.
-    if eventStat['good'] < 2:
+    if eventStat['hits'] < 2:
         logger.info('Closing all files...')
         rootFile.Close()
         outFile.close()
@@ -107,7 +107,8 @@ def e3dst(baseFilePath):
     data['RunStart'] = eventTree.runStart()
     data['RunStop'] = eventTree.runStop()
     data['RunDuration'] = eventTree.runDuration()
-    data['NumGoodEvents'] = eventStat['good']
+    data['NumHitsEvents'] = eventStat['hits']
+    data['NumTrackEvents'] = eventStat['track']
     data['NumGpsEvents'] = eventStat['no_hits']
     data['NumNoHitsEvents'] = eventStat['no_hit']
     data['NumMalformedEvents'] = eventStat['malformed']

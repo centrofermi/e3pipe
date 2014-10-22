@@ -25,31 +25,7 @@ from e3pipe.dst.E3TextTupleField import E3TextTupleField
 from e3pipe.dst.E3TextTupleRow import E3TextTupleRow
 from e3pipe.dst.E3TextTupleBase import E3TextTupleBase
 from e3pipe.__logging__ import logger
-
-
-class E3AnalyzerOutRow(E3TextTupleRow):
-    
-    """ Class encapsulating a row of a .out file from the analyzer.
-    """
-
-    FIELDS = [E3TextTupleField('RunNumber', int),
-              E3TextTupleField('EventNumber', int),
-              E3TextTupleField('Seconds', int, 0, 's'),
-              E3TextTupleField('Nanoseconds', int, 0, 'ns'),
-              E3TextTupleField('Microseconds', int, 0, 'us'),
-              E3TextTupleField('XDir', float, -1.),
-              E3TextTupleField('YDir', float, -1.),
-              E3TextTupleField('ZDir', float, -1.),
-              E3TextTupleField('ChiSquare', float, -1.),
-              E3TextTupleField('TimeOfFlight', float, -99., 'ns'),
-              E3TextTupleField('TrackLength', float, -1., 'cm'),
-              E3TextTupleField('DeltaTime', float, -1., 's')
-          ]
-
-    def timestamp(self):
-        """ Return the event timestamp.
-        """
-        return self['Seconds'] + 1.e-9*self['Nanoseconds']
+from e3pipe.config.__dst__ import MAX_GOOD_CHISQUARE
 
 
 
@@ -61,8 +37,11 @@ class E3AnalyzerOutFile(E3TextTupleBase):
     getting out structured objects rather than text lines, e.g.
     """
 
-    ROW_DESCRIPTOR = E3AnalyzerOutRow
-    NO_TRACK_MARKER = 'no hit'
+    STATUS_CODE_GOOD = 0x0
+    STATUS_CODE_NO_HITS = 0x1
+    STATUS_CODE_NO_HIT = 0x10
+    STATUS_CODE_MALFORMED = 0x100
+    STATUS_CODE_UNDEFINED = 0x1000000
 
     def __init__(self, filePath):
         """ Constructor.
@@ -72,12 +51,13 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         """
         E3TextTupleBase.__init__(self, filePath, '.out')
         self.__CurrentLine = 1
-        self.__LastTimestamp = None
+        self.__LastGoodTimestamp = None
         self.__EventStat = {'total'    : 0, 
-                            'good'     : 0,
+                            'hits'     : 0,
+                            'track'    : 0,
                             'malformed': 0,
                             'no_hits'  : 0,
-                            'no_hit'   : 0
+                            'no_hit'   : 0,
                             }
         file.next(self)
 
@@ -89,47 +69,94 @@ class E3AnalyzerOutFile(E3TextTupleBase):
     def next(self):
         """ Overloaded next() method.
         
-        Here is essentially a horrible hack to tell which events have no
-        reconstructed track and therefore should have all the fields
-        initialized to the default values.
-
-        And we also add the delta event time :-)
+        The parsing of this thing has become so complicated that we
+        essentially give up on using the general machinery put in place
+        with the E3TextTupleRow class. Here we just pass a plain dictionary
+        out of the iterator to fill the output ROOT tree.
         """
+        # Initialize the output dictionary with sensible default values.
+        outputData = {'RunNumber'   : None,
+                      'EventNumber' : None,
+                      'StatusCode'  : self.STATUS_CODE_UNDEFINED,
+                      'Seconds'     : 0,
+                      'Nanoseconds' : 0,
+                      'Microseconds': 0,
+                      'XDir'        : -1.,
+                      'YDir'        : -1.,
+                      'ZDir'        : -1.,
+                      'ChiSquare'   : -1.,
+                      'TimeOfFlight': -99.,
+                      'TrackLength' : -1.,
+                      'DeltaTime'   : -1.
+                  }
         data = file.next(self)
         self.__CurrentLine += 1
         self.__EventStat['total'] += 1
-        # Is this a line with either "no hit" or "no hits".
-        if self.NO_TRACK_MARKER in data:
-            if data.endswith('no hits\n'):
-                self.__EventStat['no_hits'] += 1
-            if data.endswith('no hit\n'):
-                self.__EventStat['no_hit'] += 1  
-            data = data.split(self.NO_TRACK_MARKER)[0]
-            for field in self.ROW_DESCRIPTOR.FIELDS[2:]:
-                data += '  %s' % field.Default
-            return self.ROW_DESCRIPTOR(data)
-        # If no go ahead and try and parse it.
+        # Does the line end with "no hits" (whatever that means)?
+        if data.endswith('no hits\n'):
+            self.__EventStat['no_hits'] += 1
+            run, evt, dummy = data.split(None, 2)
+            outputData['RunNumber'] = int(run)
+            outputData['EventNumber'] = int(evt)
+            outputData['StatusCode'] = self.STATUS_CODE_NO_HITS
+            return outputData
+        # Does the line end with "no hits" (whatever that means)?
+        # Note that this is different wrt the previous case.
+        if data.endswith('no hit\n'):
+            self.__EventStat['no_hit'] += 1
+            run, evt, dummy = data.split(None, 2)
+            outputData['RunNumber'] = int(run)
+            outputData['EventNumber'] = int(evt)
+            outputData['StatusCode'] = self.STATUS_CODE_NO_HIT
+            return outputData
+        # At this point we try and parse the line as if it was normal.
         try:
-            data = self.ROW_DESCRIPTOR(data)
-        except:
+            run, evt, sec, ns, us, xdir, ydir, zdir, chi2, tof,\
+                length = data.split()
+            run = int(run)
+            evt = int(evt)
+            sec = int(sec)
+            ns = int(ns)
+            us = int(us)
+            xdir = float(xdir)
+            ydir = float(ydir)
+            zdir = float(zdir)
+            chi2 = float(chi2)
+            tof = float(tof)
+            length = float(length)
+        except Exception, e:
             logger.error('Line %d of %s file is malformed ("%s")' %\
-                             (self.__CurrentLine, self.name, data.strip('\n')))
+                         (self.__CurrentLine, self.name, data.strip('\n')))
+            logger.info('Exception: %s' % e)
             self.__EventStat['malformed'] += 1
-            runId, evtId = data.split()[:2]
-            data = '%s %s' % (runId, evtId)
-            for field in self.ROW_DESCRIPTOR.FIELDS[2:]:
-                data += '  %s' % field.Default
-            return self.ROW_DESCRIPTOR(data)
-        # The event looks good!
-        self.__EventStat['good'] += 1
-        timestamp = data.timestamp()
-        if self.__LastTimestamp is None:
-            deltaTime = -1.
-        else:
-            deltaTime = timestamp - self.__LastTimestamp
-        data['DeltaTime'] = deltaTime
-        self.__LastTimestamp = timestamp
-        return data
+            run, evt, dummy = data.split(None, 2)
+            outputData['RunNumber'] = int(run)
+            outputData['EventNumber'] = int(evt)
+            outputData['StatusCode'] = self.STATUS_CODE_MALFORMED
+            return outputData
+        # And at this point we know that the event is good.
+        self.__EventStat['hits'] += 1
+        timestamp = sec + 1.e-9*ns
+        outputData['RunNumber'] = run
+        outputData['EventNumber'] = evt
+        outputData['StatusCode'] = self.STATUS_CODE_GOOD
+        outputData['Seconds'] = sec
+        outputData['Nanoseconds'] = ns
+        outputData['Microseconds'] = us
+        outputData['XDir'] = xdir
+        outputData['YDir'] = ydir
+        outputData['ZDir'] = zdir
+        outputData['ChiSquare'] = chi2
+        outputData['TimeOfFlight'] = tof
+        outputData['TrackLength'] = length
+        # And if the chisquare is low enough, it even has tracks!
+        if chi2 < MAX_GOOD_CHISQUARE:
+            self.__EventStat['track'] += 1
+        # Finally: update the delta event time.
+        if self.__LastGoodTimestamp is not None:
+            outputData['DeltaTime'] = timestamp - self.__LastGoodTimestamp
+        self.__LastGoodTimestamp = timestamp
+        return outputData
 
 
 

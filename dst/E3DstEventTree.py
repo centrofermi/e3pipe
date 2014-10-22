@@ -39,6 +39,7 @@ class E3DstEventTree(E3Tree):
     NAME = 'Events'
     BRANCHES = [E3BranchDescriptor('RunNumber', 'i'),
                 E3BranchDescriptor('EventNumber', 'i'),
+                E3BranchDescriptor('StatusCode', 'i'),
                 E3BranchDescriptor('Seconds', 'i'),
                 E3BranchDescriptor('Nanoseconds', 'i'),
                 E3BranchDescriptor('XDir', 'F'),

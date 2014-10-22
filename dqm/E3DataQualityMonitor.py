@@ -169,7 +169,9 @@ class E3DataQualityMonitor:
         outputFile.li('Total number of events: %s' %\
                           header.NumEvents)
         outputFile.li('Number of events with hits: %s' %\
-                          header.NumGoodEvents)
+                          header.NumHitsEvents)
+        outputFile.li('Number of events with a track: %s' %\
+                          header.NumTrackEvents)
         outputFile.li('Number of GPS events: %s' %\
                           header.NumGpsEvents)
         outputFile.li('Number of events with no hits: %s' %\
