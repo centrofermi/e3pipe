@@ -22,6 +22,7 @@
 
 
 import os
+import sys
 
 import e3pipe.__utils__ as __utils__
 
@@ -36,28 +37,7 @@ from e3pipe.config.__analyzer__ import E3_CALIB_FILE_NAME
 
 
 
-def e3exportDQM(dqmFolderPath):
-    """
-    We want something along the lines of:
-    ssh www.centrofermi.it mkdir -p /var/www/html_eee/dqm/FRAS-02/2014-10-20/FRAS-02-2014-10-20-00001/
-    scp -r /dqm/FRAS-02/2014-10-20/FRAS-02-2014-10-20-00001/* www.centrofermi.it:/var/www/html_eee/dqm/FRAS-02/2014-10-20/FRAS-02-2014-10-20-00001/
-
-    And we only want to do that when we run as the analisi user, i.e. when
-    E3PIPE_DQM_BASE is /dqm
-    """
-    if E3PIPE_DQM_BASE != '/dqm':
-        logger.info('E3PIPE_DQM_BASE is not /dqm, skipping export')
-        return 
-    relPath = dqmFolderPath.replace('/dqm/', '')
-    target = os.path.join(E3CENTRO_FERMI_DQM_BASE, relPath)
-    __utils__.cmd('ssh %s mkdir -p %s' % (E3CENTRO_FERMI_SERVER, target))
-    source = os.path.join(dqmFolderPath, '*')
-    dest = '%s:%s' % (E3CENTRO_FERMI_SERVER, target)
-    __utils__.cmd('scp -r %s %s' % (source, dest))
-
-
-
-def e3recon(rawFilePath, copyFiles = True, suffix = None, exportDQM = False):
+def e3recon(rawFilePath, copyFiles = True, suffix = None):
     """ Run the analyzer, build the DST and run the DQM (i.e., effectively
     run the full reconstruction for one single run).
 
@@ -69,7 +49,9 @@ def e3recon(rawFilePath, copyFiles = True, suffix = None, exportDQM = False):
     have already done. While this is not elegant, I don't think we'll ever
     notice the overhead.
     """
-    baseFilePath = e3analyzer(rawFilePath, suffix)
+    exitCode, baseFilePath = e3analyzer(rawFilePath, suffix)
+    if exitCode:
+        sys.exit(exitCode)
     dstFilePath = e3dst(baseFilePath)
     dqmFolderPath = '%s_DQM' % baseFilePath
     e3dqm(dstFilePath, dqmFolderPath)
@@ -83,7 +65,4 @@ def e3recon(rawFilePath, copyFiles = True, suffix = None, exportDQM = False):
         if os.path.exists(runInfo.DqmFolderPath):
             __utils__.rmdir(runInfo.DqmFolderPath)
         __utils__.cp(dqmFolderPath, runInfo.DqmFolderPath, True)
-    if exportDQM:
-        e3exportDQM(runInfo.DqmFolderPath)
 
-        

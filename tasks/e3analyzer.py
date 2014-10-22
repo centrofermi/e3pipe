@@ -52,13 +52,13 @@ def e3analyzer(binFilePath, suffix = None):
     __utils__.cp(binFilePath, copyFilePath)
     _cmd = 'cd %s; %s %s' % (E3PIPE_TEMP, E3_ANALYZER, copyFilePath)
     logger.info('Generating the calibration file...')
-    sc = __utils__.cmd(_cmd)
-    if sc:
-        return None
+    exitCode = __utils__.cmd(_cmd)
+    if exitCode:
+        return exitCode, None
     logger.info('Running the EEE Analizer for real!')
-    sc = __utils__.cmd(_cmd)
-    if sc:
-        return None
+    exitCode = __utils__.cmd(_cmd)
+    if exitCode:
+        return exitCode, None
     logger.info('Run processed in %.3f s.' % chrono.stop())
     baseFilePath = copyFilePath.replace('.bin', '')
     if suffix is not None:
@@ -69,7 +69,7 @@ def e3analyzer(binFilePath, suffix = None):
         baseFilePath = '%s_%s' % (baseFilePath, suffix)
     listTemp()
     logger.info('Returning base path: "%s"...' % baseFilePath)
-    return baseFilePath
+    return 0, baseFilePath
 
 
 	
