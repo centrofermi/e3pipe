@@ -112,8 +112,8 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         try:
             data = self.ROW_DESCRIPTOR(data)
         except:
-            logger.error('Line %d of the .out file is malformed:\n->%s' %\
-                             (self.__CurrentLine, data.strip('\n')))
+            logger.error('Line %d of %s file is malformed:\n->%s' %\
+                             (self.__CurrentLine, self.name, data.strip('\n')))
             self.__EventStat['malformed'] += 1
             runId, evtId = data.split()[:2]
             data = '%s %s' % (runId, evtId)
