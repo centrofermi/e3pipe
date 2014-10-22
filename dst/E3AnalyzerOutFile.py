@@ -154,7 +154,8 @@ class E3AnalyzerOutFile(E3TextTupleBase):
             self.__EventStat['track'] += 1
         # Finally: update the delta event time.
         if self.__LastGoodTimestamp is not None:
-            outputData['DeltaTime'] = timestamp - self.__LastGoodTimestamp
+            delta = timestamp - self.__LastGoodTimestamp
+            outputData['DeltaTime'] = delta
         self.__LastGoodTimestamp = timestamp
         return outputData
 
