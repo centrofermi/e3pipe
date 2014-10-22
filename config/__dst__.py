@@ -21,10 +21,22 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-
+""" Basic event selection cuts.
+"""
 MAX_GOOD_CHISQUARE = 10.
 CUT_GOOD_EVENT = 'StatusCode == 0'
 CUT_GOOD_TRACK = '%s && ChiSquare < %.3f' % (CUT_GOOD_EVENT, MAX_GOOD_CHISQUARE)
+
+""" Maximum run duration (in s), in the sense of the difference between the
+largest and the smallest timestamp in the run.
+
+Mind that this is really to give up on runs when the timestamps are so scrambled
+that the apparent run duration is insanely long, see e.g.
+http://eee.centrofermi.it/dqm/CATA-02/2014-10-22/CATA-02-2014-10-22-00022/
+
+One day should be plenty :-)
+"""
+MAX_RUN_DURATION = 86400.0
 
 
 
