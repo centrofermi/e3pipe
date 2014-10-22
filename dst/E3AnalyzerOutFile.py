@@ -138,9 +138,9 @@ class E3AnalyzerOutFile(E3TextTupleBase):
             tof = float(tof)
             length = float(length)
         except Exception, e:
-            logger.error('Line %d of %s file is malformed ("%s")' %\
-                         (self.__CurrentLine, self.name, data.strip('\n')))
-            logger.info('Exception: %s' % e)
+            #logger.error('Line %d of %s file is malformed ("%s")' %\
+            #             (self.__CurrentLine, self.name, data.strip('\n')))
+            #logger.info('Exception: %s' % e)
             self.__EventStat['malformed'] += 1
             run, evt, dummy = data.split(None, 2)
             outputData['RunNumber'] = int(run)
