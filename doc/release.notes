@@ -1,4 +1,9 @@
 
+* Parsing of the .out file rewritten from scratch.
+* StatusCode branch added to the output Events tree in the DST.
+* Keeping track of the number of events with tracks in the Header tree in the
+  DST (propagated to the report).
+
 -------------------------------------------------------------------------------
 e3pipe (0.13.2) - Wed, 22 Oct 2014 10:00:21 +0200
 -------------------------------------------------------------------------------
