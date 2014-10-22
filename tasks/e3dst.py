@@ -114,9 +114,9 @@ def e3dst(baseFilePath):
     # information that we want in the header is really coming from the
     # sum file.
     data['RunNumber'] = row['RunNumber']
-    data['RunStart'] = eventTree.runStart()
-    data['RunStop'] = eventTree.runStop()
-    data['RunDuration'] = eventTree.runDuration()
+    data['RunStart'] = tmin
+    data['RunStop'] = tmax
+    data['RunDuration'] = tmax - tmin
     data['NumHitsEvents'] = eventStat['hits']
     data['NumTrackEvents'] = eventStat['track']
     data['NumGpsEvents'] = eventStat['no_hits']

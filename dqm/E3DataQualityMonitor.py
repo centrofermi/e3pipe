@@ -165,7 +165,7 @@ class E3DataQualityMonitor:
         outputFile.write('<p></p>\n')
         outputFile.write('<ul>\n')
         outputFile.li('DST file path: %s' % self.__InputFile.GetName())
-        outputFile.li('Run duration: %.3f s' %\
+        outputFile.li('Run duration (largest - smallest timestamp): %.3f s' %\
                           header.RunDuration)
         outputFile.li('Total number of events: %s' %\
                           header.NumEvents)
