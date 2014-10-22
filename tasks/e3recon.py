@@ -22,7 +22,6 @@
 
 
 import os
-import sys
 
 import e3pipe.__utils__ as __utils__
 
@@ -49,9 +48,7 @@ def e3recon(rawFilePath, copyFiles = True, suffix = None):
     have already done. While this is not elegant, I don't think we'll ever
     notice the overhead.
     """
-    exitCode, baseFilePath = e3analyzer(rawFilePath, suffix)
-    if exitCode:
-        sys.exit(exitCode)
+    baseFilePath = e3analyzer(rawFilePath, suffix)
     dstFilePath = e3dst(baseFilePath)
     dqmFolderPath = '%s_DQM' % baseFilePath
     e3dqm(dstFilePath, dqmFolderPath)

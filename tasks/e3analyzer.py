@@ -22,6 +22,7 @@
 
 
 import os
+import sys
 
 import e3pipe.__utils__ as __utils__
 
@@ -54,11 +55,11 @@ def e3analyzer(binFilePath, suffix = None):
     logger.info('Generating the calibration file...')
     exitCode = __utils__.cmd(_cmd)
     if exitCode:
-        return exitCode, None
+        sys.exit(exitCode)
     logger.info('Running the EEE Analizer for real!')
     exitCode = __utils__.cmd(_cmd)
     if exitCode:
-        return exitCode, None
+        sys.exit(exitCode)
     logger.info('Run processed in %.3f s.' % chrono.stop())
     baseFilePath = copyFilePath.replace('.bin', '')
     if suffix is not None:
@@ -69,7 +70,7 @@ def e3analyzer(binFilePath, suffix = None):
         baseFilePath = '%s_%s' % (baseFilePath, suffix)
     listTemp()
     logger.info('Returning base path: "%s"...' % baseFilePath)
-    return 0, baseFilePath
+    return baseFilePath
 
 
 	
