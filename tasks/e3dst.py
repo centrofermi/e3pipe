@@ -37,6 +37,8 @@ from e3pipe.misc.E3Chrono import E3Chrono
 from e3pipe.config.__storage__ import listTemp
 from e3pipe.config.__dqm__ import TRENDING_TIME_BIN
 from e3pipe.config.__dst__ import MAX_RUN_DURATION
+from e3pipe.tasks.__exitcodes__ import E3PIPE_EXIT_CODE_NO_HITS_EVENTS,\
+    E3PIPE_EXIT_CODE_RUN_TOO_LONG
 
 
 
@@ -90,7 +92,7 @@ def e3dst(baseFilePath):
         __utils__.rm(dstFilePath)
         logger.info('No events with hits, processing terminated %.3f s.' %\
                     chrono.stop())
-        sys.exit(1)
+        sys.exit(E3PIPE_EXIT_CODE_NO_HITS_EVENTS)
     logger.info('Event stats: %s' % eventStat)
     logger.info('Range of timestamps in the output files: %.3f--%.3f' %\
                 (tmin, tmax))
@@ -98,7 +100,7 @@ def e3dst(baseFilePath):
     logger.info('Corresponding run duration: %.3f s' % duration)
     if duration > MAX_RUN_DURATION:
         logger.error('Run looks way too long, something must be wrong.')
-        sys.exit(1)
+        sys.exit(E3PIPE_EXIT_CODE_RUN_TOO_LONG)
     eventTree.Write()
     logger.info('Done, %d event(s) filled in.' % eventTree.GetEntries())
     if eventTree.GetEntries() == 0:
