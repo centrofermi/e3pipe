@@ -138,6 +138,12 @@ class E3AnalyzerOutFile(E3TextTupleBase):
             tof = float(tof)
             length = float(length)
         except Exception, e:
+            # I removed the following lines as, for some reason, they were
+            # really hurting our capability of processing runs in batch for
+            # runs with a massive fraction of malformed events.
+            #
+            # Think twice before putting it back.
+            #
             #logger.error('Line %d of %s file is malformed ("%s")' %\
             #             (self.__CurrentLine, self.name, data.strip('\n')))
             #logger.info('Exception: %s' % e)
