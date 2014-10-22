@@ -165,20 +165,22 @@ class E3DataQualityMonitor:
         outputFile.write('<p></p>\n')
         outputFile.write('<ul>\n')
         outputFile.li('DST file path: %s' % self.__InputFile.GetName())
+        outputFile.li('Unique run identifier: %s' %\
+                      header.UniqueRunId)
         outputFile.li('Run duration (largest - smallest timestamp): %.3f s' %\
-                          header.RunDuration)
+                      header.RunDuration)
         outputFile.li('Total number of events: %s' %\
-                          header.NumEvents)
+                      header.NumEvents)
         outputFile.li('Number of events with hits: %s' %\
-                          header.NumHitsEvents)
+                      header.NumHitsEvents)
         outputFile.li('Number of events with a track: %s' %\
-                          header.NumTrackEvents)
+                      header.NumTrackEvents)
         outputFile.li('Number of GPS events: %s' %\
-                          header.NumGpsEvents)
+                      header.NumGpsEvents)
         outputFile.li('Number of events with no hits: %s' %\
-                          header.NumNoHitsEvents)
+                      header.NumNoHitsEvents)
         outputFile.li('Number of malformed events: %s'% \
-                          header.NumMalformedEvents)
+                      header.NumMalformedEvents)
         outputFile.write('</ul>\n')
         outputFile.section('Alarm summary')
         outputFile.write('\n<table width=100%>\n')
