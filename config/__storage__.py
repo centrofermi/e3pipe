@@ -131,13 +131,6 @@ def splitFilePath(filePath):
     return os.path.basename(filePath).split('.')[0].rsplit('-', 4)
 
 
-def filePath2date(filePath):
-    """ Extract the date from a file path.
-    """
-    year, month, date = [int(item) for item in splitFilePath(filePath)[1:4]]
-    return datetime.date(year, month, day)
-
-
 
 class E3RawDataInfo(dict):
 
@@ -166,13 +159,12 @@ class E3RawDataInfo(dict):
         dict.__init__(self)
         self['RawFilePath'] = filePath
         self['RawDirName'], self['RawFileName'] = os.path.split(filePath)
-        data = self['RawFileName'].split('.')[0].rsplit('-', 4)
+        data = splitFilePath(filePath)
         self['Station'] = data[0]
-        self['Year'], self['Month'], \
-            self['Day'] = [int(item) for item in data[1:4]]
+        year, month, day = [int(item) for item in data[1:4]]
         self['RunString'] = data[4]
         self['RunNumber'] = int(self.RunString)
-        self['Date'] = datetime.date(self.Year, self.Month, self.Day)
+        self['Date'] = datetime.date(year, month, day)
         self['DateString'] = date2str(self.Date)
         self['DstFilePath'] = self.__dstFilePath()
         self['CalibFilePath'] = self.__calibFilePath()

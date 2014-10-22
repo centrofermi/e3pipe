@@ -21,6 +21,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+""" Unique ID assigned to each station.
+"""
 E3_STATION_DICT = {
     'ALTA-01': 1,
     'ANCO-01': 2,
@@ -70,6 +72,13 @@ E3_STATION_DICT = {
     'VIAR-01': 46,
     'VIAR-02': 47
 }
+
+
+""" And now we invert the dict.
+"""
+E3_STATION_ID_DICT = {}
+for key, value in E3_STATION_DICT.items():
+    E3_STATION_ID_DICT[value] = key
 
 
 E3_ACTIVE_STATIONS = [

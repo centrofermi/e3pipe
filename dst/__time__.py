@@ -32,6 +32,8 @@ E3_TIME_OFFSET = E3_DATE_OFFSET.Convert(True)
 """
 DATE_FMT_STRING = '%Y-%m-%d'
 
+E3_DATE_REFERENCE = datetime.date(2007, 1, 1)
+
 
 def date2str(date):
     """ Convert a date to string.
