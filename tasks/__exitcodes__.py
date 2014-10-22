@@ -68,3 +68,4 @@ if __name__ == '__main__':
         exitCodeIntent(E3PIPE_EXIT_CODE_ANALYZER_SEGFAULT)
     print lockFileMessage(E3PIPE_EXIT_CODE_ANALYZER_SEGFAULT)
     print lockFileMessage(E3PIPE_EXIT_CODE_ANALYZER_SEGFAULT, 'run.log')
+    print lockFileMessage(46)
