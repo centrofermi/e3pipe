@@ -35,6 +35,7 @@ from e3pipe.dst.__runid__ import uniqueRunIdFromFilePath
 from e3pipe.root.E3OutputRootFile import E3OutputRootFile
 from e3pipe.misc.E3Chrono import E3Chrono
 from e3pipe.config.__storage__ import listTemp
+from e3pipe.config.__dqm__ import TRENDING_TIME_BIN
 
 
 def data2hist(data, key, xmin = -0.5, xmax = 35.5):
@@ -98,7 +99,7 @@ def e3dst(baseFilePath):
     logger.info('Creating monitoring plots...')
     eventTree.doMonitoring()
     logger.info('Creating trending data products...')
-    trendingTree = eventTree.doTrending()
+    trendingTree = eventTree.doTrending(TRENDING_TIME_BIN, tmin, tmax)
     logger.info('Writing trending tree...')
     trendingTree.Write()
     logger.info('Writing monitoring/trending plots...')

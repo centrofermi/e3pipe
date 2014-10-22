@@ -58,8 +58,11 @@ def dqmPreformat(dstFile):
     dstFile.Get('RateNonGpsEvents').GetYaxis().SetRangeUser(0, 100)
     dstFile.Get('FractionTrackEvents').GetYaxis().SetRangeUser(0, 1.1)
     logger.info('Done.')
-    
-    
+
+
+""" The time bin for the trending.
+"""
+TRENDING_TIME_BIN = 60
     
     
 

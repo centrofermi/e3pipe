@@ -104,11 +104,13 @@ class E3DstEventTree(E3Tree):
         return self.runStop() - self.runStart()
 
     def trendingHist(self, name, title = None, cut = '', timeDelta = 60,
-                     **kwargs):
+                     xmin = None, xmax = None, **kwargs):
         """ Create a trending histogram.
         """
-        xmin = self.runStart() - 1.e-3
-        xmax = self.runStop() + 1.e-3
+        xmin = xmin or self.runStart()
+        xmin -= 1.e-3
+        xmax = xmax or self.runStop()
+        xmax += 1.e-3
         xbins = max(1, int(self.runDuration()/float(timeDelta) + 0.5))
         hist = self.hist1d('Timestamp', cut, name, title, xmin, xmax, xbins,
                            **kwargs)
@@ -143,7 +145,7 @@ class E3DstEventTree(E3Tree):
                     xmin = 0, xmax = 300., xbins = 100,
                     XTitle = 'Track length [cm]')
 
-    def doTrending(self):
+    def doTrending(self, timeDelta = 60, xmin = None, xmax = None):
         """ Create the trending plots/tree.
 
         TODO: this should be properly configurable from a configuration
@@ -156,17 +158,20 @@ class E3DstEventTree(E3Tree):
         _name = 'RateNonGpsEvents'
         _cut = CUT_GOOD_EVENT
         _ytitle = 'Rate of non-GPS events [Hz]'
-        h1 = self.trendingHist(_name, cut = _cut, YTitle = _ytitle)
+        h1 = self.trendingHist(_name, None, _cut, timeDelta, xmin, xmax,
+                               YTitle = _ytitle)
         _name = 'RateTrackEvents'
         _cut = CUT_GOOD_TRACK
         _ytitle = 'Rate of tracks with #chi^{2} < %.1f [Hz]' %\
                   MAX_GOOD_CHISQUARE
-        h2 = self.trendingHist(_name, cut = _cut, YTitle = _ytitle)
+        h2 = self.trendingHist(_name, None, _cut, timeDelta, xmin, xmax,
+                               YTitle = _ytitle)
         _name = 'FractionTrackEvents'
         _cut = CUT_GOOD_TRACK
         _ytitle = 'Fraction of tracks with #chi^{2} < %.1f' %\
                   MAX_GOOD_CHISQUARE
-        h3 = self.trendingHist(_name, cut = _cut, YTitle = _ytitle)
+        h3 = self.trendingHist(_name, None, _cut, timeDelta, xmin, xmax,
+                               YTitle = _ytitle)
         h3.Divide(h2, h1, 1., 1., 'B')
         for h in [h1, h2, h3]:
             h.SetTimeDisplay()
