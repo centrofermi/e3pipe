@@ -41,7 +41,7 @@ class E3DstEventTree(E3Tree):
                 E3BranchDescriptor('EventNumber', 'i'),
                 E3BranchDescriptor('StatusCode', 'i'),
                 E3BranchDescriptor('Seconds', 'i'),
-                E3BranchDescriptor('Nanoseconds', 'i'),
+                E3BranchDescriptor('Nanoseconds', 'l'),
                 E3BranchDescriptor('XDir', 'F'),
                 E3BranchDescriptor('YDir', 'F'),
                 E3BranchDescriptor('ZDir', 'F'),
