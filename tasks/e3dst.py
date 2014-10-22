@@ -122,6 +122,7 @@ def e3dst(baseFilePath):
     data['NumGpsEvents'] = eventStat['no_hits']
     data['NumNoHitsEvents'] = eventStat['no_hit']
     data['NumMalformedEvents'] = eventStat['malformed']
+    data['NumBackwardEvents'] = eventStat['backward']
     headerTree.fillRow(data)
     headerTree.Write()
     logger.info('Creating histograms...')

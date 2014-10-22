@@ -181,6 +181,8 @@ class E3DataQualityMonitor:
                       header.NumNoHitsEvents)
         outputFile.li('Number of malformed events: %s'% \
                       header.NumMalformedEvents)
+        outputFile.li('Number of events out of order: %s'% \
+                      header.NumBackwardEvents)
         outputFile.write('</ul>\n')
         outputFile.section('Alarm summary')
         outputFile.write('\n<table width=100%>\n')

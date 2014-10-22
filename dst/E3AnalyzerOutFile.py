@@ -58,6 +58,7 @@ class E3AnalyzerOutFile(E3TextTupleBase):
                             'malformed': 0,
                             'no_hits'  : 0,
                             'no_hit'   : 0,
+                            'backward' : 0
                             }
         self.__MinTimestamp = None
         self.__MaxTimestamp = None
@@ -175,6 +176,8 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         # Finally: update the delta event time.
         if self.__LastGoodTimestamp is not None:
             delta = timestamp - self.__LastGoodTimestamp
+            if delta < 0:
+                self.__EventStat['backward'] += 1
             outputData['DeltaTime'] = delta
         self.__LastGoodTimestamp = timestamp
         return outputData
