@@ -36,6 +36,8 @@ from e3pipe.root.E3OutputRootFile import E3OutputRootFile
 from e3pipe.misc.E3Chrono import E3Chrono
 from e3pipe.config.__storage__ import listTemp
 from e3pipe.config.__dqm__ import TRENDING_TIME_BIN
+from e3pipe.config.__dst__ import MAX_RUN_DURATION
+
 
 
 def data2hist(data, key, xmin = -0.5, xmax = 35.5):
@@ -92,6 +94,11 @@ def e3dst(baseFilePath):
     logger.info('Event stats: %s' % eventStat)
     logger.info('Range of timestamps in the output files: %.3f--%.3f' %\
                 (tmin, tmax))
+    duration = tmax - tmin
+    logger.info('Corresponding run duration: %.3f s' % duration)
+    if duration > MAX_RUN_DURATION:
+        logger.error('Run looks way too long, something must be wrong.')
+        sys.exit(1)
     eventTree.Write()
     logger.info('Done, %d event(s) filled in.' % eventTree.GetEntries())
     if eventTree.GetEntries() == 0:
