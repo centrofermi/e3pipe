@@ -29,7 +29,7 @@ from e3pipe.root.E3Canvas import E3Canvas
 from e3pipe.dqm.E3Alarm import E3Alarm
 from e3pipe.dqm.E3AlarmSummary import E3AlarmSummary
 from e3pipe.dqm.E3HtmlOutputFile import E3HtmlOutputFile
-from e3pipe.config.__dqm__ import DQM_BASELINE_LIST, TOP_IMAGES
+from e3pipe.config.__dqm__ import DQM_BASELINE_LIST, TOP_IMAGES, dqmPreformat
 from e3pipe.__utils__ import createFolder, cp
 from e3pipe.__package__ import E3PIPE_DQM
 
@@ -47,6 +47,7 @@ class E3DataQualityMonitor:
         self.__Label = os.path.basename(filePath).replace('_dst.root', '')
         self.__OutputFolder = outputFolder
         self.__ObjectList = []
+        dqmPreformat(self.__InputFile)
 
     def objects(self):
         """ Return the list of active alarms.

@@ -64,7 +64,7 @@ class alarm_y_values(E3Alarm):
         pad = 0.15*(self.errorMax() - self.errorMin())
         ymin = self.errorMin() - pad
         ymax = self.errorMax() + pad
-        self.rootObject().GetYaxis().SetRangeUser(ymin, ymax)
+        #self.rootObject().GetYaxis().SetRangeUser(ymin, ymax)
         xmin = ROOT.gPad.GetUxmin()
         xmax = ROOT.gPad.GetUxmax()
         if ROOT.gPad.GetLogx():

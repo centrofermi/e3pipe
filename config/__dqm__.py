@@ -21,6 +21,9 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+from e3pipe.__logging__ import logger
+
+
 TOP_IMAGES = [
     ('RateTrackEvents', 'y_values'),
     ('FractionTrackEvents', 'y_values')
@@ -47,6 +50,18 @@ DQM_BASELINE_LIST = [
     ('TrackLength', dict())
 ]
 
+def dqmPreformat(dstFile):
+    """ Generic hook to format stuff in the DST before it's plotted.
+    """
+    logger.info('Preformatting DST for DQM...')
+    dstFile.Get('RateTrackEvents').GetYaxis().SetRangeUser(0, 100)
+    dstFile.Get('RateNonGpsEvents').GetYaxis().SetRangeUser(0, 100)
+    dstFile.Get('FractionTrackEvents').GetYaxis().SetRangeUser(0, 1.1)
+    logger.info('Done.')
+    
+    
+    
+    
 
 
 if __name__ == '__main__':
