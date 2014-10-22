@@ -59,12 +59,24 @@ class E3AnalyzerOutFile(E3TextTupleBase):
                             'no_hits'  : 0,
                             'no_hit'   : 0,
                             }
+        self.__MinTimestamp = None
+        self.__MaxTimestamp = None
         file.next(self)
 
     def eventStat(self):
         """ Return the event statistics.
         """
         return self.__EventStat
+
+    def minTimestamp(self):
+        """ Return the smallest timestamp found so far.
+        """
+        return self.__MinTimestamp
+
+    def maxTimestamp(self):
+        """ Return the largest timestamp found so far.
+        """
+        return self.__MaxTimestamp
 
     def next(self):
         """ Overloaded next() method.
@@ -137,6 +149,14 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         # And at this point we know that the event is good.
         self.__EventStat['hits'] += 1
         timestamp = sec + 1.e-9*ns
+        # We keep track of the minimum and maximum timestamp in the
+        # file here, as if the events are not time ordered it would
+        # essentially be necessary to loop over the entire file one more
+        # time.
+        if self.__MinTimestamp is None or timestamp < self.__MinTimestamp:
+            self.__MinTimestamp = timestamp
+        if self.__MaxTimestamp is None or timestamp > self.__MaxTimestamp:
+            self.__MaxTimestamp = timestamp
         outputData['RunNumber'] = run
         outputData['EventNumber'] = evt
         outputData['StatusCode'] = self.STATUS_CODE_GOOD

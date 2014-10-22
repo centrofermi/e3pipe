@@ -73,6 +73,8 @@ def e3dst(baseFilePath):
     for row in outFile:
         eventTree.fillRow(row)
     eventStat = outFile.eventStat()
+    tmin = outFile.minTimestamp()
+    tmax = outFile.maxTimestamp()
     # If we have less than two good events there is nothing we could
     # possibly do, here.
     # Close all files and remove the output dst ROOT file so that
@@ -87,6 +89,8 @@ def e3dst(baseFilePath):
                     chrono.stop())
         sys.exit(1)
     logger.info('Event stats: %s' % eventStat)
+    logger.info('Range of timestamps in the output files: %.3f--%.3f' %\
+                (tmin, tmax))
     eventTree.Write()
     logger.info('Done, %d event(s) filled in.' % eventTree.GetEntries())
     if eventTree.GetEntries() == 0:
