@@ -32,6 +32,7 @@ from e3pipe.__logging__ import logger, abort, E3FileHandler
 from e3pipe.misc.E3Chrono import E3Chrono
 from e3pipe.config.__storage__ import E3PIPE_LOG_BASE, E3RawDataInfo
 from e3pipe.dst.__time__ import date2str
+from e3pipe.tasks.__exitcodes__ import lockFileMessage
 
 
 
@@ -59,12 +60,14 @@ def e3crawl(stations = None, endDate = None, daysSpanned = 2,
         logger.info('Processing file %d/%d: %s' % (curFile, numFiles, filePath))
         chrono = E3Chrono()
         _cmd = 'e3recon.py %s' % filePath
-        if __utils__.cmd(_cmd):
+        exitCode = __utils__.cmd(_cmd)
+        if exitCode:
             runInfo = E3RawDataInfo(filePath)
             lockFilePath = runInfo.LockFilePath
             __utils__.createFolder(os.path.dirname(lockFilePath))
             logger.info('Writing lock file %s...' % lockFilePath)
-            open(lockFilePath, 'w').write('%s\n' % logFilePath)
+            msg = lockFileMessage(exitCode, logFilePath)
+            open(lockFilePath, 'w').write(msg)
             logger.info('Done.')
             logger.error('Processing terminated after %.3f s.' % chrono.stop())
         else:
