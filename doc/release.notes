@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (0.15.0) - Wed, 22 Oct 2014 13:55:58 +0200
+-------------------------------------------------------------------------------
 * Data type for the Nanoseconds field in the Events tree changed from "i"
   (32 bit unsigned integer) to "l" (64 bit unsigned integer) (issue #40).
 
