@@ -24,7 +24,7 @@
 from e3pipe.root.E3Tree import E3Tree
 from e3pipe.root.E3BranchDescriptor import E3BranchDescriptor
 from e3pipe.dst.E3DstTrendingTree import E3DstTrendingTree
-from e3pipe.config.__dst__ import MAX_GOOD_CHISQUARE, CUT_NO_GPS,\
+from e3pipe.config.__dst__ import MAX_GOOD_CHISQUARE, CUT_GOOD_EVENT,\
     CUT_GOOD_TRACK
 from e3pipe.root.E3H1D import E3H1D
 
@@ -128,10 +128,12 @@ class E3DstEventTree(E3Tree):
         self.hist1d('Phi', cut = CUT_GOOD_TRACK,
                     xmin = -180., xmax = 180., xbins = 50,
                     XTitle = '#phi [#circ]', Minimum = 0.)
-        self.hist1d('DeltaTime', cut = CUT_NO_GPS,
+        # Mind we do skip the first event, here, for which the delta
+        # event time is not defined.
+        self.hist1d('DeltaTime', cut = 'EventNumber > 0 && %s' % CUT_GOOD_EVENT,
                     xmin = 0, xmax = 0.5, xbins = 100,
                     XTitle = 'Time difference [s]')
-        self.hist1d('ChiSquare', cut = CUT_NO_GPS,
+        self.hist1d('ChiSquare', cut = CUT_GOOD_EVENT,
                     xmin = 0, xmax = 50, xbins = 100,
                     XTitle = '#chi^{2}')
         self.hist1d('TimeOfFlight', cut = CUT_GOOD_TRACK,
@@ -152,7 +154,7 @@ class E3DstEventTree(E3Tree):
         in the histograms is doubles. ROOT is weird.
         """
         _name = 'RateNonGpsEvents'
-        _cut = CUT_NO_GPS
+        _cut = CUT_GOOD_EVENT
         _ytitle = 'Rate of non-GPS events [Hz]'
         h1 = self.trendingHist(_name, cut = _cut, YTitle = _ytitle)
         _name = 'RateTrackEvents'

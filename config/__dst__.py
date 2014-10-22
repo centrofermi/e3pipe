@@ -23,8 +23,8 @@
 
 
 MAX_GOOD_CHISQUARE = 10.
-CUT_NO_GPS = 'ChiSquare >= 0'
-CUT_GOOD_TRACK = 'ChiSquare >= 0 && ChiSquare < %.3f' % MAX_GOOD_CHISQUARE
+CUT_GOOD_EVENT = 'StatusCode == 0'
+CUT_GOOD_TRACK = '%s && ChiSquare < %.3f' % (CUT_GOOD_EVENT, MAX_GOOD_CHISQUARE)
 
 
 
