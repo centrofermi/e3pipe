@@ -171,6 +171,7 @@ class E3DstEventTree(E3Tree):
         for h in [h1, h2, h3]:
             h.SetTimeDisplay()
         tree = E3DstTrendingTree()
+        tree.setUniqueRunId(self.UniqueRunId)
         for i in range(1, h1.GetNbinsX() + 1):
             tree.setValue('BinStart', h1.GetBinLowEdge(i))
             tree.setValue('BinEnd', h1.GetBinLowEdge(i) + h1.GetBinWidth(i))

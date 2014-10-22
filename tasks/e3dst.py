@@ -31,6 +31,7 @@ from e3pipe.dst.E3AnalyzerOutFile import E3AnalyzerOutFile
 from e3pipe.dst.E3AnalyzerSumFile import E3AnalyzerSumFile
 from e3pipe.dst.E3DstEventTree import E3DstEventTree
 from e3pipe.dst.E3DstHeaderTree import E3DstHeaderTree
+from e3pipe.dst.__runid__ import uniqueRunIdFromFilePath
 from e3pipe.root.E3OutputRootFile import E3OutputRootFile
 from e3pipe.misc.E3Chrono import E3Chrono
 from e3pipe.config.__storage__ import listTemp
@@ -61,10 +62,13 @@ def e3dst(baseFilePath):
     outFile = E3AnalyzerOutFile('%s.out' % baseFilePath)
     sumFile = E3AnalyzerSumFile('%s.sum' % baseFilePath)
     dstFilePath = '%s_dst.root' % baseFilePath
+    uniqueId = uniqueRunIdFromFilePath(baseFilePath)
+    logger.info('Unique run ID is %s.' % uniqueId)
     logger.info('Opening output ROOT file %s...' % dstFilePath)
     rootFile = E3OutputRootFile(dstFilePath)
     logger.info('Initializing event tree...')
     eventTree = E3DstEventTree()
+    eventTree.setUniqueRunId(uniqueId)
     logger.info('Filling event tree...')
     for row in outFile:
         eventTree.fillRow(row)
@@ -98,6 +102,7 @@ def e3dst(baseFilePath):
         plot.Write()
     logger.info('Initializing header tree...')
     headerTree = E3DstHeaderTree()
+    headerTree.setUniqueRunId(uniqueId)
     logger.info('Filling header tree...')
     data = sumFile.data()
     # Mind we need to add a few things "by hand", here, as not all the

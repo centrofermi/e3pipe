@@ -89,6 +89,19 @@ class E3Tree(ROOT.TTree, E3TreePlotter):
         for key, value in self.ALIAS_DICT.items():
             logger.info('Setting alias "%s" -> "%s"...' % (key, value))
             self.SetAlias(key, value)
+            
+    def setUniqueRunId(self, uniqueId):
+        """ Add a branch for the unique run ID and set the corresponding array
+        to the specified value.
+        
+        It is intended that this value won't change within a run, i.e., will
+        be the same for each single event.
+
+        While this might seem a little bit like a waste of space, it might
+        turn out to be handy when we'll start merging trees.
+        """
+        self.addBranch('UniqueRunId', 'l')
+        self.setValue('UniqueRunId', uniqueId)
 
     def addBranch(self, branchName, branchType):
         """ Add a branch to the output tree.
