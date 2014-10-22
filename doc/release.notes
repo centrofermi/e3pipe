@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (0.14.0) - Wed, 22 Oct 2014 11:24:15 +0200
+-------------------------------------------------------------------------------
 * Parsing of the .out file rewritten from scratch.
 * StatusCode branch added to the output Events tree in the DST.
 * Keeping track of the number of events with tracks in the Header tree in the
