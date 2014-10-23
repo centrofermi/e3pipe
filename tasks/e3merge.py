@@ -24,6 +24,7 @@
 
 import ROOT
 import datetime
+import os
 
 import e3pipe.__utils__ as __utils__
 
