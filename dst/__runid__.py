@@ -55,12 +55,8 @@ def uniqueRunIdFromFilePath(filePath):
     """ Return the unique run ID corresponding to a given file path.
     """
     station, year, month, day, runId = splitFilePath(filePath)
-    year = int(year)
-    month = int(month)
-    day = int(day)
-    date = datetime.date(year, month, day)
-    runId = int(runId)
-    return uniqueRunId(station, date, runId)
+    date = datetime.date(int(year), int(month), int(day))
+    return uniqueRunId(station, date, int(runId))
 
 def runStation(uniqueId):
     """ Return the run station corresponding to a unique ID.

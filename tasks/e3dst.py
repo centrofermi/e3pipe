@@ -24,6 +24,7 @@
 import os
 import sys
 import ROOT
+import datetime
 import e3pipe.__utils__ as __utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
@@ -37,6 +38,7 @@ from e3pipe.misc.E3Chrono import E3Chrono
 from e3pipe.config.__storage__ import listTemp
 from e3pipe.config.__dqm__ import TRENDING_TIME_BIN
 from e3pipe.config.__dst__ import MAX_RUN_DURATION
+from e3pipe.dst.__time__ import date2str
 from e3pipe.tasks.__exitcodes__ import E3PIPE_EXIT_CODE_NO_HITS_EVENTS,\
     E3PIPE_EXIT_CODE_RUN_TOO_LONG
 
@@ -68,9 +70,11 @@ def e3dst(baseFilePath):
     sumFile = E3AnalyzerSumFile('%s.sum' % baseFilePath)
     dstFilePath = '%s_dst.root' % baseFilePath
     uniqueId = uniqueRunIdFromFilePath(baseFilePath)
+    station, year, month, day, runId = splitFilePath(filePath)
+    date = datetime.date(int(year), int(month), int(day))
     logger.info('Unique run ID is %s.' % uniqueId)
     logger.info('Opening output ROOT file %s...' % dstFilePath)
-    rootFile = E3OutputRootFile(dstFilePath)
+    rootFile = E3OutputRootFile(dstFilePath, 'e3dst', date2str(date), station)
     logger.info('Initializing event tree...')
     eventTree = E3DstEventTree()
     eventTree.setUniqueRunId(uniqueId)
