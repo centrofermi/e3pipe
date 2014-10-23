@@ -96,7 +96,7 @@ class E3HtmlOutputFile(file):
         """
         css = kwargs.get('css', self.DEFAULT_CSS_FILE_PATH)
         title = kwargs.get('title', self.DEFAULT_TITLE)
-        header = kwargs.get('text', self.DEFAULT_HEADER_TEXT)
+        header = kwargs.get('header', self.DEFAULT_HEADER_TEXT)
         logger.info('Opening output file %s...' % filePath)
         file.__init__(self, filePath, 'w')
         self.write(HTML_HEADER % (title, css, header))

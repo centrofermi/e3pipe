@@ -27,6 +27,7 @@ import ROOT
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3Chain import E3Chain
 from e3pipe.root.E3TreePlotter import E3TreePlotter
+from e3pipe.config.__dst__ import MAX_GOOD_CHISQUARE
 
 
 
@@ -51,11 +52,16 @@ class E3DstTrendingChain(E3Chain, E3TreePlotter):
         return self.formulaValue('BinCenter')
 
     def doSummaryPlots(self):
+        """ Create the summary plots.
         """
-        """
-        self.stripChart('RateTrackEvents')
-        self.stripChart('RateNonGpsEvents')
-        self.stripChart('FractionTrackEvents')
+        _ytitle = 'Rate of non-GPS events [Hz]'
+        self.stripChart('RateNonGpsEvents', ytitle = _ytitle)
+        _ytitle = 'Rate of tracks with #chi^{2} < %.1f [Hz]' %\
+                  MAX_GOOD_CHISQUARE
+        self.stripChart('RateTrackEvents', ytitle = _ytitle)
+        _ytitle = 'Fraction of tracks with #chi^{2} < %.1f' %\
+                  MAX_GOOD_CHISQUARE
+        self.stripChart('FractionTrackEvents', ytitle = _ytitle)
 
 
 
