@@ -56,7 +56,7 @@ class E3DstFileCrawler(E3FileCrawlerBase):
 def test():
     """ Test program.
     """
-    crawler = E3DstFileCrawler('BARI-01')
+    crawler = E3DstFileCrawler('BOLO-03')
     print crawler
     numFiles = len(crawler)
     curFile = 1
