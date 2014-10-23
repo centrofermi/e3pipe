@@ -76,6 +76,16 @@ except KeyError:
     E3PIPE_DQM_BASE = '/dqm'
 
 
+""" Base folder for the output dqm reports.
+
+TODO: need to ask Francesco to link /reports, here.
+"""
+try:
+    E3PIPE_REPORTS_BASE = os.environ['E3PIPE_REPORTS_BASE']
+except KeyError:
+    E3PIPE_REPORTS_BASE = os.path.expanduser(os.path.join('~', 'reports'))
+
+
 """ Base folder for the log files.
 """
 E3PIPE_LOG_BASE = os.path.expanduser(os.path.join('~', 'eeelog'))

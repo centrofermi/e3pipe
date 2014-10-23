@@ -64,6 +64,7 @@ def e3mergeFiles(outputFilePath, *fileList, **kwargs):
         _trending = trending.CloneTree()
         _trending.Write()
     outputFile.Close()
+    return outputFilePath
     
 
 
@@ -79,7 +80,7 @@ def e3mergeTimeSpan(outputFilePath, station, endDate = None, daysSpanned = 1,
     fileList = crawler.fileList()
     # The crawler return an ordered file list, so no need for an extra sort.
     kwargs['sort'] = False
-    e3mergeFiles(outputFilePath, *fileList, **kwargs)
+    return e3mergeFiles(outputFilePath, *fileList, **kwargs)
 
 
 

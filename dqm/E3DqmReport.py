@@ -28,6 +28,8 @@ from e3pipe.root.E3InputRootFile import E3InputRootFile
 from e3pipe.root.E3Canvas import E3Canvas
 from e3pipe.dqm.E3HtmlOutputFile import E3HtmlOutputFile
 from e3pipe.__utils__ import createFolder, cp
+from e3pipe.dst.E3DstHeaderChain import E3DstHeaderChain
+from e3pipe.dst.E3DstTrendingChain import E3DstTrendingChain
 
 
 
@@ -39,16 +41,41 @@ class E3DqmReport:
     def __init__(self, filePath, outputFolder = None):
         """ Constructor.
         """
-        self.__InputFile = E3InputRootFile(filePath)
-        self.__Label = os.path.basename(filePath).replace('_dst.root', '')
+        self.__InputFilePath = filePath
+        self.__Label = os.path.basename(filePath).replace('.root', '')
         self.__OutputFolder = outputFolder
         self.__ObjectList = []
+
+    def canvasName(self, objName):
+        """
+        """
+        return 'c%s' % objName
 
     def fill(self):
         """
         """
-        pass
-
+        header = E3DstHeaderChain(self.__InputFilePath)
+        header.doSummaryPlots()
+        for _plot in header.plots():
+            _canvas = E3Canvas(self.canvasName(_plot.GetName()))
+            _plot.Draw()
+            _canvas.annotate(0.1, 0.94, self.__Label)
+            _canvas.Update()
+            if self.__OutputFolder is not None:
+                _canvas.save(self.__OutputFolder)
+        self.__ObjectList.append(_canvas.GetName())
+        trending = E3DstTrendingChain(self.__InputFilePath)
+        trending.setupArrays()
+        trending.setupTreeFormulae()
+        trending.doSummaryPlots()
+        for _plot in trending.plots():
+            _canvas = E3Canvas(self.canvasName(_plot.GetName()))
+            _plot.Draw('al')
+            _canvas.annotate(0.1, 0.94, self.__Label)
+            _canvas.Update()
+            if self.__OutputFolder is not None:
+                _canvas.save(self.__OutputFolder)
+        self.__ObjectList.append(_canvas.GetName())
 
 
 
