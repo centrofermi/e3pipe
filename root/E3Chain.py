@@ -41,30 +41,32 @@ class E3Chain(ROOT.TChain):
     EXTENSION = E3InputRootFile.EXTENSION
     ALIAS_DICT = {}
 
-    def __init__(self, filePath, treeName):
+    def __init__(self, treeName, *fileList):
         """ Constructor.
         """
-        if not os.path.exists(filePath):
-            abort('Could not find input file %s' % filePath)
-        if not filePath.endswith(self.EXTENSION):
-            abort('Wrong file extension for input file %s (%s expected)' %\
-                  (filePath, self.EXTENSION))
         logger.info('Initializing TChain %s...' % treeName)
         ROOT.TChain.__init__(self, treeName)
-        self.Add(filePath)
+        for filePath in fileList:
+            self.Add(filePath)
         logger.info('Done, %d entries found.' % self.GetEntries())
-        self.__TreeFormulaDict = {}
         for key, value in self.ALIAS_DICT.items():
             logger.info('Setting alias "%s" -> "%s"...' % (key, value))
             self.SetAlias(key, value)
-            self.__TreeFormulaDict[key] = ROOT.TTreeFormula(key, value, self)
 
-    def value(self, key, entry = None):
+    def Add(self, filePath):
+        """ Add a file to the chain.
+        
+        Note that we are doing some basic check, here, in order to try
+        and prevent simple issues.
         """
-        """
-        if entry is not None:
-            self.GetEntry(entry)
-        return self.__TreeFormulaDict[key].EvalInstance()
+        if not '*' in filePath:
+            if not os.path.exists(filePath):
+                abort('Could not find input file %s' % filePath)
+            if not filePath.endswith(self.EXTENSION):
+                abort('Wrong file extension for input file %s (%s expected)' %\
+                      (filePath, self.EXTENSION))
+        logger.info('Adding %s...' % filePath)
+        ROOT.TChain.Add(self, filePath)
 
 
 

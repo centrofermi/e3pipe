@@ -66,3 +66,9 @@ class E3OutputRootFile(ROOT.TFile):
         ROOT.TFile.__init__(self, filePath, 'RECREATE')
         writeString(CREATOR_KEY, creator)
         writeString(VERSION_KEY, TAG)
+
+    def Close(self):
+        """
+        """
+        logger.info('Closing output file %s...' % self.GetName())
+        ROOT.TFile.Close(self)
