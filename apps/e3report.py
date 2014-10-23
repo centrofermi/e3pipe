@@ -40,6 +40,9 @@ parser.add_option('-m', '--max-runs', type = int,
 parser.add_option('-s', '--station', type = str,
                   default = None, dest = 'station',
                   help = 'the station to be processed')
+parser.add_option('-o', '--output-folder', type = str,
+                  default = None, dest = 'out',
+                  help = 'path to the output folder')
 (opts, args) = parser.parse_args()
 
 # Print the start message.
@@ -63,4 +66,4 @@ else:
     from e3pipe.dst.__time__ import str2date
     end = str2date(end)
 
-e3report(opts.station, opts.end, opts.span)
+e3report(opts.station, opts.end, opts.span, opts.out)

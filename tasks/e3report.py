@@ -34,13 +34,15 @@ from e3pipe.dst.__time__ import date2str
 
 
 
-def e3report(station, endDate = None, daysSpanned = 2, **kwargs):
+def e3report(station, endDate = None, daysSpanned = 2, outputFolder = None,
+             **kwargs):
     """ Read the DST and run the data quality monitoring.
     """
     endDate = endDate or datetime.date.today()
     startDate = endDate - datetime.timedelta(daysSpanned - 1)
-    outputFolder = os.path.join(E3PIPE_REPORTS_BASE, station,
-                                date2str(endDate))
+    if outputFolder is None:
+        outputFolder = os.path.join(E3PIPE_REPORTS_BASE, station,
+                                    date2str(endDate))
     __utils__.createFolder(outputFolder)
     mergedFileName = '%s_%s_%s.root' % (station, startDate, endDate)
     mergedFilePath = os.path.join(outputFolder, mergedFileName)
