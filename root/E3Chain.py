@@ -68,6 +68,15 @@ class E3Chain(ROOT.TChain):
         logger.info('Adding %s...' % filePath)
         ROOT.TChain.Add(self, filePath)
 
+    def selectBranches(self, *branches):
+        """ 
+        """
+        logger.info('Disabling all branches...')
+        self.SetBranchStatus('*', 0)
+        for branch in branches:
+            logger.info('Enabling branch %s...' % branch)
+            self.SetBranchStatus(branch, 1)
+
 
 
 def test(filePath, treeName):

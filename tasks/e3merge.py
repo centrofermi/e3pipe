@@ -47,6 +47,9 @@ def e3mergeFiles(outputFilePath, *fileList, **kwargs):
         header.Write()
     if kwargs.get('mergeEvents', True):
         events = E3DstEventChain(*fileList)
+        #eventBranches = kwargs.get('eventBranches', None)
+        #if eventBranches is not None:
+        #    events.selectBranches(*eventBranches)
         events.Write()
     if kwargs.get('mergeTrending', True):
         trending = E3DstTrendingChain(*fileList)
@@ -75,4 +78,5 @@ if __name__ == '__main__':
     from optparse import OptionParser
     parser = OptionParser()
     (opts, args) = parser.parse_args()
-    e3mergeFiles('testmerge.root', *args, mergeEvents = False, sort = False)
+    #_branches = ['UniqueRunId', 'EventNumber', 'Seconds', 'Nanoseconds']
+    e3mergeFiles('testmerge.root', *args)
