@@ -25,9 +25,7 @@ _usage = 'usage: %prog [options]'
 _synopsis = 'Merge DST files'
 
 
-import datetime
-
-from e3pipe.dst.__time__ import str2date
+MERGE_MODES = ['trending', 'coincidences', 'full']
 
 
 # Set up the command-line switches.
@@ -45,6 +43,9 @@ parser.add_option('-m', '--max-runs', type = int,
 parser.add_option('-s', '--station', type = str,
                   default = None, dest = 'station',
                   help = 'the station to be processed')
+parser.add_option('-t', '--mode', type = str,
+                  default = 'trending', dest = 'mode',
+                  help = 'the merging mode %s' % MERGE_MODES)
 parser.add_option('-o', '--output-file', type = str, default = None,
                   dest = 'output',
                   help = 'path to the output ROOT file')
@@ -67,11 +68,23 @@ if len(args):
     parser.error('This apps only takes options.')
 if opts.station is None:
     parser.error('Please select the station (e3merge.py -s station)')
+if not opts.mode in MERGE_MODES:
+    parser.error('Invalid merge mode (%s not in %s)' % (opts.mode, MERGE_MODES))
 
 # And now we are ready to go.
 end = opts.end
 if end is None:
+    import datetime
     end = datetime.date.today()
 else:
+    from e3pipe.dst.__time__ import str2date
     end = str2date(end)
-e3mergeTimeSpan(opts.output, opts.station, end, opts.span, mergeEvents = False)
+
+if opts.mode == 'trending':
+    e3mergeTimeSpan(opts.output, opts.station, end, opts.span,
+                    mergeEvents = False)
+elif opts.mode == 'coincidences':
+    e3mergeTimeSpan(opts.output, opts.station, end, opts.span,
+                    mergeTrending = False, mergeHeader = False)
+elif opts.mode == 'full':
+    e3mergeTimeSpan(opts.output, opts.station, end, opts.span)

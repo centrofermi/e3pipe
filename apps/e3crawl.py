@@ -25,11 +25,6 @@ _usage = 'usage: %prog [options]'
 _synopsis = 'Crawl the raw data and process the files'
 
 
-import datetime
-
-from e3pipe.dst.__time__ import str2date
-
-
 # Set up the command-line switches.
 from e3pipe.misc.E3OptionParser import E3OptionParser
 parser = E3OptionParser(_usage, _synopsis)
@@ -71,8 +66,10 @@ from e3pipe.tasks.e3crawl import e3crawl
 # And now we are ready to go.
 end = opts.end
 if end is None:
+    import datetime
     end = datetime.date.today()
 else:
+    from e3pipe.dst.__time__ import str2date
     end = str2date(end)
 e3crawl(opts.stations, end, opts.span, opts.hours, opts.overwrite,\
         opts.maxruns, opts.dry)
