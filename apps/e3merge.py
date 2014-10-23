@@ -35,7 +35,7 @@ parser.add_option('-E', '--end-date', type = str,
                   default = None, dest = 'end',
                   help = 'the end date for the time span of interest')
 parser.add_option('-N', '--days-spanned', type = int,
-                  default = 1, dest = 'span',
+                  default = 2, dest = 'span',
                   help = 'the duration (in days) of the time span of interest')
 parser.add_option('-m', '--max-runs', type = int,
                   default = None, dest = 'maxruns',
