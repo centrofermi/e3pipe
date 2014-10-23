@@ -41,7 +41,7 @@ def e3report(station, endDate = None, daysSpanned = 2, outputFolder = None,
     if outputFolder is None:
         outputFolder = os.path.join(E3PIPE_REPORTS_BASE, station,
                                     date2str(endDate))
-    mergedFileName = '%s_%s_%s.root' % (station, startDate, endDate)
+    mergedFileName = '%s_%s_%s_summary.root' % (station, startDate, endDate)
     mergedFilePath = os.path.join(outputFolder, mergedFileName)
     e3mergeTimeSpan(mergedFilePath, station, endDate, daysSpanned,
                     mergeEvents = False)
