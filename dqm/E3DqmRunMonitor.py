@@ -35,7 +35,7 @@ from e3pipe.__package__ import E3PIPE_DQM
 
 
 
-class E3DataQualityMonitor:
+class E3DqmRunMonitor:
 
     """ Basic DQM class.
     """
@@ -224,7 +224,7 @@ class E3DataQualityMonitor:
 def test(filePath):
     """ Test function.
     """
-    monitor = E3DataQualityMonitor(filePath, None)
+    monitor = E3DqmRunMonitor(filePath, None)
     monitor.run()
 
 

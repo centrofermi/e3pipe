@@ -23,14 +23,14 @@
 
 
 from e3pipe.__logging__ import logger, startmsg, abort
-from e3pipe.dqm.E3DataQualityMonitor import E3DataQualityMonitor
+from e3pipe.dqm.E3DqmRunMonitor import E3DqmRunMonitor
 
 
 
 def e3dqm(dstFilePath, outputFolder = None):
     """ Read the DST and run the data quality monitoring.
     """
-    monitor = E3DataQualityMonitor(dstFilePath, outputFolder)
+    monitor = E3DqmRunMonitor(dstFilePath, outputFolder)
     monitor.run()
     
 
