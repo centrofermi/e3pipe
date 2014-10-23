@@ -45,6 +45,9 @@ parser.add_option('-m', '--max-runs', type = int,
 parser.add_option('-s', '--station', type = str,
                   default = None, dest = 'station',
                   help = 'the station to be processed')
+parser.add_option('-o', '--output-file', type = str, default = None,
+                  dest = 'output',
+                  help = 'path to the output ROOT file')
 parser.add_option('-d', '--dry-run', action = 'store_true',
                   default = False, dest = 'dry',
                   help = 'do not process (only populate the file list)')
@@ -57,10 +60,13 @@ startmsg()
 # Import the necessary stuff.
 from e3pipe.tasks.e3merge import e3mergeFiles, e3mergeTimeSpan
 
-# Make sure we are passing some argument.
+# Make sure the combination of arguments and options makes sense.
+if opts.output is None:
+    parser.error('Please set the output file (e3merge.py -o outfile).')
 if len(args):
-    parser.print_help()
     parser.error('This apps only takes options.')
+if opts.station is None:
+    parser.error('Please select the station (e3merge.py -s station)')
 
 # And now we are ready to go.
 end = opts.end
@@ -68,4 +74,4 @@ if end is None:
     end = datetime.date.today()
 else:
     end = str2date(end)
-e3mergeTimeSpan(opts.station, end, opts.span, mergeEvents = False)
+e3mergeTimeSpan(opts.output, opts.station, end, opts.span, mergeEvents = False)

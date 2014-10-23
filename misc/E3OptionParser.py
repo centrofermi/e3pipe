@@ -34,3 +34,9 @@ class E3OptionParser(OptionParser):
         """
         kwargs['usage'] = '%s\n\nSynopsis: %s' % (usage, synopsis)
         OptionParser.__init__(self, **kwargs)
+
+    def error(self, msg):
+        """ Overloaded method.
+        """
+        self.print_help()
+        OptionParser.error(self, msg)
