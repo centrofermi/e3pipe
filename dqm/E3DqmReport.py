@@ -117,7 +117,10 @@ class E3DqmReport:
         #outputFile.li('Number of runs transferred to CNAF: --- ')
         #outputFile.li('Number of runs processed: --- ')
         #outputFile.li('Number of runs failed: --- ')
-        outputFile.li('Data files: root, csv (header), csv (events)')
+        fileName = os.path.basename(self.__InputFilePath)
+        rootAnchor = '<a href="%s">root</a>' % (fileName)
+        outputFile.li('Data files: %s, csv (header), csv (events)' %\
+                      (rootAnchor))
         outputFile.write('</ul>\n')
         outputFile.section('Summary plots')
         outputFile.write('\n<table width=100%>\n')
