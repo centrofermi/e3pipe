@@ -70,7 +70,7 @@ def e3dst(baseFilePath):
     sumFile = E3AnalyzerSumFile('%s.sum' % baseFilePath)
     dstFilePath = '%s_dst.root' % baseFilePath
     uniqueId = uniqueRunIdFromFilePath(baseFilePath)
-    station, year, month, day, runId = splitFilePath(filePath)
+    station, year, month, day, runId = splitFilePath(baseFilePath)
     date = datetime.date(int(year), int(month), int(day))
     logger.info('Unique run ID is %s.' % uniqueId)
     logger.info('Opening output ROOT file %s...' % dstFilePath)
