@@ -25,6 +25,8 @@
 import ROOT
 import datetime
 
+import e3pipe.__utils__ as __utils__
+
 from e3pipe.__logging__ import logger, startmsg, abort
 from e3pipe.dst.E3DstHeaderChain import E3DstHeaderChain
 from e3pipe.dst.E3DstEventChain import E3DstEventChain
@@ -45,6 +47,7 @@ def e3mergeFiles(outputFilePath, *fileList, **kwargs):
         logger.info('Done.')
     if not len(fileList):
         abort('No files to merge')
+    __utils__.createFolder(os.path.dirname(outputFilePath))
     outputFile = E3OutputRootFile(outputFilePath, 'e3merge', kwargs['date'],
                                   kwargs['station'])
     if kwargs.get('mergeHeader', True):
