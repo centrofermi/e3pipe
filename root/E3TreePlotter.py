@@ -61,7 +61,9 @@ class E3TreePlotter:
         title = title or name
         if xmin is None or xmax is None:
             _xmin = self.GetMinimum(expression)
-            _xmax = self.GetMaximum(expression) 
+            _xmax = self.GetMaximum(expression)
+            if _xmin == 0 and _xmax == 0:
+                _xmax = 1
             _xrange = _xmax - _xmin
         if xmin is None:
             xmin = _xmin - xpad*_xrange

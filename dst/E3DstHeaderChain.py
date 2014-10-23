@@ -26,9 +26,11 @@ import ROOT
 
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3Chain import E3Chain
+from e3pipe.root.E3TreePlotter import E3TreePlotter
 
 
-class E3DstHeaderChain(E3Chain):
+
+class E3DstHeaderChain(E3Chain, E3TreePlotter):
 
     """ Small wrapper around the TChain class specialized for the
     Trending DST tree.
@@ -41,6 +43,25 @@ class E3DstHeaderChain(E3Chain):
         """ Constructor.
         """
         E3Chain.__init__(self, self.TREE_NAME, *fileList)
+        E3TreePlotter.__init__(self)
+        
+    def doSummaryPlots(self, xpad = 0.05):
+        """ Create a set of summary plots.
+        """
+        self.hist1d('RunDuration', xpad = xpad,
+                    XTitle = 'Run duration [s]')
+        self.hist1d('NumEvents', xpad = xpad,
+                    XTitle = 'Total number of events', Ndivisions = 508)
+        self.hist1d('NumTrackEvents', xpad = xpad,
+                    XTitle = 'Number of events with tracks', Ndivisions = 508)
+        self.hist1d('NumMalformedEvents', xpad = xpad,
+                    XTitle = 'Number of malformed events')
+        self.hist1d('NumBackwardEvents', xpad = xpad,
+                    XTitle = 'Number of non-time-ordered events')
+        self.hist1d('NumGpsEvents', xpad = xpad,
+                    XTitle = 'Number of GPS events')
+        self.hist1d('NumNoHitsEvents', xpad = xpad,
+                    XTitle = 'Number events with no hits')
 
 
 
@@ -48,12 +69,17 @@ def test(*fileList):
     """ Test program.
     """
     t = E3DstHeaderChain(*fileList)
+    t.doSummaryPlots()
+    return t.plots()
 
 
 
 if __name__ == '__main__':
+    from e3pipe.root.E3Canvas import E3Canvas
     from optparse import OptionParser
     parser = OptionParser()
     (opts, args) = parser.parse_args()
-    test(*args)
-
+    for i, h in enumerate(test(*args)):
+        c = E3Canvas('c%d' % i)
+        h.Draw()
+        c.Update()
