@@ -88,5 +88,8 @@ if __name__ == '__main__':
     parser = OptionParser()
     (opts, args) = parser.parse_args()
     g = test(*args)
+    from e3pipe.root.E3Canvas import E3Canvas
+    c = E3Canvas('c')
     g.Draw('alp')
+    c.Update()
     
