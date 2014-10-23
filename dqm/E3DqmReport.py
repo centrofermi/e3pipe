@@ -45,7 +45,7 @@ class E3DqmReport:
         """ Constructor.
         """
         self.__InputFilePath = filePath
-        self.__Label = os.path.basename(filePath).replace('.root', '')
+        self.__Label = os.path.basename(filePath).replace('_summary.root', '')
         self.__OutputFolder = outputFolder
         self.__ObjectList = []
 
