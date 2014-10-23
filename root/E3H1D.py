@@ -44,7 +44,7 @@ class E3H1D(ROOT.TH1D, E3RootObject):
         self.setupStatBox(**kwargs)
 
     def SetTimeDisplay(self):
-        """
+        """ TODO: this is redundant with the function in root.__ROOT__.py
         """
         self.GetXaxis().SetTitle('')
         self.GetXaxis().SetTimeDisplay(True)

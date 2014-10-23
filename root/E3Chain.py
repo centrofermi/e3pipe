@@ -22,11 +22,13 @@
 
 
 import os
+import numpy
 import ROOT
 
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3InputRootFile import E3InputRootFile
 from e3pipe.root.E3H1D import E3H1D
+from e3pipe.root.E3Tree import ROOT_TO_NUMPY_DICT
 
 
 class E3Chain(ROOT.TChain):
@@ -52,6 +54,18 @@ class E3Chain(ROOT.TChain):
         for key, value in self.ALIAS_DICT.items():
             logger.info('Setting alias "%s" -> "%s"...' % (key, value))
             self.SetAlias(key, value)
+        self.__ArrayDict = {}
+        self.__TreeFormulaDict = {}
+
+    def arrayValue(self, key):
+        """ Return the content of an array.
+        """
+        return self.__ArrayDict[key][0]
+
+    def formulaValue(self, key):
+        """ Return the content of a TTreeFormula, evaluated for a given event.
+        """
+        return self.__TreeFormulaDict[key].EvalInstance()
 
     def Add(self, filePath):
         """ Add a file to the chain.
@@ -76,6 +90,42 @@ class E3Chain(ROOT.TChain):
         for branch in branches:
             logger.info('Enabling branch %s...' % branch)
             self.SetBranchStatus(branch, 1)
+
+    def __setupArray(self, branch):
+        """ Setup an array to be attached to a tree branch.
+        """
+        branchTitle = branch.GetTitle()
+        (branchName, branchType) = branchTitle.split('/')
+        if self.GetBranchStatus(branchName):
+            logger.info('Setting up numpy array for %s...' % branchTitle)
+            x = numpy.empty((1,), ROOT_TO_NUMPY_DICT[branchType])
+            self.__ArrayDict[branchName] = x
+            self.SetBranchAddress(branchName, x)
+
+    def setupArrays(self):
+        """ Setup the arrays to be attached to all the enabled tree
+        branches.
+        """
+        logger.info('Creating array(s) to be attached to the branches...')
+        for branch in self.GetListOfBranches():
+            self.__setupArray(branch)
+        logger.info('Done, arrays ready.')
+
+    def __setupTreeFormula(self, key, value):
+        """ Setup a TTree formula.
+        """
+        logger.info('Compiling formula for %s -> %s...' % (key, value))
+        formula = ROOT.TTreeFormula('TTF_%s' % key, value, self)
+        self.__TreeFormulaDict[key] = formula
+
+    def setupTreeFormulae(self):
+        """ Setup tree formulae for all the aliases.
+        """
+        logger.info('Compiling TTreeFormula objects for the aliases...')
+        for key, value in self.ALIAS_DICT.items():
+            self.__setupTreeFormula(key, value)
+        logger.info('Done.')
+
 
 
 

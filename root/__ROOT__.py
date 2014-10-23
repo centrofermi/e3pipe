@@ -141,8 +141,10 @@ def setupBox(box, x, y, numRows, width = 0.25):
 def setupTimeDisplay(plot, **kwargs):
     """ Setup the x-axis labels for strip charts.
     """
+    plot.GetXaxis().SetTimeDisplay(1)
     plot.GetXaxis().SetNdivisions(kwargs.get('Ndivisions', 504))
     plot.GetXaxis().SetLabelOffset(kwargs.get('LabelOffset', 0.04))
     plot.GetXaxis().SetTimeFormat('#splitline{%d/%m/%y}{%H:%M:%S}')
-    plot.SetStats(False)
+    if isinstance(plot, ROOT.TH1):
+        plot.SetStats(False)
 
