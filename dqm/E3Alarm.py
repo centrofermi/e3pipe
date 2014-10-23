@@ -40,7 +40,7 @@ class E3Alarm:
     SUPPORTED_PARAMETERS = []
     SUPPORTED_CONDITIONS = []
     OUTPUT_DESCRIPTION = None
-    HTML_TABLE_HEADER = htmlTableHeader('ROOT object', 'Alarm', 'Status',
+    HTML_TABLE_HEADER = htmlTableHeader('Plot', 'Alarm', 'Status',
                                         'Output', 'Limits')
     
     def __init__(self, rootObject, errMin, warnMin, warnMax, errMax):

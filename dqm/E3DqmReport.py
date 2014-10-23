@@ -103,13 +103,17 @@ class E3DqmReport:
         outputFile = E3HtmlOutputFile(filePath,
                                       header = 'EEE DQM summary report')
         outputFile.write('<p></p>\n')
-        for objName in ['gRateTrackEvents', 'gFractionTrackEvents']:
+        for objName in ['RateTrackEvents', 'FractionTrackEvents']:
             img = '%s.png' % self.canvasName(objName)
             outputFile.image(img, width = '49%')
         outputFile.section('Summary')
+        inputFile = E3InputRootFile(self.__InputFilePath)
+        station = inputFile.station()
+        date = inputFile.date()
+        inputFile.Close()
         outputFile.write('<ul>\n')
-        outputFile.li('Station: ---')
-        outputFile.li('Time period: ---')
+        outputFile.li('Station: %s' % station)
+        outputFile.li('Time period: %s' % date)
         outputFile.li('Number of runs transferred to CNAF: --- ')
         outputFile.li('Number of runs processed: --- ')
         outputFile.li('Number of runs failed: --- ')
@@ -117,7 +121,7 @@ class E3DqmReport:
         outputFile.write('</ul>\n')
         outputFile.section('Summary plots')
         outputFile.write('\n<table width=100%>\n')
-        outputFile.write('%s\n' % htmlTableHeader('ROOT object'))
+        outputFile.write('%s\n' % htmlTableHeader('Plot'))
         def _htmlTableRow(objName, linkPlot = True, index = None):
             """ Embedded function to make a table row on the fly.
             """
