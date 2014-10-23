@@ -30,6 +30,7 @@ from e3pipe.dst.E3DstEventChain import E3DstEventChain
 from e3pipe.dst.E3DstTrendingChain import E3DstTrendingChain
 from e3pipe.root.E3OutputRootFile import E3OutputRootFile
 from e3pipe.misc.E3DstFileCrawler import E3DstFileCrawler
+from e3pipe.dst.__time__ import date2str
 
 
 
@@ -41,7 +42,8 @@ def e3mergeFiles(outputFilePath, *fileList, **kwargs):
         fileList = list(fileList)
         fileList.sort()
         logger.info('Done.')
-    outputFile = E3OutputRootFile(outputFilePath, 'e3merge')
+    outputFile = E3OutputRootFile(outputFilePath, 'e3merge', kwargs['date'],
+                                  kwargs['station'])
     if kwargs.get('mergeHeader', True):
         header = E3DstHeaderChain(*fileList)
         branches = kwargs.get('headerBranches', None)
@@ -68,7 +70,7 @@ def e3mergeFiles(outputFilePath, *fileList, **kwargs):
     
 
 
-def e3mergeTimeSpan(outputFilePath, station, endDate = None, daysSpanned = 1,
+def e3mergeTimeSpan(outputFilePath, station, endDate, daysSpanned = 1,
                     **kwargs):
     """ Merge the DST ROOT files for a given station in a given time
     span.
@@ -80,6 +82,10 @@ def e3mergeTimeSpan(outputFilePath, station, endDate = None, daysSpanned = 1,
     fileList = crawler.fileList()
     # The crawler return an ordered file list, so no need for an extra sort.
     kwargs['sort'] = False
+    # Fill some more details.
+    startDate = endDate - datetime.timedelta(daysSpanned - 1)
+    kwargs['date'] = '%s--%s' % (date2str(startDate), date2str(endDate))
+    kwargs['station'] = station
     return e3mergeFiles(outputFilePath, *fileList, **kwargs)
 
 

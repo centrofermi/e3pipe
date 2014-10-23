@@ -26,7 +26,7 @@ import numpy
 import ROOT
 
 from e3pipe.__logging__ import logger, abort
-from e3pipe.root.E3InputRootFile import E3InputRootFile
+from e3pipe.root.E3RootFileBase import E3RootFileBase
 from e3pipe.root.E3H1D import E3H1D
 from e3pipe.root.E3Tree import ROOT_TO_NUMPY_DICT
 
@@ -40,7 +40,6 @@ class E3Chain(ROOT.TChain):
     reading trees.
     """
 
-    EXTENSION = E3InputRootFile.EXTENSION
     ALIAS_DICT = {}
 
     def __init__(self, treeName, *fileList):
@@ -76,9 +75,9 @@ class E3Chain(ROOT.TChain):
         if not '*' in filePath:
             if not os.path.exists(filePath):
                 abort('Could not find input file %s' % filePath)
-            if not filePath.endswith(self.EXTENSION):
+            if not filePath.endswith(E3RootFileBase.EXTENSION):
                 abort('Wrong file extension for input file %s (%s expected)' %\
-                      (filePath, self.EXTENSION))
+                      (filePath, E3RootFileBase.EXTENSION))
         logger.info('Adding %s...' % filePath)
         ROOT.TChain.Add(self, filePath)
 

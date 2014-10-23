@@ -23,14 +23,12 @@
 
 import os
 import ROOT
+import time
 
 from e3pipe.__logging__ import logger, abort
 from e3pipe.__version__ import TAG
-from e3pipe.root.E3InputRootFile import E3InputRootFile
+from e3pipe.root.E3RootFileBase import E3RootFileBase
 
-
-CREATOR_KEY = 'creator'
-VERSION_KEY = 'version'
 
 
 def writeString(key, value):
@@ -54,21 +52,26 @@ class E3OutputRootFile(ROOT.TFile):
     file---most notably the version of the software that created it.
     """
 
-    EXTENSION = E3InputRootFile.EXTENSION
-
-    def __init__(self, filePath, creator = 'e3pipe'):
+    def __init__(self, filePath, creator = 'e3pipe', date = None,
+                 station = None):
         """
         """
-        if not filePath.endswith(self.EXTENSION):
+        if not filePath.endswith(E3RootFileBase.EXTENSION):
             abort('Please root the %s extension for ROOT files' %\
-                  self.EXTENSION)
+                  E3RootFileBase.EXTENSION)
         logger.info('Opening output file %s...' % filePath)
         ROOT.TFile.__init__(self, filePath, 'RECREATE')
-        writeString(CREATOR_KEY, creator)
-        writeString(VERSION_KEY, TAG)
+        writeString(E3RootFileBase.CREATOR_KEY, creator)
+        writeString(E3RootFileBase.VERSION_KEY, TAG)
+        writeString(E3RootFileBase.CREATION_TIME_KEY, time.asctime())
+        if date is None:
+            writeString(E3RootFileBase.DATE_KEY, date)
+        if station is not None:
+            writeString(E3RootFileBase.STATION_KEY, station)
 
     def Close(self):
         """
         """
         logger.info('Closing output file %s...' % self.GetName())
         ROOT.TFile.Close(self)
+

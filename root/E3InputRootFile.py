@@ -25,6 +25,8 @@ import os
 import ROOT
 
 from e3pipe.__logging__ import logger, abort
+from e3pipe.root.E3RootFileBase import E3RootFileBase
+
 
 
 class E3InputRootFile(ROOT.TFile):
@@ -35,18 +37,21 @@ class E3InputRootFile(ROOT.TFile):
     it has the right extension.
     """
 
-    EXTENSION = '.root'
-
     def __init__(self, filePath):
         """
         """
         if not os.path.exists(filePath):
             abort('Could not find input file %s' % filePath)
-        if not filePath.endswith(self.EXTENSION):
+        if not filePath.endswith(E3RootFileBase.EXTENSION):
             abort('Wrong file extension for input file %s (%s expected)' %\
-                  (filePath, self.EXTENSION))
+                  (filePath, E3RootFileBase.EXTENSION))
         logger.info('Opening input file %s...' % filePath)
         ROOT.TFile.__init__(self, filePath)
+        logger.info('Creator: %s' % self.creator())
+        logger.info('Version: %s' % self.version())
+        logger.info('Creation time: %s' % self.creationTime())
+        logger.info('Date: %s' % self.date())
+        logger.info('Station: %s' % self.station())
 
     def readString(self, key):
         """ Read a piece of text from the ROOT file.
@@ -54,8 +59,32 @@ class E3InputRootFile(ROOT.TFile):
         try:
             return self.Get(key).GetTitle()
         except ReferenceError:
-            logger.error('Could not find key "%s" in the ROOT file.' % key)
-            return None
+            return 'N/A'
+
+    def creator(self):
+        """
+        """
+        return self.readString(E3RootFileBase.CREATOR_KEY)
+
+    def version(self):
+        """
+        """
+        return self.readString(E3RootFileBase.VERSION_KEY)
+
+    def creationTime(self):
+        """
+        """
+        return self.readString(E3RootFileBase.CREATION_TIME_KEY)
+
+    def date(self):
+        """
+        """
+        return self.readString(E3RootFileBase.DATE_KEY)
+
+    def station(self):
+        """
+        """
+        return self.readString(E3RootFileBase.STATION_KEY)
 
     def filter(self, *args, **kwargs):
         """ Filter the objects in the file based on their class.

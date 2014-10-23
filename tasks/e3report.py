@@ -46,7 +46,7 @@ def e3report(station, endDate = None, daysSpanned = 2, outputFolder = None,
     e3mergeTimeSpan(mergedFilePath, station, endDate, daysSpanned,
                     mergeEvents = False)
     report = E3DqmReport(mergedFilePath, outputFolder)
-    report.fill()
+    report.fill(station, startDate, endDate)
 
 
 
