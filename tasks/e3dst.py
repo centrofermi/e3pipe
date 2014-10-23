@@ -35,7 +35,7 @@ from e3pipe.dst.E3DstHeaderTree import E3DstHeaderTree
 from e3pipe.dst.__runid__ import uniqueRunIdFromFilePath
 from e3pipe.root.E3OutputRootFile import E3OutputRootFile
 from e3pipe.misc.E3Chrono import E3Chrono
-from e3pipe.config.__storage__ import listTemp
+from e3pipe.config.__storage__ import listTemp, splitFilePath
 from e3pipe.config.__dqm__ import TRENDING_TIME_BIN
 from e3pipe.config.__dst__ import MAX_RUN_DURATION
 from e3pipe.dst.__time__ import date2str
