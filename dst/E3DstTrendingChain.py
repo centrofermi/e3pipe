@@ -51,6 +51,9 @@ class E3DstTrendingChain(E3Chain):
     def stripChart(self, branchName, errors = False, ytitle = None,
                    **kwargs):
         """ Create a strip chart.
+        
+        TODO: the core of this should be moved to a base class, as presumably
+        we'll want to reuse this functionality.
         """
         from e3pipe.root.__ROOT__ import setupTimeDisplay
         from e3pipe.root.E3Graph import E3Graph
