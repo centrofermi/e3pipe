@@ -35,7 +35,7 @@ class E3DstTrendingChain(E3Chain):
     """
 
     TREE_NAME = 'Trending'
-    ALIAS_DICT = {}
+    ALIAS_DICT = {'BinCenter': '0.5*(BinStart + BinEnd)'}
 
     def __init__(self, *fileList):
         """ Constructor.
