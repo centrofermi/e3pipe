@@ -64,7 +64,7 @@ class E3OutputRootFile(ROOT.TFile):
         writeString(E3RootFileBase.CREATOR_KEY, creator)
         writeString(E3RootFileBase.VERSION_KEY, TAG)
         writeString(E3RootFileBase.CREATION_TIME_KEY, time.asctime())
-        if date is None:
+        if date is not None:
             writeString(E3RootFileBase.DATE_KEY, date)
         if station is not None:
             writeString(E3RootFileBase.STATION_KEY, station)
