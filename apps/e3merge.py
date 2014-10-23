@@ -25,7 +25,7 @@ _usage = 'usage: %prog [options]'
 _synopsis = 'Merge DST files'
 
 
-MERGE_MODES = ['trending', 'coincidences', 'full']
+MERGE_MODES = ['trending', 'full']
 
 
 # Set up the command-line switches.
@@ -83,8 +83,5 @@ else:
 if opts.mode == 'trending':
     e3mergeTimeSpan(opts.output, opts.station, end, opts.span,
                     mergeEvents = False)
-elif opts.mode == 'coincidences':
-    e3mergeTimeSpan(opts.output, opts.station, end, opts.span,
-                    mergeTrending = False, mergeHeader = False)
 elif opts.mode == 'full':
     e3mergeTimeSpan(opts.output, opts.station, end, opts.span)
