@@ -22,6 +22,9 @@
 
 
 import datetime
+import os
+
+import e3pipe.__utils__ as __utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
 from e3pipe.dqm.E3DqmReport import E3DqmReport
@@ -31,13 +34,15 @@ from e3pipe.dst.__time__ import date2str
 
 
 
-def e3report(station, endDate = None, daysSpanned = 1, **kwargs):
+def e3report(station, endDate = None, daysSpanned = 2, **kwargs):
     """ Read the DST and run the data quality monitoring.
     """
-    endDate = endDate or datetime.date.today() - datetime.timedelta(1)
-    startDate = endDate - datetime.timedelta(daysSpanned)
-    outputFolder = os.path.join(E3PIPE_REPORTS_BASE, station, date2str(date))
-    mergedFileName = '%s_%s_%s.root' % (startDate, endDate)
+    endDate = endDate or datetime.date.today()
+    startDate = endDate - datetime.timedelta(daysSpanned - 1)
+    outputFolder = os.path.join(E3PIPE_REPORTS_BASE, station,
+                                date2str(endDate))
+    __utils__.createFolder(outputFolder)
+    mergedFileName = '%s_%s_%s.root' % (station, startDate, endDate)
     mergedFilePath = os.path.join(outputFolder, mergedFileName)
     e3mergeTimeSpan(mergedFilePath, station, endDate, daysSpanned,
                     mergeEvents = False)

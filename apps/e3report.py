@@ -32,7 +32,7 @@ parser.add_option('-E', '--end-date', type = str,
                   default = None, dest = 'end',
                   help = 'the end date for the time span of interest')
 parser.add_option('-N', '--days-spanned', type = int,
-                  default = 1, dest = 'span',
+                  default = 2, dest = 'span',
                   help = 'the duration (in days) of the time span of interest')
 parser.add_option('-m', '--max-runs', type = int,
                   default = None, dest = 'maxruns',
@@ -58,7 +58,7 @@ if opts.station is None:
 end = opts.end
 if end is None:
     import datetime
-    end = datetime.date.today() - datetime.timedelta(1)
+    end = datetime.date.today()
 else:
     from e3pipe.dst.__time__ import str2date
     end = str2date(end)
