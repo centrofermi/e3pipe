@@ -43,6 +43,8 @@ def e3mergeFiles(outputFilePath, *fileList, **kwargs):
         fileList = list(fileList)
         fileList.sort()
         logger.info('Done.')
+    if not len(fileList):
+        abort('No files to merge')
     outputFile = E3OutputRootFile(outputFilePath, 'e3merge', kwargs['date'],
                                   kwargs['station'])
     if kwargs.get('mergeHeader', True):
