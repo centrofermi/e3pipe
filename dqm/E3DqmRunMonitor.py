@@ -32,6 +32,7 @@ from e3pipe.dqm.E3HtmlOutputFile import E3HtmlOutputFile
 from e3pipe.config.__dqm__ import DQM_BASELINE_LIST, TOP_IMAGES, dqmPreformat
 from e3pipe.__utils__ import createFolder, cp
 from e3pipe.__package__ import E3PIPE_DQM
+from e3pipe.root.__ROOT__ import setupTimeDisplay
 
 
 
@@ -66,10 +67,7 @@ class E3DqmRunMonitor:
         """ Setup the x-axis labels for strip charts.
         """
         if plot.GetXaxis().GetTimeDisplay():
-            plot.GetXaxis().SetNdivisions(504)
-            plot.GetXaxis().SetLabelOffset(0.04)
-            plot.GetXaxis().SetTimeFormat('#splitline{%d/%m/%y}{%H:%M:%S}')
-            plot.SetStats(False)
+            setupTimeDisplay(plot, Ndivisions = 504, LabelOffset = 0.04)
 
     def draw(self, objName, **kwargs):
         """ Draw a plot from the DST.

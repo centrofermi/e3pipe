@@ -137,3 +137,12 @@ def setupBox(box, x, y, numRows, width = 0.25):
     ROOT.gPad.Modified()
     ROOT.gPad.Update()
 
+
+def setupTimeDisplay(plot, **kwargs):
+    """ Setup the x-axis labels for strip charts.
+    """
+    plot.GetXaxis().SetNdivisions(kwargs.get('Ndivisions', 504))
+    plot.GetXaxis().SetLabelOffset(kwargs.get('LabelOffset', 0.04))
+    plot.GetXaxis().SetTimeFormat('#splitline{%d/%m/%y}{%H:%M:%S}')
+    plot.SetStats(False)
+
