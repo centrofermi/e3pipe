@@ -68,4 +68,4 @@ if end is None:
     end = datetime.date.today()
 else:
     end = str2date(end)
-e3mergeTimeSpan(opts.station, end, opts.span)
+e3mergeTimeSpan(opts.station, end, opts.span, mergeEvents = False)
