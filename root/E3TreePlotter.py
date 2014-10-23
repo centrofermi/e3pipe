@@ -23,6 +23,9 @@
 
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3H1D import E3H1D
+from e3pipe.root.__ROOT__ import setupTimeDisplay
+from e3pipe.root.E3Graph import E3Graph
+
 
 
 class E3TreePlotter:
@@ -78,3 +81,23 @@ class E3TreePlotter:
         """ Create a 2-dimensional histogram.
         """
         pass
+
+    def stripChart(self, branchName, errors = False, ytitle = None,
+                   **kwargs):
+        """ Create a strip chart.
+        """
+        ytitle = ytitle or branchName
+        g = E3Graph('g%s' % branchName, ytitle)
+        for i in xrange(self.GetEntries()):
+            self.GetEntry(i)
+            x = self.binCenter()
+            y = self.arrayValue(branchName)
+            if errors:
+                dy = self.arrayValue('%sErr' % branchName)
+            else:
+                dy = 0
+            g.SetNextPoint(x, y, dy)
+        setupTimeDisplay(g)
+        g.GetYaxis().SetTitle(ytitle)
+        self.store(g)
+        return g

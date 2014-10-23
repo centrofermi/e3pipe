@@ -26,10 +26,11 @@ import ROOT
 
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3Chain import E3Chain
+from e3pipe.root.E3TreePlotter import E3TreePlotter
 
 
 
-class E3DstTrendingChain(E3Chain):
+class E3DstTrendingChain(E3Chain, E3TreePlotter):
 
     """ Small wrapper around the TChain class specialized for the
     Trending DST tree.
@@ -42,35 +43,19 @@ class E3DstTrendingChain(E3Chain):
         """ Constructor.
         """
         E3Chain.__init__(self, self.TREE_NAME, *fileList)
+        E3TreePlotter.__init__(self)
 
     def binCenter(self):
         """ Return the center of the time bin for the current entry.
         """
         return self.formulaValue('BinCenter')
 
-    def stripChart(self, branchName, errors = False, ytitle = None,
-                   **kwargs):
-        """ Create a strip chart.
-        
-        TODO: the core of this should be moved to a base class, as presumably
-        we'll want to reuse this functionality.
+    def doSummaryPlots(self):
         """
-        from e3pipe.root.__ROOT__ import setupTimeDisplay
-        from e3pipe.root.E3Graph import E3Graph
-        ytitle = ytitle or branchName
-        g = E3Graph('g%s' % branchName, ytitle)
-        for i in xrange(self.GetEntries()):
-            self.GetEntry(i)
-            x = self.binCenter()
-            y = self.arrayValue(branchName)
-            if errors:
-                dy = self.arrayValue('%sErr' % branchName)
-            else:
-                dy = 0
-            g.SetNextPoint(x, y, dy)
-        setupTimeDisplay(g)
-        g.GetYaxis().SetTitle(ytitle)
-        return g
+        """
+        self.stripChart('RateTrackEvents')
+        self.stripChart('RateNonGpsEvents')
+        self.stripChart('FractionTrackEvents')
 
 
 
@@ -80,19 +65,19 @@ def test(*fileList):
     t = E3DstTrendingChain(*fileList)
     t.setupArrays()
     t.setupTreeFormulae()
-    g = t.stripChart('RateTrackEvents')
-    return g
+    t.doSummaryPlots()
+    return t.plots()
     
 
 
 
 if __name__ == '__main__':
+    from e3pipe.root.E3Canvas import E3Canvas
     from optparse import OptionParser
     parser = OptionParser()
     (opts, args) = parser.parse_args()
-    g = test(*args)
-    from e3pipe.root.E3Canvas import E3Canvas
-    c = E3Canvas('c')
-    g.Draw('alp')
-    c.Update()
+    for i, g in enumerate(test(*args)):
+        c = E3Canvas('c%d' % i)
+        g.Draw('al')
+        c.Update()
     
