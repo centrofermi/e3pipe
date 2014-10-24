@@ -125,6 +125,12 @@ class E3Chain(ROOT.TChain):
             self.__setupTreeFormula(key, value)
         logger.info('Done.')
 
+    def writeAscii(self, outputFilePath):
+        """ Write the chain to a text file.
+        """
+        logger.info('Writing %s to %s...' % (self.GetName(), outputFilePath))
+        logger.info('Done.')
+
 
 
 
