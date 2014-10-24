@@ -43,7 +43,7 @@ class E3WeatherStationRecord:
         self.__OutdoorTemperature = outdoorTemperature/100.
         self.__Pressure = pressure
         
-    def timestamp(self):
+    def seconds(self):
         """ Mind we're not using delta.total_seconds(), here, as apparently
         that is new in python 2.7 and it would not work at CNAF.
         

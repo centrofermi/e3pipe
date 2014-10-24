@@ -83,7 +83,7 @@ def test(filePath):
     f = E3BinFile(filePath)
     record = f.weatherStationRecord()
     if record is not None:
-        print record.timestamp()
+        print record.seconds()
 
 
 
