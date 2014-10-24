@@ -48,7 +48,7 @@ class E3WeatherStationRecord:
         that is new in python 2.7 and it would not work at CNAF.
         
         TODO: we subtract two hours to take into account the timezone, but
-        we'll be introuble with daylight savings time!
+        we'll be in trouble with daylight savings time!
         """
         delta = self.__Datetime - E3_DATETIME_REFERENCE
         return float(delta.seconds + delta.days*24*3600 - 2*3600)
