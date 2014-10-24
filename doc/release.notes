@@ -1,4 +1,7 @@
 
+* Type changed from float to double for all the tree branches having to do
+  with timestamps (32 bits were just enough to round to the nearest second).
+
 -------------------------------------------------------------------------------
 e3pipe (0.20.2) - Fri, 24 Oct 2014 15:46:40 +0200
 -------------------------------------------------------------------------------
