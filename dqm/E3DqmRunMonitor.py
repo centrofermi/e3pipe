@@ -133,8 +133,15 @@ class E3DqmRunMonitor:
                 summary.fill(alarm)
         logger.info(summary)
         if self.__OutputFolder is not None:
+            header = self.__InputFile.Get('Header')
+            header.GetEntry(0)
             filePath = os.path.join(self.__OutputFolder, '.summary')
-            summary.write(filePath)
+            outputFile = open(filePath, 'w')
+            outputFile.write('num_events: %d\n' % header.NumEvents)
+            outputFile.write('num_tracks: %d\n' % header.NumTrackEvents)
+            outputFile.write('run_duration: %d\n' % header.RunDuration)
+            outputFile.write('alarm_status: %s\n' % summary.status())
+            outputFile.close()
 
     def createReport(self):
         """ Create the html report.
