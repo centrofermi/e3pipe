@@ -33,9 +33,9 @@ class E3DstHeaderTree(E3Tree):
 
     NAME = 'Header'
     BRANCHES = [E3BranchDescriptor('RunNumber', 'i'),
-                E3BranchDescriptor('RunStart', 'F'),
-                E3BranchDescriptor('RunStop', 'F'),
-                E3BranchDescriptor('RunDuration', 'F'),
+                E3BranchDescriptor('RunStart', 'D'),
+                E3BranchDescriptor('RunStop', 'D'),
+                E3BranchDescriptor('RunDuration', 'D'),
                 E3BranchDescriptor('NumEvents', 'i'),
                 E3BranchDescriptor('NumHitsEvents', 'i'),
                 E3BranchDescriptor('NumTrackEvents', 'i'),

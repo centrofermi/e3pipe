@@ -48,7 +48,7 @@ class E3DstEventTree(E3Tree):
                 E3BranchDescriptor('ChiSquare', 'F'),
                 E3BranchDescriptor('TimeOfFlight', 'F'),
                 E3BranchDescriptor('TrackLength', 'F'),
-                E3BranchDescriptor('DeltaTime', 'F')
+                E3BranchDescriptor('DeltaTime', 'D')
             ]
     ALIAS_DICT = {'Timestamp': 'Seconds + 1.e-9*Nanoseconds',
                   'Theta'    : '57.29577951308232*acos(ZDir)',
