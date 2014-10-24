@@ -28,10 +28,12 @@ import datetime
 import e3pipe.__utils__ as __utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
+from e3pipe.dst.E3BinFile import E3BinFile
 from e3pipe.dst.E3AnalyzerOutFile import E3AnalyzerOutFile
 from e3pipe.dst.E3AnalyzerSumFile import E3AnalyzerSumFile
 from e3pipe.dst.E3DstEventTree import E3DstEventTree
 from e3pipe.dst.E3DstHeaderTree import E3DstHeaderTree
+from e3pipe.dst.E3DstWeatherTree import E3DstWeatherTree
 from e3pipe.dst.__runid__ import uniqueRunIdFromFilePath
 from e3pipe.root.E3OutputRootFile import E3OutputRootFile
 from e3pipe.misc.E3Chrono import E3Chrono
@@ -138,6 +140,15 @@ def e3dst(baseFilePath):
     data['NumBackwardEvents'] = eventStat['backward']
     headerTree.fillRow(data)
     headerTree.Write()
+    logger.info('Initializing weather tree...')
+    weatherTree = E3DstWeatherTree()
+    weatherTree.setUniqueRunId(uniqueId)
+    binFile = E3BinFile('%s.bin' % baseFilePath)
+    record = binFile.weatherStationRecord()
+    if record is not None:
+        logger.info('Filling weather tree...')
+        weatherTree.fillRow(record.data())
+    weatherTree.Write()
     logger.info('Creating histograms...')
     for key in ['HitMultBot', 'HitMultMid', 'HitMultTop',
                 'ClusterMultBot', 'ClusterMultMid', 'ClusterMultTop']:

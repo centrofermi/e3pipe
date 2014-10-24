@@ -50,12 +50,15 @@ class E3BinFile(file):
             try:
                 blockType, blockSize, data = self.readBlock()
             except:
+                logger.error('Could not parse file content, giving up.')
                 break
             if blockType == self.HEADER_WS_RECORD:
                 self.__WeatherStationRecord = E3WeatherStationRecord(*data)
                 logger.info('Weather station record found!')
                 logger.info(self.__WeatherStationRecord)
                 break
+        if self.__WeatherStationRecord is None:
+            logger.info('Could not find any weather station record.')
 
     def weatherStationRecord(self):
         """
