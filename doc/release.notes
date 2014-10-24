@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (0.21.0) - Fri, 24 Oct 2014 20:25:47 +0200
+-------------------------------------------------------------------------------
 * Type changed from float to double for all the tree branches having to do
   with timestamps (32 bits were just enough to round to the nearest second).
 
