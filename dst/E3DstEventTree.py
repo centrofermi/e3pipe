@@ -145,7 +145,8 @@ class E3DstEventTree(E3Tree):
                     xmin = 0, xmax = 300., xbins = 100,
                     XTitle = 'Track length [cm]')
 
-    def doTrending(self, timeDelta = 60, xmin = None, xmax = None):
+    def doTrending(self, timeDelta = 60, xmin = None, xmax = None,
+                   weatherRecord = None):
         """ Create the trending plots/tree.
 
         TODO: this should be properly configurable from a configuration
@@ -177,6 +178,12 @@ class E3DstEventTree(E3Tree):
             h.SetTimeDisplay()
         tree = E3DstTrendingTree()
         tree.setUniqueRunId(self.UniqueRunId)
+        if weatherRecord is not None:
+            tree.setValue('IndoorTemperature',
+                          weatherRecord.indoorTemperature())
+            tree.setValue('OutdoorTemperature', 
+                          weatherRecord.outdoorTemperature())
+            tree.setValue('Pressure', weatherRecord.pressure())
         for i in range(1, h1.GetNbinsX() + 1):
             tree.setValue('BinStart', h1.GetBinLowEdge(i))
             tree.setValue('BinEnd', h1.GetBinLowEdge(i) + h1.GetBinWidth(i))

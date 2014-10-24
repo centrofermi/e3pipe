@@ -53,6 +53,21 @@ class E3WeatherStationRecord:
         delta = self.__Datetime - E3_DATETIME_REFERENCE
         return float(delta.seconds + delta.days*24*3600 - 2*3600)
 
+    def indoorTemperature(self):
+        """
+        """
+        return self.__IndoorTemperature
+
+    def outdoorTemperature(self):
+        """
+        """
+        return self.__OutdoorTemperature
+
+    def pressure(self):
+        """
+        """
+        return self.__Pressure
+
     def data(self):
         """ Return the data in a form which is suitable for the corresponding
         DST tree.

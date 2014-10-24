@@ -113,8 +113,18 @@ def e3dst(baseFilePath):
         abort('No events found (maybe an issue with eee_calib.txt?)')
     logger.info('Creating monitoring plots...')
     eventTree.doMonitoring()
+    logger.info('Initializing weather tree...')
+    weatherTree = E3DstWeatherTree()
+    weatherTree.setUniqueRunId(uniqueId)
+    binFile = E3BinFile('%s.bin' % baseFilePath)
+    weatherRecord = binFile.weatherStationRecord()
+    if weatherRecord is not None:
+        logger.info('Filling weather tree...')
+        weatherTree.fillRow(weatherRecord.data())
+    weatherTree.Write()
     logger.info('Creating trending data products...')
-    trendingTree = eventTree.doTrending(TRENDING_TIME_BIN, tmin, tmax)
+    trendingTree = eventTree.doTrending(TRENDING_TIME_BIN, tmin, tmax,
+                                        weatherRecord)
     logger.info('Writing trending tree...')
     trendingTree.Write()
     logger.info('Writing monitoring/trending plots...')
@@ -140,15 +150,7 @@ def e3dst(baseFilePath):
     data['NumBackwardEvents'] = eventStat['backward']
     headerTree.fillRow(data)
     headerTree.Write()
-    logger.info('Initializing weather tree...')
-    weatherTree = E3DstWeatherTree()
-    weatherTree.setUniqueRunId(uniqueId)
-    binFile = E3BinFile('%s.bin' % baseFilePath)
-    record = binFile.weatherStationRecord()
-    if record is not None:
-        logger.info('Filling weather tree...')
-        weatherTree.fillRow(record.data())
-    weatherTree.Write()
+    
     logger.info('Creating histograms...')
     for key in ['HitMultBot', 'HitMultMid', 'HitMultTop',
                 'ClusterMultBot', 'ClusterMultMid', 'ClusterMultTop']:
