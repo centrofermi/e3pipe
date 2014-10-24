@@ -139,7 +139,7 @@ class E3Chain(ROOT.TChain):
                 if branchType in ['F', 'D']:
                     formatList.append('%.6e')
                 else:
-                    formatList.append('%.d')
+                    formatList.append('%d')
         outputFile.write('#')
         for branchName in branchList[:-1]:
             outputFile.write('%s,' % branchName)
