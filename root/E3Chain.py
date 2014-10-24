@@ -125,11 +125,35 @@ class E3Chain(ROOT.TChain):
             self.__setupTreeFormula(key, value)
         logger.info('Done.')
 
-    def writeAscii(self, outputFilePath):
+    def writeAscii(self, outputFilePath, delimiter = ','):
         """ Write the chain to a text file.
         """
         logger.info('Writing %s to %s...' % (self.GetName(), outputFilePath))
-        logger.info('Done.')
+        outputFile = open(outputFilePath, 'w')
+        branchList = []
+        formatList = []
+        for branch in self.GetListOfBranches():
+            (branchName, branchType) = branch.GetTitle().split('/')
+            if self.GetBranchStatus(branchName):
+                branchList.append(branch.GetName())
+                if branchType in ['F', 'D']:
+                    formatList.append('%.6e')
+                else:
+                    formatList.append('%.d')
+        outputFile.write('#')
+        for branchName in branchList[:-1]:
+            outputFile.write('%s,' % branchName)
+        outputFile.write('%s\n' % branchList[-1])
+        rowSpecifier = zip(branchList, formatList)
+        for i in xrange(self.GetEntries()):
+            self.GetEntry(i)
+            for branchName, fmt in rowSpecifier[:-1]:
+                val = fmt % self.arrayValue(branchName)
+                outputFile.write('%s,' % val)
+            val = formatList[-1] % self.arrayValue(branchList[-1])
+            outputFile.write('%s\n' % val)
+        outputFile.close()
+        logger.info('Output file closed, done.')
 
 
 
