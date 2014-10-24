@@ -165,6 +165,8 @@ class E3DqmRunMonitor:
         outputFile.li('DST file path: %s' % self.__InputFile.GetName())
         outputFile.li('Unique run identifier: %s' %\
                       header.UniqueRunId)
+        outputFile.li('Smallest event timestamp: %.3f s UTC' % header.RunStart)
+        outputFile.li('Largest event timestamp: %.3f s UTC' % header.RunStop)
         outputFile.li('Run duration (largest - smallest timestamp): %.3f s' %\
                       header.RunDuration)
         outputFile.li('Total number of events: %s' %\
@@ -181,6 +183,26 @@ class E3DqmRunMonitor:
                       header.NumMalformedEvents)
         outputFile.li('Number of events out of order: %s'% \
                       header.NumBackwardEvents)
+        outputFile.write('</ul>\n')
+        outputFile.section('Weather station')
+        outputFile.write('<p></p>\n')
+        outputFile.write('<ul>\n')
+        weather = self.__InputFile.Get('Weather')
+        if weather.GetEntries():
+            weather.GetEntry(0)
+            delta = weather.Seconds - header.RunStart
+            if delta < 0:
+                text = '(%.3f s before the start of the run)' % abs(delta)
+            else:
+                text = '(%.3f s after (!!) the start of the run)' % abs(delta)
+            outputFile.li('Readout at %.3f s UTC %s' % (weather.Seconds, text))
+            outputFile.li('Outdoor temperature: %.2f deg C' %\
+                          weather.OutdoorTemperature)
+            outputFile.li('Indoor temperature: %.2f deg C' %\
+                          weather.IndoorTemperature)
+            outputFile.li('Pressure: %d hPa' % weather.Pressure)
+        else:
+            outputFile.li('Weather station data not found.')
         outputFile.write('</ul>\n')
         outputFile.section('Alarm summary')
         outputFile.write('\n<table width=100%>\n')
