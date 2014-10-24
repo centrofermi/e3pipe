@@ -119,8 +119,12 @@ class E3DqmReport:
         #outputFile.li('Number of runs failed: --- ')
         fileName = os.path.basename(self.__InputFilePath)
         rootAnchor = '<a href="%s">root</a>' % (fileName)
-        outputFile.li('Data files: %s, csv (header), csv (events)' %\
-                      (rootAnchor))
+        csvHeaderAnchor = '<a href="%s">csv header</a>' %\
+                          (fileName.replace('.root', '_Header.csv'))
+        csvTrendingAnchor = '<a href="%s">csv trending</a>' %\
+                            (fileName.replace('.root', '_Trending.csv'))
+        outputFile.li('Data files: %s, %s, %s' %\
+                      (rootAnchor, csvHeaderAnchor, csvTrendingAnchor))
         outputFile.write('</ul>\n')
         outputFile.section('Summary plots')
         outputFile.write('\n<table width=100%>\n')
