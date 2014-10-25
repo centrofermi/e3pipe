@@ -179,13 +179,13 @@ class E3DqmRunMonitor:
         outputFile.li('Total number of events: %s' %\
                       header.NumEvents)
         outputFile.li('Number of events with hits: %s' %\
-                      header.NumHitsEvents)
+                      header.NumHitEvents)
         outputFile.li('Number of events with a track: %s' %\
                       header.NumTrackEvents)
-        outputFile.li('Number of GPS events: %s' %\
-                      header.NumGpsEvents)
-        outputFile.li('Number of events with no hits: %s' %\
+        outputFile.li('Number of "no hits" (GPS?) events: %s' %\
                       header.NumNoHitsEvents)
+        outputFile.li('Number of "no hit" events: %s' %\
+                      header.NumNoHitEvents)
         outputFile.li('Number of malformed events: %s'% \
                       header.NumMalformedEvents)
         outputFile.li('Number of events out of order: %s'% \

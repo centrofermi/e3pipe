@@ -142,10 +142,10 @@ def e3dst(baseFilePath):
     data['RunStart'] = tmin
     data['RunStop'] = tmax
     data['RunDuration'] = tmax - tmin
-    data['NumHitsEvents'] = eventStat['hits']
+    data['NumHitEvents'] = eventStat['hits']
     data['NumTrackEvents'] = eventStat['track']
-    data['NumGpsEvents'] = eventStat['no_hits']
-    data['NumNoHitsEvents'] = eventStat['no_hit']
+    data['NumNoHitsEvents'] = eventStat['no_hits']
+    data['NumNoHitEvents'] = eventStat['no_hit']
     data['NumMalformedEvents'] = eventStat['malformed']
     data['NumBackwardEvents'] = eventStat['backward']
     headerTree.fillRow(data)

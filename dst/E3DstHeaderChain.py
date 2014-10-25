@@ -58,10 +58,10 @@ class E3DstHeaderChain(E3Chain, E3TreePlotter):
                     XTitle = 'Number of malformed events')
         self.hist1d('NumBackwardEvents', xpad = xpad,
                     XTitle = 'Number of non-time-ordered events')
-        self.hist1d('NumGpsEvents', xpad = xpad,
-                    XTitle = 'Number of GPS events')
         self.hist1d('NumNoHitsEvents', xpad = xpad,
-                    XTitle = 'Number events with no hits')
+                    XTitle = 'Number of "no hits" events')
+        self.hist1d('NumNoHitEvents', xpad = xpad,
+                    XTitle = 'Number of "no hit" events')
 
 
 

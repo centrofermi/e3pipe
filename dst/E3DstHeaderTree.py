@@ -37,10 +37,10 @@ class E3DstHeaderTree(E3Tree):
                 E3BranchDescriptor('RunStop', 'D'),
                 E3BranchDescriptor('RunDuration', 'D'),
                 E3BranchDescriptor('NumEvents', 'i'),
-                E3BranchDescriptor('NumHitsEvents', 'i'),
+                E3BranchDescriptor('NumHitEvents', 'i'),
                 E3BranchDescriptor('NumTrackEvents', 'i'),
-                E3BranchDescriptor('NumGpsEvents', 'i'),
                 E3BranchDescriptor('NumNoHitsEvents', 'i'),
+                E3BranchDescriptor('NumNoHitEvents', 'i'),
                 E3BranchDescriptor('NumMalformedEvents', 'i'),
                 E3BranchDescriptor('NumBackwardEvents', 'i')
             ]
