@@ -24,8 +24,8 @@
 """ Basic event selection cuts.
 """
 MAX_GOOD_CHISQUARE = 10.
-CUT_GOOD_EVENT = 'StatusCode == 0'
-CUT_GOOD_TRACK = '%s && ChiSquare < %.3f' % (CUT_GOOD_EVENT, MAX_GOOD_CHISQUARE)
+CUT_HIT_EVENT = 'StatusCode == 0'
+CUT_GOOD_TRACK = '%s && ChiSquare < %.3f' % (CUT_HIT_EVENT, MAX_GOOD_CHISQUARE)
 
 """ Maximum run duration (in s), in the sense of the difference between the
 largest and the smallest timestamp in the run.
