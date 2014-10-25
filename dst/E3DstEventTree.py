@@ -25,8 +25,9 @@ from e3pipe.root.E3Tree import E3Tree
 from e3pipe.root.E3BranchDescriptor import E3BranchDescriptor
 from e3pipe.dst.E3DstTrendingTree import E3DstTrendingTree
 from e3pipe.config.__dst__ import MAX_GOOD_CHISQUARE, CUT_HIT_EVENT,\
-    CUT_GOOD_TRACK
+    CUT_GOOD_TRACK, TRENDING_LIST
 from e3pipe.root.E3H1D import E3H1D
+from e3pipe.root.__ROOT__ import setupTimeDisplay
 
 
 
@@ -116,7 +117,7 @@ class E3DstEventTree(E3Tree):
                            **kwargs)
         hist.Sumw2()
         hist.Scale(1./hist.GetBinWidth(1))
-        hist.SetXTitle('Time')
+        hist.SetXTitle('')
         return hist
 
     def doMonitoring(self):
@@ -149,33 +150,24 @@ class E3DstEventTree(E3Tree):
                    weatherRecord = None):
         """ Create the trending plots/tree.
 
-        TODO: this should be properly configurable from a configuration
-        file.
+        TODO: this is only partially configured from config.__dst__.py
 
         Note that you do have to call the TH1::SetTimeDisplay() method
         after the call to TH1::Divide(), otherwise the number of bins
         in the histograms is doubles. ROOT is weird.
         """
-        _name = 'RateNonGpsEvents'
-        _cut = CUT_HIT_EVENT
-        _ytitle = 'Rate of non-GPS events [Hz]'
-        h1 = self.trendingHist(_name, None, _cut, timeDelta, xmin, xmax,
-                               YTitle = _ytitle)
-        _name = 'RateTrackEvents'
-        _cut = CUT_GOOD_TRACK
-        _ytitle = 'Rate of tracks with #chi^{2} < %.1f [Hz]' %\
-                  MAX_GOOD_CHISQUARE
-        h2 = self.trendingHist(_name, None, _cut, timeDelta, xmin, xmax,
-                               YTitle = _ytitle)
-        _name = 'FractionTrackEvents'
-        _cut = CUT_GOOD_TRACK
-        _ytitle = 'Fraction of tracks with #chi^{2} < %.1f' %\
-                  MAX_GOOD_CHISQUARE
-        h3 = self.trendingHist(_name, None, _cut, timeDelta, xmin, xmax,
-                               YTitle = _ytitle)
-        h3.Divide(h2, h1, 1., 1., 'B')
-        for h in [h1, h2, h3]:
-            h.SetTimeDisplay()
+        for (name, title, cut, kwargs) in TRENDING_LIST:
+            self.trendingHist(name, title, cut, timeDelta, xmin, xmax,
+                              YTitle = '%s [Hz]' % title)
+        hHit = self.plot('RateHitEvents')
+        hTkr = self.plot('RateTrackEvents')
+        hFra = hHit.Clone('FractionTrackEvents')
+        hFra.SetYTitle('Fraction of events with #chi^{2} < %.1f' %\
+                       MAX_GOOD_CHISQUARE)
+        hFra.Divide(hTkr, hHit, 1., 1., 'B')
+        self.store(hFra)
+        for h in [hHit, hTkr, hFra]:
+            setupTimeDisplay(h)
         tree = E3DstTrendingTree()
         tree.setUniqueRunId(self.UniqueRunId)
         if weatherRecord is not None:
@@ -184,15 +176,15 @@ class E3DstEventTree(E3Tree):
             tree.setValue('OutdoorTemperature', 
                           weatherRecord.outdoorTemperature())
             tree.setValue('Pressure', weatherRecord.pressure())
-        for i in range(1, h1.GetNbinsX() + 1):
-            tree.setValue('BinStart', h1.GetBinLowEdge(i))
-            tree.setValue('BinEnd', h1.GetBinLowEdge(i) + h1.GetBinWidth(i))
-            tree.setValue('RateNonGpsEvents', h1.GetBinContent(i))
-            tree.setValue('RateNonGpsEventsErr', h1.GetBinError(i))
-            tree.setValue('RateTrackEvents', h2.GetBinContent(i))
-            tree.setValue('RateTrackEventsErr', h2.GetBinError(i))
-            tree.setValue('FractionTrackEvents', h3.GetBinContent(i))
-            tree.setValue('FractionTrackEventsErr', h3.GetBinError(i))
+        for i in range(1, hHit.GetNbinsX() + 1):
+            tree.setValue('BinStart', hHit.GetBinLowEdge(i))
+            tree.setValue('BinEnd', hHit.GetBinLowEdge(i) + hHit.GetBinWidth(i))
+            tree.setValue('RateHitEvents', hHit.GetBinContent(i))
+            tree.setValue('RateHitEventsErr', hHit.GetBinError(i))
+            tree.setValue('RateTrackEvents', hTkr.GetBinContent(i))
+            tree.setValue('RateTrackEventsErr', hTkr.GetBinError(i))
+            tree.setValue('FractionTrackEvents', hFra.GetBinContent(i))
+            tree.setValue('FractionTrackEventsErr', hFra.GetBinError(i))
             tree.Fill()
         return tree
 

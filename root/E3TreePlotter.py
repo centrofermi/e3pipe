@@ -57,7 +57,8 @@ class E3TreePlotter:
                xmin = None, xmax = None, xbins = 100, xpad = 0, **kwargs):
         """ Create a 1-dimensional histogram.
         """
-        logger.info('Creating 1-d histogram for %s...' % expression)
+        logger.info('Creating 1-d histogram for %s with cut "%s"...' %\
+                    (expression, cut))
         kwargs['XTitle'] = kwargs.get('XTitle', expression)
         kwargs['YTitle'] = kwargs.get('YTitle', 'Entries/bin')
         name = name or expression

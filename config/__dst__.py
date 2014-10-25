@@ -39,6 +39,18 @@ One day should be plenty :-)
 MAX_RUN_DURATION = 86400.0
 
 
+""" Configuration list for the trending quantities that are created in
+E3DstEventTree.doTrending().
+
+This is essentially a list of tuples (name, title, cut, **kwargs)
+"""
+TRENDING_LIST = [
+    ('RateHitEvents', 'Rate events with hits', CUT_HIT_EVENT, dict()),
+    ('RateTrackEvents',
+     'Rate of events with #chi^{2} < %.1f' % MAX_GOOD_CHISQUARE,
+     CUT_GOOD_TRACK, dict())
+]
+
 
 if __name__ == '__main__':
     print 'MAX_GOOD_CHISQUARE = %s' % MAX_GOOD_CHISQUARE

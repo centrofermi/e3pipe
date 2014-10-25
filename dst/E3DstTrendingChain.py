@@ -54,8 +54,8 @@ class E3DstTrendingChain(E3Chain, E3TreePlotter):
     def doSummaryPlots(self):
         """ Create the summary plots.
         """
-        _ytitle = 'Rate of non-GPS events [Hz]'
-        self.stripChart('RateNonGpsEvents', ytitle = _ytitle)
+        _ytitle = 'Rate of events with hits [Hz]'
+        self.stripChart('RateHitEvents', ytitle = _ytitle)
         _ytitle = 'Rate of tracks with #chi^{2} < %.1f [Hz]' %\
                   MAX_GOOD_CHISQUARE
         self.stripChart('RateTrackEvents', ytitle = _ytitle)

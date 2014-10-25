@@ -30,7 +30,7 @@ TOP_IMAGES = [
 ]
 
 DQM_BASELINE_LIST = [
-    ('RateNonGpsEvents', 'y_values', 10, 20, 60, 80, dict()),
+    ('RateHitEvents', 'y_values', 10, 20, 60, 80, dict()),
     ('DeltaTime', 'exp_fit_lambda', 5, 10, 50, 75, dict(Logy = True)),
     ('HitMultTop', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
     ('HitMultMid', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
@@ -54,8 +54,8 @@ def dqmPreformat(dstFile):
     """ Generic hook to format stuff in the DST before it's plotted.
     """
     logger.info('Preformatting DST for DQM...')
+    dstFile.Get('RateHitEvents').GetYaxis().SetRangeUser(0, 100)
     dstFile.Get('RateTrackEvents').GetYaxis().SetRangeUser(0, 100)
-    dstFile.Get('RateNonGpsEvents').GetYaxis().SetRangeUser(0, 100)
     dstFile.Get('FractionTrackEvents').GetYaxis().SetRangeUser(0, 1.1)
     logger.info('Done.')
 
