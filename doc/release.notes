@@ -1,5 +1,7 @@
 
 * CUT_GOOD_EVENT changed to CUT_HIT_EVENT throughout.
+* RateNonGpsEvents changed to RateHitEvents throughout.
+* Minor reactoring of the trending code.
 
 -------------------------------------------------------------------------------
 e3pipe (0.22.0) - Fri, 24 Oct 2014 20:42:05 +0200
