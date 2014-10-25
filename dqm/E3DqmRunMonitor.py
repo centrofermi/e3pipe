@@ -68,6 +68,7 @@ class E3DqmRunMonitor:
         """
         if plot.GetXaxis().GetTimeDisplay():
             setupTimeDisplay(plot, Ndivisions = 504, LabelOffset = 0.04)
+            plot.SetMarkerStyle(20)
 
     def draw(self, objName, **kwargs):
         """ Draw a plot from the DST.
