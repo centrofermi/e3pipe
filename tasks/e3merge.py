@@ -32,6 +32,7 @@ from e3pipe.__logging__ import logger, startmsg, abort
 from e3pipe.dst.E3DstHeaderChain import E3DstHeaderChain
 from e3pipe.dst.E3DstEventChain import E3DstEventChain
 from e3pipe.dst.E3DstTrendingChain import E3DstTrendingChain
+from e3pipe.dst.E3DstWeatherChain import E3DstWeatherChain
 from e3pipe.root.E3OutputRootFile import E3OutputRootFile
 from e3pipe.misc.E3DstFileCrawler import E3DstFileCrawler
 from e3pipe.dst.__time__ import date2str
