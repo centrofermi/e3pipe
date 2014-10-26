@@ -95,7 +95,7 @@ class E3TreePlotter:
         """ Create a strip chart.
         """
         title = kwargs.get('YTitle', None) or branchName
-        g = E3Graph(branchName, title, **kwargs)
+        g = E3Graph(branchName, title)
         for i in xrange(self.GetEntries()):
             self.GetEntry(i)
             x = self.binCenter()

@@ -22,6 +22,7 @@
 
 
 import os
+import ROOT
 
 import e3pipe.__utils__ as __utils__
 
@@ -45,7 +46,7 @@ class E3DqmReport:
         """ Constructor.
         """
         self.__InputFilePath = filePath
-        self.__Label = os.path.basename(filePath).replace('_summary.root', '')
+        self.__Label = E3InputRootFile(filePath).canvasLabel()
         self.__OutputFolder = outputFolder
         self.__ObjectList = []
 
@@ -59,6 +60,7 @@ class E3DqmReport:
         """
         if self.__OutputFolder is not None:
             __utils__.createFolder(self.__OutputFolder)
+        # Plots from the header tree.
         header = E3DstHeaderChain(self.__InputFilePath)
         header.setupArrays()
         header.setupTreeFormulae()
@@ -72,6 +74,7 @@ class E3DqmReport:
                 _canvas.save(self.__OutputFolder)
             self.__ObjectList.append(_plot.GetName())
         self.__ObjectList.append(None)
+        # Plots from the trending tree.
         trending = E3DstTrendingChain(self.__InputFilePath)
         trending.setupArrays()
         trending.setupTreeFormulae()
@@ -84,6 +87,48 @@ class E3DqmReport:
             if self.__OutputFolder is not None:
                 _canvas.save(self.__OutputFolder)
             self.__ObjectList.append(_plot.GetName())
+        # And now the summary plots.
+        _canvas = E3Canvas(self.canvasName('RateSummary'))
+        g1 = header.plot('AverageRate')
+        g2 = trending.plot('RateHitEvents')
+        g3 = trending.plot('RateTrackEvents')
+        ymax = max([g1.GetY()[i] for i in range(g1.GetN())])
+        ymin = min([g3.GetY()[i] for i in range(g3.GetN())])
+        yrange = ymax - ymin
+        ymax += yrange
+        ymin -= yrange
+        g1.GetYaxis().SetRangeUser(ymin, ymax)
+        g1.GetYaxis().SetTitle('Rate [Hz]')
+        g1.SetLineStyle(7)
+        g2.SetLineColor(ROOT.kBlue)
+        g3.SetLineColor(ROOT.kRed)
+        g1.Draw('al')
+        g2.Draw('lsame')
+        g3.Draw('lsame')
+        _canvas.annotate(0.1, 0.94, self.__Label)
+        _canvas.Update()
+        _canvas.save(self.__OutputFolder)
+        _canvas = E3Canvas(self.canvasName('WeatherSummary'))
+        g1 = trending.plot('IndoorTemperature')
+        g2 = trending.plot('OutdoorTemperature')
+        g3 = trending.plot('Pressure')
+        ymax = max([g1.GetY()[i] for i in range(g1.GetN())] +\
+                   [g2.GetY()[i] for i in range(g2.GetN())])
+        ymin = min([g1.GetY()[i] for i in range(g1.GetN())] +\
+                   [g2.GetY()[i] for i in range(g2.GetN())])
+        yrange = ymax - ymin
+        ymax += yrange
+        ymin -= yrange
+        g1.GetYaxis().SetRangeUser(ymin, ymax) 
+        g1.GetYaxis().SetTitle('Temperature [#circ C]')
+        g1.SetLineColor(ROOT.kRed)
+        g2.SetLineStyle(7)
+        g2.SetLineColor(ROOT.kRed)
+        g1.Draw('al')
+        g2.Draw('lsame')
+        _canvas.annotate(0.1, 0.94, self.__Label)
+        _canvas.Update()
+        _canvas.save(self.__OutputFolder)
         self.createReport()
 
     def createReport(self):
@@ -105,7 +150,7 @@ class E3DqmReport:
         outputFile = E3HtmlOutputFile(filePath,
                                       header = 'EEE DQM summary report')
         outputFile.write('<p></p>\n')
-        for objName in ['RateTrackEvents', 'FractionTrackEvents']:
+        for objName in ['RateSummary', 'WeatherSummary']:
             img = '%s.png' % self.canvasName(objName)
             outputFile.image(img, width = '49%')
         outputFile.section('Summary')

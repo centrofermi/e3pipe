@@ -86,6 +86,11 @@ class E3InputRootFile(ROOT.TFile):
         """
         return self.readString(E3RootFileBase.STATION_KEY)
 
+    def canvasLabel(self):
+        """
+        """
+        return '%s %s' % (self.station(), self.date())
+
     def filter(self, *args, **kwargs):
         """ Filter the objects in the file based on their class.
 
