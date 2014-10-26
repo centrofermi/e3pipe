@@ -47,7 +47,7 @@ class E3RootObject:
         for (key, value) in kwargs.items():
             try:
                 if isinstance(value, str):
-                    value = '"%s"' % value
+                    value = '\'%s\'' % value
                 exec('self.Set%s(%s)' % (key, value))
             except AttributeError, e:
                 logger.warn('Cannot process kwarg "%s = %s" (%s).' %\
