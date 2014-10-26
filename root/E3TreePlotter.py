@@ -37,13 +37,19 @@ class E3TreePlotter:
 
     def __init__(self):
         """ Constructor.
+
+        Note that we maintain both a dictionary and a list of the plots that
+        have been made so that we can retrieve them according to the insertion
+        order, if we want to.
         """
         self.__PlotDict = {}
+        self.__PlotList = []
 
     def store(self, plot):
         """ Store a plot.
         """
         self.__PlotDict[plot.GetName()] = plot
+        self.__PlotList.append(plot)
 
     def plot(self, name):
         """ Return a specific plot.
@@ -53,7 +59,7 @@ class E3TreePlotter:
     def plots(self):
         """ Return all the underlying plot objects.
         """
-        return self.__PlotDict.values()
+        return self.__PlotList
 
     def hist1d(self, expression, cut = '', name = None, title = None,
                xmin = None, xmax = None, xbins = 100, xpad = 0, **kwargs):
@@ -85,12 +91,11 @@ class E3TreePlotter:
         """
         pass
 
-    def stripChart(self, branchName, errors = False, ytitle = None,
-                   **kwargs):
+    def stripChart(self, branchName, errors = False, **kwargs):
         """ Create a strip chart.
         """
-        ytitle = ytitle or branchName
-        g = E3Graph(branchName, ytitle, **kwargs)
+        title = kwargs.get('YTitle', None) or branchName
+        g = E3Graph(branchName, title, **kwargs)
         for i in xrange(self.GetEntries()):
             self.GetEntry(i)
             x = self.binCenter()
@@ -101,6 +106,6 @@ class E3TreePlotter:
                 dy = 0
             g.SetNextPoint(x, y, dy)
         setupTimeDisplay(g)
-        g.GetYaxis().SetTitle(ytitle)
+        g.GetYaxis().SetTitle(kwargs.get('YTitle', branchName))
         self.store(g)
         return g

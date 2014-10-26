@@ -55,19 +55,19 @@ class E3DstTrendingChain(E3Chain, E3TreePlotter):
         """ Create the summary plots.
         """
         self.stripChart('RateHitEvents',
-                        ytitle = 'Rate of events with hits [Hz]')
+                        YTitle = 'Rate of events with hits [Hz]')
         self.stripChart('RateTrackEvents',
-                        ytitle = 'Rate of events with #chi^{2} < %.1f [Hz]' %\
+                        YTitle = 'Rate of events with #chi^{2} < %.1f [Hz]' %\
                         MAX_GOOD_CHISQUARE)
         self.stripChart('FractionTrackEvents',
-                        ytitle = 'Fraction of events with #chi^{2} < %.1f' %\
+                        YTitle = 'Fraction of events with #chi^{2} < %.1f' %\
                         MAX_GOOD_CHISQUARE)
         self.stripChart('IndoorTemperature', False, 
-                        ytitle = 'Indoor temperature [#circ C]')
+                        YTitle = 'Indoor temperature [#circ C]')
         self.stripChart('OutdoorTemperature', False,
-                        ytitle = 'Outdoor temperature [#circ C]')
+                        YTitle = 'Outdoor temperature [#circ C]')
         self.stripChart('Pressure', False,
-                        ytitle = 'Pressure [hPa]')
+                        YTitle = 'Pressure [hPa]')
 
 
 

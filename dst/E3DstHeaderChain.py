@@ -54,11 +54,11 @@ class E3DstHeaderChain(E3Chain, E3TreePlotter):
     def doSummaryPlots(self, xpad = 0.05):
         """ Create a set of summary plots.
         """
-        self.stripChart('AverageRate')
         self.hist1d('RunDuration', xpad = xpad,
                     XTitle = 'Run duration [s]')
         self.hist1d('NumEvents', xpad = xpad,
                     XTitle = 'Total number of events', Ndivisions = 508)
+        self.stripChart('AverageRate', YTitle = 'Average rate of events [Hz]')
         self.hist1d('NumTrackEvents', xpad = xpad,
                     XTitle = 'Number of events with tracks', Ndivisions = 508)
         self.hist1d('NumMalformedEvents', xpad = xpad,
