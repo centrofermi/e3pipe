@@ -48,6 +48,7 @@ def e3report(station, endDate = None, daysSpanned = 2, outputFolder = None,
                     mergeEvents = False)
     e3root2text(mergedFilePath, 'Header')
     e3root2text(mergedFilePath, 'Trending')
+    e3root2text(mergedFilePath, 'Weather')
     report = E3DqmReport(mergedFilePath, outputFolder)
     report.fill()
 

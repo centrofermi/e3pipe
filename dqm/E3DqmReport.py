@@ -178,8 +178,11 @@ class E3DqmReport:
                           (fileName.replace('.root', '_Header.csv'))
         csvTrendingAnchor = '<a href="%s">csv trending</a>' %\
                             (fileName.replace('.root', '_Trending.csv'))
-        outputFile.li('Data files: %s, %s, %s' %\
-                      (rootAnchor, csvHeaderAnchor, csvTrendingAnchor))
+        csvWeatherAnchor = '<a href="%s">csv weather</a>' %\
+                            (fileName.replace('.root', '_Weather.csv'))
+        outputFile.li('Data files: %s, %s, %s, %s' %\
+                      (rootAnchor, csvHeaderAnchor, csvTrendingAnchor,
+                       csvWeatherAnchor))
         outputFile.write('</ul>\n')
         outputFile.section('Summary plots')
         outputFile.write('\n<table width=100%>\n')
