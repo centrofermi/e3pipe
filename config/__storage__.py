@@ -81,9 +81,9 @@ except KeyError:
 TODO: need to ask Francesco to link /reports, here.
 """
 try:
-    E3PIPE_REPORTS_BASE = os.environ['E3PIPE_REPORTS_BASE']
+    E3PIPE_DQM_REPORT_BASE = os.environ['E3PIPE_DQM_REPORT_BASE']
 except KeyError:
-    E3PIPE_REPORTS_BASE = os.path.expanduser(os.path.join('~', 'reports'))
+    E3PIPE_DQM_REPORT_BASE = '/dqmreport'
 
 
 """ Base folder for the log files.

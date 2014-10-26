@@ -28,7 +28,7 @@ from e3pipe.__logging__ import logger, startmsg, abort
 from e3pipe.dqm.E3DqmReport import E3DqmReport
 from e3pipe.tasks.e3merge import e3mergeTimeSpan
 from e3pipe.tasks.e3root2text import e3root2text
-from e3pipe.config.__storage__ import E3PIPE_REPORTS_BASE
+from e3pipe.config.__storage__ import E3PIPE_DQM_REPORT_BASE
 from e3pipe.dst.__time__ import date2str
 
 
@@ -40,7 +40,7 @@ def e3report(station, endDate = None, daysSpanned = 2, outputFolder = None,
     endDate = endDate or datetime.date.today()
     startDate = endDate - datetime.timedelta(daysSpanned - 1)
     if outputFolder is None:
-        outputFolder = os.path.join(E3PIPE_REPORTS_BASE, station,
+        outputFolder = os.path.join(E3PIPE_DQM_REPORT_BASE, station,
                                     date2str(endDate))
     mergedFileName = '%s_%s_%s_summary.root' % (station, startDate, endDate)
     mergedFilePath = os.path.join(outputFolder, mergedFileName)
