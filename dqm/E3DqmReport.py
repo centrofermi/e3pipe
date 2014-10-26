@@ -35,6 +35,7 @@ from e3pipe.dst.E3DstHeaderChain import E3DstHeaderChain
 from e3pipe.dst.E3DstTrendingChain import E3DstTrendingChain
 from e3pipe.__package__ import E3PIPE_DQM
 from e3pipe.dqm.E3HtmlOutputFile import htmlTableHeader
+from e3pipe.root.E3Legend import E3Legend
 
 
 class E3DqmReport:
@@ -105,6 +106,8 @@ class E3DqmReport:
         g1.Draw('al')
         g2.Draw('lsame')
         g3.Draw('lsame')
+        legend = E3Legend(entries = [g1, g2, g3])
+        legend.Draw()
         _canvas.annotate(0.1, 0.94, self.__Label)
         _canvas.Update()
         _canvas.save(self.__OutputFolder)
@@ -126,6 +129,8 @@ class E3DqmReport:
         g2.SetLineColor(ROOT.kRed)
         g1.Draw('al')
         g2.Draw('lsame')
+        legend = E3Legend(entries = [g1, g2])
+        legend.Draw()
         _canvas.annotate(0.1, 0.94, self.__Label)
         _canvas.Update()
         _canvas.save(self.__OutputFolder)
