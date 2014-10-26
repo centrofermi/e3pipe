@@ -45,6 +45,11 @@ class E3DstWeatherChain(E3Chain, E3TreePlotter):
         E3Chain.__init__(self, self.TREE_NAME, *fileList)
         E3TreePlotter.__init__(self)
 
+    def stripChartTime(self):
+        """ Return the center of the time bin for the current entry.
+        """
+        return self.arrayValue('Seconds')
+
     def doSummaryPlots(self):
         """ Create the summary plots.
         """
