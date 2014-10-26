@@ -47,7 +47,7 @@ def e3mergeFiles(outputFilePath, *fileList, **kwargs):
         fileList = list(fileList)
         fileList.sort()
         logger.info('Done.')
-    if not len(fileList):
+    if len(fileList) < 2:
         abort('No files to merge')
     __utils__.createFolder(os.path.dirname(outputFilePath))
     outputFile = E3OutputRootFile(outputFilePath, 'e3merge', kwargs['date'],
