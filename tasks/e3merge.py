@@ -72,6 +72,13 @@ def e3mergeFiles(outputFilePath, *fileList, **kwargs):
             trending.selectBranches(*branches)
         _trending = trending.CloneTree()
         _trending.Write()
+    if kwargs.get('mergeWeather', True):
+        weather = E3DstWeatherChain(*fileList)
+        branches = kwargs.get('trendingBranches', None)
+        if branches is not None:
+            weather.selectBranches(*branches)
+        _weather = weather.CloneTree()
+        _weather.Write()
     outputFile.Close()
     return outputFilePath
     
