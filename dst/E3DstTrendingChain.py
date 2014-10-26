@@ -46,8 +46,8 @@ class E3DstTrendingChain(E3Chain, E3TreePlotter):
         E3Chain.__init__(self, self.TREE_NAME, *fileList)
         E3TreePlotter.__init__(self)
 
-    def binCenter(self):
-        """ Return the center of the time bin for the current entry.
+    def stripChartTime(self):
+        """ Return the x-value to be used when creating strip charts.
         """
         return self.formulaValue('BinCenter')
 

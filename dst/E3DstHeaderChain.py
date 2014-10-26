@@ -37,7 +37,7 @@ class E3DstHeaderChain(E3Chain, E3TreePlotter):
     """
 
     TREE_NAME = 'Header'
-    ALIAS_DICT = {'BinCenter': '0.5*(RunStart + RunStop)',
+    ALIAS_DICT = {'RunCenter': '0.5*(RunStart + RunStop)',
                   'AverageRate': 'NumEvents/RunDuration'}
 
     def __init__(self, *fileList):
@@ -46,10 +46,10 @@ class E3DstHeaderChain(E3Chain, E3TreePlotter):
         E3Chain.__init__(self, self.TREE_NAME, *fileList)
         E3TreePlotter.__init__(self)
         
-    def binCenter(self):
+    def stripChartTime(self):
         """ Return the center of the time bin for the current entry.
         """
-        return self.formulaValue('BinCenter')
+        return self.formulaValue('RunCenter')
 
     def doSummaryPlots(self, xpad = 0.05):
         """ Create a set of summary plots.

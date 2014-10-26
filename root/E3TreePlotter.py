@@ -93,12 +93,15 @@ class E3TreePlotter:
 
     def stripChart(self, branchName, errors = False, **kwargs):
         """ Create a strip chart.
+
+        Note that, in order for this to work, the TTree/TChain class
+        must have a stripChartTime() method defined.
         """
         title = kwargs.get('YTitle', None) or branchName
         g = E3Graph(branchName, title)
         for i in xrange(self.GetEntries()):
             self.GetEntry(i)
-            x = self.binCenter()
+            x = self.stripChartTime()
             y = self.value(branchName)
             if errors:
                 dy = self.arrayValue('%sErr' % branchName)
