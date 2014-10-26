@@ -144,7 +144,9 @@ class E3Chain(ROOT.TChain):
             (branchName, branchType) = branch.GetTitle().split('/')
             if self.GetBranchStatus(branchName):
                 branchList.append(branch.GetName())
-                if branchType in ['F', 'D']:
+                if branchType == 'D':
+                    formatList.append('%.12e')
+                elif branchType == 'F':
                     formatList.append('%.6e')
                 else:
                     formatList.append('%d')
