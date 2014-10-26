@@ -23,7 +23,7 @@
 
 import datetime
 
-from e3pipe.dst.__time__ import E3_DATETIME_REFERENCE
+from e3pipe.dst.__time__ import E3_DATETIME_REFERENCE, isDST
 
 
 
@@ -47,11 +47,18 @@ class E3WeatherStationRecord:
         """ Mind we're not using delta.total_seconds(), here, as apparently
         that is new in python 2.7 and it would not work at CNAF.
         
-        TODO: we subtract two hours to take into account the timezone, but
-        we'll be in trouble with daylight savings time!
+        We try and take into account the daylight saving time in the crudest
+        possible way, as the __time__.isDST() method relies on the fact that
+        the computer that is running the reconstruction is in the same time
+        zone of the DAQ. This ugly!
         """
         delta = self.__Datetime - E3_DATETIME_REFERENCE
-        return float(delta.seconds + delta.days*24*3600 - 2*3600)
+        secs = delta.seconds + delta.days*24*3600
+        if isDST(self.__Datetime):
+            secs -= 7200
+        else:
+            secs -= 3600
+        return float(secs)
 
     def indoorTemperature(self):
         """

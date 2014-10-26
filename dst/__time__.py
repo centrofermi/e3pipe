@@ -59,8 +59,6 @@ def isDST(dt):
 
 
 if __name__ == '__main__':
-    import time
-
     dt1 = datetime.datetime(2014, 10, 26, 1, 0)
     dt2 = datetime.datetime(2014, 10, 26, 3, 0)
     print dt1, isDST(dt1)
