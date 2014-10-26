@@ -98,6 +98,8 @@ class E3DqmReport:
         yrange = ymax - ymin
         ymax += yrange
         ymin -= yrange
+        if ymin < 0:
+            ymin = 0.
         g1.GetYaxis().SetRangeUser(ymin, ymax)
         g1.GetYaxis().SetTitle('Rate [Hz]')
         g1.SetLineStyle(7)
@@ -122,6 +124,8 @@ class E3DqmReport:
         yrange = ymax - ymin
         ymax += yrange
         ymin -= yrange
+        if ymin < 0:
+            ymin = 0.
         g1.GetYaxis().SetRangeUser(ymin, ymax) 
         g1.GetYaxis().SetTitle('Temperature [#circ C]')
         g1.SetLineColor(ROOT.kRed)
