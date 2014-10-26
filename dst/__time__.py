@@ -22,6 +22,7 @@
 
 
 import ROOT
+import time
 import datetime
 
 E3_DATE_OFFSET = ROOT.TDatime(2007,01,01,00,00,00)
@@ -46,3 +47,21 @@ def str2date(string):
     """ Convert a string to date.
     """
     return datetime.datetime.strptime(string, DATE_FMT_STRING).date()
+
+def isDST(dt):
+    """ Return whether the daylight saving flag is on for a given
+    datetime object.
+    
+    Mind this relies on the timezone of the computer the code is run on!
+    """
+    t = time.mktime(datetime.datetime.timetuple(dt))
+    return time.localtime(t).tm_isdst 
+
+
+if __name__ == '__main__':
+    import time
+
+    dt1 = datetime.datetime(2014, 10, 26, 1, 0)
+    dt2 = datetime.datetime(2014, 10, 26, 3, 0)
+    print dt1, isDST(dt1)
+    print dt2, isDST(dt2)
