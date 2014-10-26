@@ -102,7 +102,6 @@ class E3DqmReport:
             ymin = 0.
         g1.GetYaxis().SetRangeUser(ymin, ymax)
         g1.GetYaxis().SetTitle('Rate [Hz]')
-        g1.SetLineStyle(7)
         g2.SetLineColor(ROOT.kBlue)
         g3.SetLineColor(ROOT.kRed)
         g1.Draw('al')
