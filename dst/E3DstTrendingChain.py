@@ -51,6 +51,31 @@ class E3DstTrendingChain(E3Chain, E3TreePlotter):
         """
         return self.formulaValue('BinCenter')
 
+    def interpolateWeatherData(self, weatherChain):
+        """ Perform a linear interpolation of a TChain containing the data
+        from the weather station and overwrite in place the corresponding data
+        in the trending tree.
+
+        The basic idea is that, while on a run by run basis we only have a
+        single record from the weather station and we can't really be
+        more clever than assigning the same value to all the trending time
+        bins, when we do merge multiple runs we can actually interpolate and
+        have a bettern handle on the weather data.
+
+        And it looks like this isn't really possible the way I had originally
+        conceived it, as some googling around seems to point to the fact that
+        "TTree are designed for write-once, read many time. I.e. it is not
+        really possible to change the value in a TTree."
+
+        I am leaving this comment here as I might want revisit this
+        interpolation in the future.
+        """
+        logger.info('Interpolating weather data for the %s chain...' %
+                    self.TREE_NAME)
+        if not weatherChain.GetEntries():
+            logger.info('No weather station data available, giving up...')
+            return
+
     def doSummaryPlots(self):
         """ Create the summary plots.
         """
