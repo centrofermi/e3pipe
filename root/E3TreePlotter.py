@@ -21,6 +21,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import ROOT
+
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3H1D import E3H1D
 from e3pipe.root.__ROOT__ import setupTimeDisplay
@@ -88,11 +90,11 @@ class E3TreePlotter:
         """ Create a strip chart.
         """
         ytitle = ytitle or branchName
-        g = E3Graph(branchName, ytitle)
+        g = E3Graph(branchName, ytitle, **kwargs)
         for i in xrange(self.GetEntries()):
             self.GetEntry(i)
             x = self.binCenter()
-            y = self.arrayValue(branchName)
+            y = self.value(branchName)
             if errors:
                 dy = self.arrayValue('%sErr' % branchName)
             else:

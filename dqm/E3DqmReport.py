@@ -60,6 +60,8 @@ class E3DqmReport:
         if self.__OutputFolder is not None:
             __utils__.createFolder(self.__OutputFolder)
         header = E3DstHeaderChain(self.__InputFilePath)
+        header.setupArrays()
+        header.setupTreeFormulae()
         header.doSummaryPlots()
         for _plot in header.plots():
             _canvas = E3Canvas(self.canvasName(_plot.GetName()))

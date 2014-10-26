@@ -66,6 +66,14 @@ class E3Chain(ROOT.TChain):
         """
         return self.__TreeFormulaDict[key].EvalInstance()
 
+    def value(self, key):
+        """
+        """
+        try:
+            return self.formulaValue(key)
+        except:
+            return self.arrayValue(key)
+
     def Add(self, filePath):
         """ Add a file to the chain.
         
