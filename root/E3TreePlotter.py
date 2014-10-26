@@ -81,6 +81,13 @@ class E3TreePlotter:
             xmin = _xmin - xpad*_xrange
         if xmax is None:
             xmax = _xmax + xpad*_xrange
+        if xmin == xmax:
+            if xmin == 0:
+                xmin = -0.5
+                xmax = 0.5
+            else:
+                xmin -= 0.1*xmin
+                xmax += 0.1*xmax
         hist = E3H1D(name, title, xbins, xmin, xmax, **kwargs)
         self.Project(name, expression, cut)
         self.store(hist)
