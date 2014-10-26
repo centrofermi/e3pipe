@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (0.25.0) - Sun, 26 Oct 2014 13:13:21 +0100
+-------------------------------------------------------------------------------
 * Merging code updated to handle the new Weather tree.
 * A significant amount of work put into the daily/weekly report.
 * Fix in the output text formatting for the E3Chain class (issue #45).
