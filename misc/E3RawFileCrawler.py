@@ -46,14 +46,6 @@ class E3RawFileCrawler(E3FileCrawlerBase):
         self.__MinHoursSinceSynch = minHoursSinceSynch
         self.__Overwrite = overwrite
         E3FileCrawlerBase.__init__(self, stations, endDate, daysSpanned)
-        self.__RunInfoDict = {}
-        for station in stations:
-            self.__RunInfoDict[station] = []
-
-    def runInfoDict(self):
-        """ Return the run info dictionary.
-        """
-        return self.__RunInfoDict
 
     def folderPath(self, station, date):
         """ Overloaded class method.
@@ -75,7 +67,6 @@ class E3RawFileCrawler(E3FileCrawlerBase):
         numReady = 0
         for filePath in glob.glob(os.path.join(folderPath, '*.bin')):
             runInfo = E3RawDataInfo(filePath)
-            self.__RunInfoDict[runInfo.Station] = runInfo
             _new = runInfo.hoursSinceSynch() < self.__MinHoursSinceSynch
             _processed = runInfo.processed()
             _locked = runInfo.locked()
