@@ -22,10 +22,10 @@
 
 
 import os
-import ROOT
 
 import e3pipe.__utils__ as __utils__
 
+from e3pipe.root.__ROOT__ import *
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3InputRootFile import E3InputRootFile
 from e3pipe.root.E3Canvas import E3Canvas
@@ -128,6 +128,8 @@ class E3DqmReport:
         if self.__OutputFolder is not None:
             _canvas.save(self.__OutputFolder)
         _canvas = E3Canvas(self.canvasName('WeatherSummary'))
+        _canvas.SetRightMargin(0.15)
+        _canvas.SetTicky(0)
         g1 = trending.plot('IndoorTemperature')
         g2 = trending.plot('OutdoorTemperature')
         g3 = trending.plot('Pressure')
@@ -140,13 +142,39 @@ class E3DqmReport:
         ymin -= yrange
         if ymin < 0:
             ymin = 0.
+        yrange = ymax - ymin
         g1.GetYaxis().SetRangeUser(ymin, ymax) 
         g1.GetYaxis().SetTitle('Temperature [#circ C]')
         g1.SetLineColor(ROOT.kRed)
         g2.SetLineColor(ROOT.kBlue)
         g1.Draw('al')
         g2.Draw('lsame')
-        legend = E3Legend(entries = [g1, g2])
+        # Now put the pressure, with a right axis.
+        pmin = min([g3.GetY()[i] for i in range(g3.GetN())])
+        pmax = max([g3.GetY()[i] for i in range(g3.GetN())])
+        pmin -= 20
+        pmax += 20
+        prange = pmax - pmin
+        xmax = g1.GetXaxis().GetXmax()
+        rightAxis = ROOT.TGaxis(xmax, ymin, xmax, ymax, pmin, pmax, 410, 'L+')
+        rightAxis.SetTitle('Pressure [hPa]')
+        rightAxis.SetLabelFont(TEXT_FONT)
+        rightAxis.SetLabelSize(LABEL_TEXT_SIZE)
+        rightAxis.SetTitleFont(TEXT_FONT)
+        rightAxis.SetTitleSize(TEXT_SIZE)
+        rightAxis.SetTitleOffset(1.2)
+        rightAxis.Draw()
+        g4 = g3.Clone('PressureScaled')
+        g4.Draw('lsame')
+        x = ROOT.Double()
+        y = ROOT.Double()
+        print pmin, pmax, prange, ymin, ymax, yrange
+        for i in xrange(g4.GetN()):
+            g4.GetPoint(i, x, y)
+            _x = float(x)
+            _y = (float(y) - pmin)/prange*yrange + ymin
+            g4.SetPoint(i, _x, _y)
+        legend = E3Legend(entries = [g1, g2, g4])
         legend.Draw()
         _canvas.annotate(0.1, 0.94, self.__Label)
         _canvas.Update()
