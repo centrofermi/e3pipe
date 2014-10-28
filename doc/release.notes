@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (1.0.1) - Tue, 28 Oct 2014 22:43:42 +0100
+-------------------------------------------------------------------------------
 * A few quantities added to the daily report (issue #49).
 * .summary file written along with the daily report (issue #44).
 
