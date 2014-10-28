@@ -111,7 +111,8 @@ class E3DqmReport:
         legend.Draw()
         _canvas.annotate(0.1, 0.94, self.__Label)
         _canvas.Update()
-        _canvas.save(self.__OutputFolder)
+        if self.__OutputFolder is not None:
+            _canvas.save(self.__OutputFolder)
         _canvas = E3Canvas(self.canvasName('WeatherSummary'))
         g1 = trending.plot('IndoorTemperature')
         g2 = trending.plot('OutdoorTemperature')
@@ -135,10 +136,11 @@ class E3DqmReport:
         legend.Draw()
         _canvas.annotate(0.1, 0.94, self.__Label)
         _canvas.Update()
-        _canvas.save(self.__OutputFolder)
-        self.createReport()
+        if self.__OutputFolder is not None:
+            _canvas.save(self.__OutputFolder)
+        self.createReport(header)
 
-    def createReport(self):
+    def createReport(self, header):
         """ Create the html report.
 
         TODO: this is ugly. We should refector the code so that objects
@@ -168,9 +170,19 @@ class E3DqmReport:
         outputFile.write('<ul>\n')
         outputFile.li('Station: %s' % station)
         outputFile.li('Time period: %s' % date)
-        #outputFile.li('Number of runs transferred to CNAF: --- ')
-        #outputFile.li('Number of runs processed: --- ')
-        #outputFile.li('Number of runs failed: --- ')
+        numRuns = header.GetEntries()
+        numEvents = 0
+        numHitEvents = 0
+        numTrackEvents = 0
+        for i in xrange(numRuns):
+            header.GetEntry(i)
+            numEvents += header.NumEvents
+            numHitEvents += header.NumHitEvents
+            numTrackEvents += header.NumTrackEvents
+        outputFile.li('Number of runs processed: %d' % numRuns)
+        outputFile.li('Total number of events: %s' % numEvents)
+        outputFile.li('Number of events with hits: %s' % numHitEvents)
+        outputFile.li('Number of events with a track: %s' % numTrackEvents)
         fileName = os.path.basename(self.__InputFilePath)
         rootAnchor = '<a href="%s">root</a>' % (fileName)
         csvHeaderAnchor = '<a href="%s">csv header</a>' %\
