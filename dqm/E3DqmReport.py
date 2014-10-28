@@ -50,6 +50,7 @@ class E3DqmReport:
         self.__Label = E3InputRootFile(filePath).canvasLabel()
         self.__OutputFolder = outputFolder
         self.__ObjectList = []
+        self.__StatDict = {}
 
     def canvasName(self, objName):
         """ Get the canvas name for a given plot.
@@ -63,6 +64,19 @@ class E3DqmReport:
             __utils__.createFolder(self.__OutputFolder)
         # Plots from the header tree.
         header = E3DstHeaderChain(self.__InputFilePath)
+        numRuns = header.GetEntries()
+        numEvents = 0
+        numHitEvents = 0
+        numTrackEvents = 0
+        for i in xrange(numRuns):
+            header.GetEntry(i)
+            numEvents += header.NumEvents
+            numHitEvents += header.NumHitEvents
+            numTrackEvents += header.NumTrackEvents
+        self.__StatDict['num_runs'] = numRuns
+        self.__StatDict['num_events'] = numEvents
+        self.__StatDict['num_hit_events'] = numHitEvents
+        self.__StatDict['num_track_events'] = numTrackEvents
         header.setupArrays()
         header.setupTreeFormulae()
         header.doSummaryPlots()
@@ -138,9 +152,26 @@ class E3DqmReport:
         _canvas.Update()
         if self.__OutputFolder is not None:
             _canvas.save(self.__OutputFolder)
-        self.createReport(header)
+        self.createReport()
+        self.createSummary()
 
-    def createReport(self, header):
+    def createSummary(self):
+        """ Create the alarm summary.
+        """
+        if self.__OutputFolder is not None:
+            filePath = os.path.join(self.__OutputFolder, '.summary')
+            outputFile = open(filePath, 'w')
+            outputFile.write('num_runs: %d\n' %\
+                             self.__StatDict['num_runs'])
+            outputFile.write('num_events: %d\n' %\
+                             self.__StatDict['num_events'])
+            outputFile.write('num_hit_events: %d\n' %\
+                             self.__StatDict['num_hit_events'])
+            outputFile.write('num_track_events: %d\n' %\
+                             self.__StatDict['num_track_events'])
+            outputFile.close()
+
+    def createReport(self):
         """ Create the html report.
 
         TODO: this is ugly. We should refector the code so that objects
@@ -170,19 +201,14 @@ class E3DqmReport:
         outputFile.write('<ul>\n')
         outputFile.li('Station: %s' % station)
         outputFile.li('Time period: %s' % date)
-        numRuns = header.GetEntries()
-        numEvents = 0
-        numHitEvents = 0
-        numTrackEvents = 0
-        for i in xrange(numRuns):
-            header.GetEntry(i)
-            numEvents += header.NumEvents
-            numHitEvents += header.NumHitEvents
-            numTrackEvents += header.NumTrackEvents
-        outputFile.li('Number of runs processed: %d' % numRuns)
-        outputFile.li('Total number of events: %s' % numEvents)
-        outputFile.li('Number of events with hits: %s' % numHitEvents)
-        outputFile.li('Number of events with a track: %s' % numTrackEvents)
+        outputFile.li('Number of runs processed: %d' %\
+                      self.__StatDict['num_runs'])
+        outputFile.li('Total number of events: %s' %\
+                      self.__StatDict['num_events'])
+        outputFile.li('Number of events with hits: %s' %\
+                      self.__StatDict['num_hit_events'])
+        outputFile.li('Number of events with a track: %s' %\
+                      self.__StatDict['num_track_events'])
         fileName = os.path.basename(self.__InputFilePath)
         rootAnchor = '<a href="%s">root</a>' % (fileName)
         csvHeaderAnchor = '<a href="%s">csv header</a>' %\
@@ -198,6 +224,7 @@ class E3DqmReport:
         outputFile.section('Summary plots')
         outputFile.write('\n<table width=100%>\n')
         outputFile.write('%s\n' % htmlTableHeader('Plot'))
+
         def _htmlTableRow(objName, linkPlot = True, index = None):
             """ Embedded function to make a table row on the fly.
             """
