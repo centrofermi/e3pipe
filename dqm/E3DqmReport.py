@@ -138,6 +138,8 @@ class E3DqmReport:
         ymin = min([g1.GetY()[i] for i in range(g1.GetN())] +\
                    [g2.GetY()[i] for i in range(g2.GetN())])
         yrange = ymax - ymin
+        if yrange == 0:
+            yrange = 5.
         ymax += yrange
         ymin -= yrange
         if ymin < 0:
@@ -168,7 +170,6 @@ class E3DqmReport:
         g4.Draw('lsame')
         x = ROOT.Double()
         y = ROOT.Double()
-        print pmin, pmax, prange, ymin, ymax, yrange
         for i in xrange(g4.GetN()):
             g4.GetPoint(i, x, y)
             _x = float(x)
