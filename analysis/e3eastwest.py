@@ -35,9 +35,10 @@ def e3eastwest(filePath, northAngle = 56.,
     expr = 'Phi - %.3f + 360*(Phi - %.3f < -180) - 360*(Phi - %.3f > 180)' %\
            (northAngle, northAngle, northAngle)
     chain.SetAlias('PhiNorth', expr)
-    h1 = ROOT.TH1F('h1', 'h1', 200, 0, 180)
+    h1 = ROOT.TH1F('h1', '#phi > 0 (East)', 200, 0, 180)
+    h1.SetXTitle('abs(#phi) [#circ from North]')
     h1.SetLineColor(ROOT.kRed)
-    h2 = ROOT.TH1F('h2', 'h2', 200, 0, 180)
+    h2 = ROOT.TH1F('h2', '#phi < 0 (West)', 200, 0, 180)
     h2.SetLineColor(ROOT.kBlue)
     cut1 = '%s && PhiNorth > 0' % baseCut
     chain.Project('h1', 'PhiNorth', cut1)
@@ -51,6 +52,7 @@ def e3eastwest(filePath, northAngle = 56.,
 
 if __name__ == '__main__':
     from e3pipe.root.E3Canvas import E3Canvas
+    from e3pipe.root.E3Legend import E3Legend
     from optparse import OptionParser
     parser = OptionParser()
     (opts, args) = parser.parse_args()
@@ -58,6 +60,8 @@ if __name__ == '__main__':
     c1 = E3Canvas('c1')
     h1.Draw()
     h2.Draw('same')
+    l = E3Legend(entries = [h1, h2])
+    l.Draw()
     c1.Update()
     c2 = E3Canvas('c2')
     hratio.Draw()

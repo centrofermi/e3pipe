@@ -28,11 +28,9 @@ class E3Timestamp:
 
     def __init__(self, seconds, nanoseconds):
         """ Constructor.
-        """
-        assert isinstance(seconds, int)
-        assert isinstance(nanoseconds, int)
-        self.__Seconds = seconds
-        self.__Nanoseconds = nanoseconds
+        """        
+        self.__Seconds = int(seconds)
+        self.__Nanoseconds = int(nanoseconds)
         # Enforce sign matching between seconds and nanoseconds.
         if self.__Seconds < 0 and self.__Nanoseconds > 0:
             self.__Nanoseconds = -self.__Nanoseconds
