@@ -32,6 +32,11 @@ def e3eastwest(filePath, northAngle = 56.,
     """
     """
     chain = E3DstEventChain(filePath)
+    h = ROOT.TH1F('h', '#phi', 100, -180, 180)
+    chain.Project('h', 'Phi', baseCut)
+    return h
+
+
     expr = 'Phi - %.3f + 360*(Phi - %.3f < -180) - 360*(Phi - %.3f > 180)' %\
            (northAngle, northAngle, northAngle)
     chain.SetAlias('PhiNorth', expr)
@@ -56,13 +61,17 @@ if __name__ == '__main__':
     from optparse import OptionParser
     parser = OptionParser()
     (opts, args) = parser.parse_args()
-    h1, h2, hratio = e3eastwest(args[0])
-    c1 = E3Canvas('c1')
-    h1.Draw()
-    h2.Draw('same')
-    l = E3Legend(entries = [h1, h2])
-    l.Draw()
-    c1.Update()
-    c2 = E3Canvas('c2')
-    hratio.Draw()
-    c2.Update()
+    #h1, h2, hratio = e3eastwest(args[0])
+    #c1 = E3Canvas('c1')
+    #h1.Draw()
+    #h2.Draw('same')
+    #l = E3Legend(entries = [h1, h2])
+    #l.Draw()
+    #c1.Update()
+    #c2 = E3Canvas('c2')
+    #hratio.Draw()
+    #c2.Update()
+    h = e3eastwest(args[0])
+    c = E3Canvas('c')
+    h.Draw()
+    c.Update()
