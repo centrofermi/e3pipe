@@ -32,16 +32,15 @@ class E3WeatherStationRecord:
     """ Small utility class to encapsulate a record from the weather station.
     """
     
-    def __init__(self, year, month, day, hours, minutes, indoorTemperature,
-                 outdoorTemperature, pressure):
+    def __init__(self, *args):
         """ Constructor.
 
         All the temperatures are in degrees and the pressure in hPa.
         """
-        self.__Datetime = datetime.datetime(year, month, day, hours, minutes)
-        self.__IndoorTemperature = indoorTemperature/100.
-        self.__OutdoorTemperature = outdoorTemperature/100.
-        self.__Pressure = pressure
+        self.__Datetime = datetime.datetime(*args[:5])
+        self.__IndoorTemperature = args[5]/100.
+        self.__OutdoorTemperature = args[6]/100.
+        self.__Pressure = args[7]
         
     def seconds(self):
         """ Mind we're not using delta.total_seconds(), here, as apparently
