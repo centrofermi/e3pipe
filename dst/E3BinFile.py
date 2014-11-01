@@ -65,8 +65,6 @@ class E3BinFile(file):
                 self.__GeometryRecord = E3GeometryRecord(*data)
                 logger.info('Geometry record found!')
                 logger.info(self.__GeometryRecord)
-            elif blockType == self.HEADER_GPS_RECORD:
-                print data
             elif blockType == self.HEADER_VWS_RECORD:
                 self.__WeatherStationRecord = E3WeatherStationRecord(*data)
                 logger.info('Weather station record found!')
