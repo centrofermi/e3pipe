@@ -72,6 +72,14 @@ def phi(station1, station2):
 
 
 if __name__ == '__main__':
+    """ The output of the test program below should be compared with the
+    figure in a old presentation by Corrado Cicalo:
+
+    CAGL-01 - CAGL-02: 518 m
+    CAGL-01 - CAGL-03: 2360 m
+    CAGL-02 - CAGL-03: 2510 m 
+    """
     print dist('CAGL-01', 'CAGL-02'), phi('CAGL-01', 'CAGL-02')
     print dist('CAGL-01', 'CAGL-03'), phi('CAGL-01', 'CAGL-03')
     print dist('CAGL-02', 'CAGL-03'), phi('CAGL-02', 'CAGL-03')
+    print dist('SAVO-01', 'SAVO-02'), phi('SAVO-01', 'SAVO-02')
