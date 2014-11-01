@@ -30,7 +30,8 @@ class E3Event:
     sort events while searching for coincidences.
     """
 
-    def __init__(self, runId, evtId, seconds, nanoseconds, theta, phi):
+    def __init__(self, runId, evtId, seconds, nanoseconds, theta, phi,
+                 chisquare):
         """ Constructor.
         """
         self.UniqueRunId = runId
@@ -39,6 +40,7 @@ class E3Event:
         self.Nanoseconds = nanoseconds
         self.Theta = theta
         self.Phi = phi
+        self.Chisquare = chisquare
 
     def timestamp(self):
         """ Return the timestamp of the event.
