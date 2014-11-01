@@ -58,11 +58,15 @@ def uniqueRunIdFromFilePath(filePath):
     date = datetime.date(int(year), int(month), int(day))
     return uniqueRunId(station, date, int(runId))
 
+def runStationId(uniqueId):
+    """ Return the run station ID corresponding to a unique ID.
+    """
+    return int(uniqueId/STATION_MULTIPLIER)
+
 def runStation(uniqueId):
     """ Return the run station corresponding to a unique ID.
     """
-    stationId = int(uniqueId/STATION_MULTIPLIER)
-    return E3_STATION_ID_DICT[stationId]
+    return E3_STATION_ID_DICT[runStationId(uniqueId)]
 
 def runDate(uniqueId):
     """ Return the run date corresponding to a unique ID.
@@ -91,6 +95,7 @@ if __name__ == '__main__':
     uniqueId = uniqueRunIdFromFilePath(filePath)
     print filePath
     print uniqueId
+    print runStationId(uniqueId)
     print runStation(uniqueId)
     print runDate(uniqueId)
     print runId(uniqueId)
