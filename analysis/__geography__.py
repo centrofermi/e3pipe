@@ -21,7 +21,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-from math import sin, cos, acos, radians
+from math import sin, cos, acos, radians, atan2, degrees
 
 from e3pipe.config.__stations__ import location
 
@@ -52,8 +52,26 @@ def dist(station1, station2):
     return greatCircleDist(lat1, lon1, lat2, lon2)
 
 
+def phi(station1, station2):
+    """ Return the angle phi, in degrees, between the segment connecting two
+    stations and the north direction.
+
+    Mind this is horrible and only valid in the Euclidean approximation.
+    I believe it is aduquate for our needs, though.
+    """
+    lat1, lon1, alt1 = location(station1)
+    lat2, lon2, alt2 = location(station2)
+    dns = greatCircleDist(lat1, lon1, lat2, lon1)
+    if lat1 > lat2:
+        dns *= -1.
+    dew = greatCircleDist(lat1, lon1, lat1, lon2)
+    if lon1 > lon2:
+        dew *= -1.
+    return 90. - degrees(atan2(dns, dew))
+
+
 
 if __name__ == '__main__':
-    print dist('CAGL-01', 'CAGL-02')
-    print dist('CAGL-01', 'CAGL-03')
-    print dist('CAGL-02', 'CAGL-03')
+    print dist('CAGL-01', 'CAGL-02'), phi('CAGL-01', 'CAGL-02')
+    print dist('CAGL-01', 'CAGL-03'), phi('CAGL-01', 'CAGL-03')
+    print dist('CAGL-02', 'CAGL-03'), phi('CAGL-02', 'CAGL-03')
