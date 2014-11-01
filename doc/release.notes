@@ -1,4 +1,8 @@
 
+* Improved parsing of the binary file (geometry and GPS).
+* Added information about the location and geometry for all the operating
+  stations.
+
 -------------------------------------------------------------------------------
 e3pipe (1.0.3) - Wed, 29 Oct 2014 15:36:36 +0100
 -------------------------------------------------------------------------------
