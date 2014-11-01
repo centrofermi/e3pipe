@@ -156,6 +156,19 @@ E3_LOCATION_DICT = {
 }
 
 
+def location(station):
+    """ Return the location of a given station, indexed either by name or
+    unique (integer) ID.
+    """
+    if isinstance(station, int):
+        station = E3_STATION_ID_DICT[station]
+    lat = E3_LOCATION_DICT[station]['lat']
+    lon = E3_LOCATION_DICT[station]['lon']
+    alt = E3_LOCATION_DICT[station]['alt']
+    return (lat, lon, alt)
+
+
+
 E3_GEOMETRY_DICT = {
     'ALTA-01': {'phi_north':  55.0, 'd12':  60.0, 'd23':  60.0},
     #'ANCO-01': {'phi_north': , 'd12': , 'd23': },

@@ -23,24 +23,37 @@
 
 from math import sin, cos, acos, radians
 
+from e3pipe.config.__stations__ import location
+
 
 EARTH_RADIUS = 6371000.
 
 
-def spheredist(lat1, lon1, lat2, lon2):
-    """
-    """
-    return EARTH_RADIUS*acos(sin(radians(lat1))*sin(radians(lat2)) + \
-                             cos(radians(lat1))*cos(radians(lat2))* \
-                             cos(abs(radians(lon1) - radians(lon2))))
+def greatCircleDist(lat1, lon1, lat2, lon2):
+    """ Return the shortest distance between two points on the surface of
+    the Earth, measured along the surface of the Earth itself.
 
+    The formula is taken from
+    http://en.wikipedia.org/wiki/Great-circle_distance
+    """
+    lat1 = radians(lat1)
+    lon1 = radians(lon1)
+    lat2 = radians(lat2)
+    lon2 = radians(lon2)
+    ds = acos(sin(lat1)*sin(lat2) + cos(lat1)*cos(lat2)*cos(abs(lon1 - lon2)))
+    return EARTH_RADIUS*ds
+
+
+def dist(station1, station2):
+    """ Return the distance between two stations.
+    """
+    lat1, lon1, alt1 = location(station1)
+    lat2, lon2, alt2 = location(station2)
+    return greatCircleDist(lat1, lon1, lat2, lon2)
 
 
 
 if __name__ == '__main__':
-    from e3pipe.config.__stations__ import E3_LOCATION_DICT
-    lat1 = E3_LOCATION_DICT['CAGL-01']['lat']
-    lon1 = E3_LOCATION_DICT['CAGL-01']['lon']
-    lat2 = E3_LOCATION_DICT['CAGL-02']['lat']
-    lon2 = E3_LOCATION_DICT['CAGL-02']['lon']
-    print spheredist(lat1, lon1, lat2, lon2)
+    print dist('CAGL-01', 'CAGL-02')
+    print dist('CAGL-01', 'CAGL-03')
+    print dist('CAGL-02', 'CAGL-03')
