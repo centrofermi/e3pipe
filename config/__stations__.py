@@ -208,6 +208,7 @@ E3_GEOMETRY_DICT = {
 
 
 
+
 if __name__ == '__main__':
     print E3_STATION_DICT
     print E3_ACTIVE_STATIONS

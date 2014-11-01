@@ -26,6 +26,7 @@ import os
 """ Basic folder structure of the package.
 """
 E3PIPE_BASE = os.path.abspath(os.path.dirname(__file__))
+E3PIPE_ANALYSIS = os.path.join(E3PIPE_BASE, 'analysis')
 E3PIPE_APPS = os.path.join(E3PIPE_BASE, 'apps')
 E3PIPE_CONFIG = os.path.join(E3PIPE_BASE, 'config')
 E3PIPE_DIST = os.path.join(E3PIPE_BASE, 'dist')
