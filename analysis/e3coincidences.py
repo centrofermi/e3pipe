@@ -22,35 +22,95 @@
 
 
 import ROOT
+import sys
+
 
 from e3pipe.__logging__ import logger
 from e3pipe.dst.E3DstEventChain import E3DstEventChain
-from e3pipe.dst.E3Timestamp import E3Timestamp
 from e3pipe.misc.E3Chrono import E3Chrono
+from e3pipe.analysis.E3Event import E3Event
 
 
 
-class E3DumbTimestamp:
+class E3ChainRow:
+    
+    """ Minimal event structure that we use to sort events in a chain.
+    """
 
-    def __init__(self, timestamp, station):
+    def __init__(self, index, timestamp):
+        """ Constructor.
+        """
+        self.__Index = index
+        self.__Timestamp = float(timestamp)
+
+    def index(self):
         """
         """
-        self.Timestamp = timestamp
-        self.Station = station
+        return self.__Index
+
+    def timestamp(self):
+        """
+        """
+        return self.__Timestamp
 
     def __cmp__(self, other):
+        """ Comparison operator (for sorting).
         """
-        """
-        if self.Timestamp > other.Timestamp:
+        if self.timestamp() > other.timestamp():
             return 1
-        else:
+        elif self.timestamp() < other.timestamp():
             return -1
+        else:
+            return 0      
+    
 
-    def __sub__(self, other):
-        """
-        """
-        return self.Timestamp - other.Timestamp
+
+
+def e3reduce(*fileList, **kwargs):
+    """
+    """
+    selectionCut = kwargs.get('selectionCut', 'StatusCode == 0')
+    outputFilePath = kwargs.get('outputFilePath', None)
+    windowWidth = kwargs.get('windowWidth', 3e-6)
+    maxEvents = kwargs.get('maxEvents', None)
+    eventList = []
+    chrono = E3Chrono()
+    logger.info('Populating events list...')
+    chain = E3DstEventChain(*fileList)
+    chain.GetEntry(0)
+    chain.setupArrays()
+    chain.setupTreeFormulae()
+    selectionFormula = ROOT.TTreeFormula('cut', selectionCut, chain)
+    numEvents = chain.GetEntries()
+    #if maxEvents is not None:
+    #    numEvents = min(numEvents, maxEvents)
+    for i in xrange(numEvents):
+        chain.ResetBranchAddresses()
+        chain.GetEntry(i)
+        #if selectionFormula.EvalInstance():
+        print i
+        row = E3ChainRow(i, chain.formulaValue('Timestamp'))
+        eventList.append(row)
+    logger.info('Input files processed in %.3f s.' % chrono.stop())
+    logger.info('Event list ready, %d event(s) in.' % len(eventList))
+    #logger.info('Sorting event list...')
+    #chrono = E3Chrono()
+    #eventList.sort()
+    #logger.info('List sorted in %.3f s.' % chrono.stop())
+    #for i in xrange(1, len(eventList)):
+    #    _evt1 = eventList[i - 1]
+    #    _evt2 = eventList[i]
+    #    if abs(_evt1.timestamp() - _evt2.timestamp()) <= windowWidth:
+    #        _sta1 = _evt1.stationId()
+    #        _sta2 = _evt2.stationId()
+    #        if _sta1 != _sta2:
+    #            if _sta1 > _sta2:
+    #                _evt1, _evt2 = _evt2, _evt1
+    #            print _evt1
+    #            print _evt2
+    #            print
         
+
 
 
 def e3coincidences(*fileList, **kwargs):
@@ -99,5 +159,5 @@ if __name__ == '__main__':
     from optparse import OptionParser
     parser = OptionParser()
     (opts, args) = parser.parse_args()
-    h = e3coincidences(*args)
-    h.Draw()
+    h = e3reduce(*args, maxEvents = 10000)
+    #h.Draw()

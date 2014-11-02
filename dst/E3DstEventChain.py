@@ -26,6 +26,7 @@ import ROOT
 
 from e3pipe.__logging__ import logger, abort
 from e3pipe.root.E3Chain import E3Chain
+from e3pipe.dst.E3DstEventTree import E3DstEventTree
 
 
 class E3DstEventChain(E3Chain):
@@ -34,7 +35,7 @@ class E3DstEventChain(E3Chain):
     """
 
     TREE_NAME = 'Events'
-    ALIAS_DICT = {'Timestamp': 'Seconds + 1.0e-9*Nanoseconds'}
+    ALIAS_DICT = E3DstEventTree.ALIAS_DICT
 
     def __init__(self, *fileList):
         """ Constructor.
