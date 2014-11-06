@@ -212,7 +212,7 @@ E3_GEOMETRY_DICT = {
     #'TORI-02': {'phi_north': , 'd12': , 'd23': },
     #'TORI-03': {'phi_north': , 'd12': , 'd23': },
     'TORI-04': {'phi_north': 297.0, 'd12': 50.0, 'd23': 50.0},
-    #'TRAP-01': {'phi_north': , 'd12': , 'd23': },
+    'TRAP-01': {'phi_north': 137.0, 'd12': 55.0, 'd23': 55.0},
     #'TREV-01': {'phi_north': , 'd12': , 'd23': }, 
     'TRIN-01': {'phi_north':  20.0, 'd12': 58.0, 'd23': 59.0},
     #'VIAR-01': {'phi_north': , 'd12': , 'd23': },
