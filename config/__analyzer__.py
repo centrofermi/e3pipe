@@ -39,6 +39,15 @@ except KeyError:
     E3_ANALYZER = '/opt/eee/bin/EEE_Analyzer_V0'
 
 
+""" And of course we have a custom DAQ in Pisa and need a different
+analyzer, otherwise life would have been too simple.
+"""
+try:
+    E3_ANALYZER_PI  = os.environ['E3_ANALYZER_PI']
+except KeyError:
+    E3_ANALYZER_PI = '/opt/eee/bin/EEE_Analyzer_PI_V0'
+
+
 """ Name of the calibration file that is created on the fly by the analysis
 program.
 """

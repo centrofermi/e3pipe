@@ -28,9 +28,35 @@ import e3pipe.__utils__ as __utils__
 
 from e3pipe.__logging__ import logger, startmsg, abort
 from e3pipe.misc.E3Chrono import E3Chrono
-from e3pipe.config.__storage__ import E3PIPE_TEMP, cleanupTemp, listTemp
-from e3pipe.config.__analyzer__ import E3_ANALYZER, E3_CALIB_FILE_NAME,\
-    E3_ANALYZER_OUTPUTS
+from e3pipe.config.__storage__ import E3PIPE_TEMP, splitFilePath,\
+    cleanupTemp, listTemp
+from e3pipe.config.__analyzer__ import E3_ANALYZER, E3_ANALYZER_PI,\
+    E3_CALIB_FILE_NAME, E3_ANALYZER_OUTPUTS
+
+
+
+def __e3analyzer_standard(filePath):
+    """ Run the standard EEE analyzer (all stations but Pisa).
+    """
+    _cmd = 'cd %s; %s %s' % (E3PIPE_TEMP, E3_ANALYZER, filePath)
+    logger.info('Generating the calibration file...')
+    exitCode = __utils__.cmd(_cmd)
+    if exitCode:
+        sys.exit(exitCode)
+    logger.info('Running the EEE Analyzer for real!')
+    exitCode = __utils__.cmd(_cmd)
+    if exitCode:
+        sys.exit(exitCode)
+
+
+def __e3analyzer_pisa(filePath):
+    """ Run the Pisa custom analyzer.
+    """
+    _cmd = 'cd %s; %s %s' % (E3PIPE_TEMP, E3_ANALYZER_PI, filePath)
+    logger.info('Running the EEE Analyzer in the Pisan flavor')
+    exitCode = __utils__.cmd(_cmd)
+    if exitCode:
+        sys.exit(exitCode)
 
 
 def e3analyzer(binFilePath, suffix = None):
@@ -51,15 +77,14 @@ def e3analyzer(binFilePath, suffix = None):
     binFileName = os.path.basename(binFilePath)
     copyFilePath = os.path.join(E3PIPE_TEMP, binFileName)
     __utils__.cp(binFilePath, copyFilePath)
-    _cmd = 'cd %s; %s %s' % (E3PIPE_TEMP, E3_ANALYZER, copyFilePath)
-    logger.info('Generating the calibration file...')
-    exitCode = __utils__.cmd(_cmd)
-    if exitCode:
-        sys.exit(exitCode)
-    logger.info('Running the EEE Analizer for real!')
-    exitCode = __utils__.cmd(_cmd)
-    if exitCode:
-        sys.exit(exitCode)
+    # Here we need a bit of extra attention about whether we are analyzing data
+    # from Pisa or any other station.
+    station = splitFilePath(copyFilePath)[0]
+    if station == 'PISA-01':
+        __e3analyzer_pisa(copyFilePath)
+    else:
+        __e3analyzer_standard(copyFilePath)
+    # End of the hack for the Pisa custom DAQ.
     logger.info('Run processed in %.3f s.' % chrono.stop())
     baseFilePath = copyFilePath.replace('.bin', '')
     if suffix is not None:
