@@ -197,7 +197,7 @@ E3_GEOMETRY_DICT = {
     #'LECC-02': {'phi_north': , 'd12': , 'd23': },
     #'LECC-03': {'phi_north': , 'd12': , 'd23': },
     #'LODI-01': {'phi_north': , 'd12': , 'd23': },
-    #'PISA-01': {'phi_north': , 'd12': , 'd23': },
+    'PISA-01': {'phi_north':   0.0, 'd12':  53.0, 'd23':  53.0},
     #'PARM-01': {'phi_north': , 'd12': , 'd23': },
     #'PATE-01': {'phi_north': , 'd12': , 'd23': },
     #'REGG-01': {'phi_north': , 'd12': , 'd23': },
