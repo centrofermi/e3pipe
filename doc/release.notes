@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (1.1.0) - Fri, 07 Nov 2014 11:01:03 +0100
+-------------------------------------------------------------------------------
 * Code in place to run the PISA-01 analyzer (for the data produced with the
   custom DAQ).
 * Improved parsing of the binary file (geometry and GPS).
