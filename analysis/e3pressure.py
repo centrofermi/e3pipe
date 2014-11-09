@@ -33,6 +33,7 @@ from e3pipe.dst.E3DstWeatherChain import E3DstWeatherChain
 
 
 STATION = 'SAVO-02'
+STD_PRESSURE = 1013.25
 RATE_EXPR = 'RateTrackEvents'
 MIN_RATE = 20.
 MAX_RATE = 50.
@@ -88,13 +89,19 @@ prof.SetLineColor(ROOT.kWhite)
 prof.SetMarkerStyle(20)
 prof.SetMarkerColor(ROOT.kWhite)
 prof.Draw('same')
-func = ROOT.TF1('line', '[0] + [1]*(x - 1013.25)', pmin, pmax)
+func = ROOT.TF1('line', '[0] + [1]*(x - %f)' % STD_PRESSURE, pmin, pmax)
 func.SetLineColor(ROOT.kRed)
 prof.Fit(func, 'N')
 func.Draw('same')
 c2.annotate(0.1, 0.94, station)
-c2.annotate(0.5, 0.8, 'p0 = %.2f Hz' % func.GetParameter(0))
-c2.annotate(0.5, 0.75, 'p1 = %.3f Hz/hPa' % func.GetParameter(1))
+c2.annotate(0.4, 0.85, 'p0 = %.2f Hz @ %.2f hPa' %\
+            (func.GetParameter(0), STD_PRESSURE))
+slope = func.GetParameter(1)/func.GetParameter(0)*100.
+c2.annotate(0.4, 0.80, 'p1 = %.2f %% per hPa' % slope)
+m = ROOT.TMarker(STD_PRESSURE, func.Eval(STD_PRESSURE), 20)
+m.SetMarkerColor(ROOT.kRed)
+m.SetMarkerSize(2)
+m.Draw()
 c2.Update()
 
 
@@ -106,10 +113,10 @@ for i in xrange(trendingChain.GetEntries()):
     t = trendingChain.stripChartTime()
     p = weatherChain.interpolatePressure(t)
     r = trendingChain.arrayValue(RATE_EXPR)
-    corr = func.Eval(1013.25)/func.Eval(p)
+    corr = func.Eval(STD_PRESSURE)/func.Eval(p)
     h3.Fill(r*corr)
 h3.Draw()
 c3.annotate(0.1, 0.94, station)
-exp = (func.Eval(1013.25)/60)**0.5
+exp = (func.Eval(STD_PRESSURE)/60)**0.5
 c3.annotate(0.65, 0.6, 'Exp. RMS = %.3f' % exp)
 c3.Update()
