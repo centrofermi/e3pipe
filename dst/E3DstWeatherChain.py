@@ -44,6 +44,57 @@ class E3DstWeatherChain(E3Chain, E3TreePlotter):
         """
         E3Chain.__init__(self, self.TREE_NAME, *fileList)
         E3TreePlotter.__init__(self)
+        self.__fillGraphs()
+
+    def __fillGraphs(self):
+        """ Setup the internal TGraph objects to perform the linear 
+        interpolation of the environmental quantities.
+        """
+        self.setupArrays()
+        logger.info('Setting up graphs for environmental quantities...')
+        self.__IndoorTemperature = ROOT.TGraph()
+        self.__OutdoorTemperature = ROOT.TGraph()
+        self.__Pressure = ROOT.TGraph()
+        for i in xrange(self.GetEntries()):
+            self.GetEntry(i)
+            t = self.arrayValue('Seconds')
+            Tin = self.arrayValue('IndoorTemperature')
+            Tout = self.arrayValue('OutdoorTemperature')
+            p = self.arrayValue('Pressure')
+            self.__IndoorTemperature.SetPoint(i, t, Tin)
+            self.__OutdoorTemperature.SetPoint(i, t, Tout)
+            self.__Pressure.SetPoint(i, t, p)
+        logger.info('Done.')
+
+    def indoorTemperature(self):
+        """ Return the underlying TGraph for the indoor temperature.
+        """
+        return self.__IndoorTemperature
+
+    def interpolateIndoorTemperature(self, t):
+        """ Interpolate the indoor temperature at a given time.
+        """
+        return self.__IndoorTemperature.Eval(t)
+
+    def outdoorTemperature(self):
+        """ Return the underlying TGraph for the outdoor temperature.
+        """
+        return self.__OutdoorTemperature
+
+    def interpolateOutdoorTemperature(self, t):
+        """ Interpolate the outdoor temperature at a given time.
+        """
+        return self.__OutdoorTemperature.Eval(t)
+
+    def pressure(self):
+        """ Return the underlying TGraph for the indoor pressure.
+        """
+        return self.__Pressure
+
+    def interpolatePressure(self, t):
+        """ Interpolate the pressure at a given time.
+        """
+        return self.__Pressure.Eval(t)
 
     def stripChartTime(self):
         """ Return the center of the time bin for the current entry.
@@ -54,18 +105,7 @@ class E3DstWeatherChain(E3Chain, E3TreePlotter):
         """ Create the summary plots.
         """
         pass
-
-
-
-def test(*fileList):
-    """ Test program.
-    """
-    t = E3DstTrendingChain(*fileList)
-    t.setupArrays()
-    t.setupTreeFormulae()
-    t.doSummaryPlots()
-    return t.plots()
-    
+  
 
 
 
@@ -74,7 +114,12 @@ if __name__ == '__main__':
     from optparse import OptionParser
     parser = OptionParser()
     (opts, args) = parser.parse_args()
-    for i, g in enumerate(test(*args)):
+    t = E3DstWeatherChain(*args)
+    print t.interpolateIndoorTemperature(247e6)
+    print t.interpolateOutdoorTemperature(247e6)
+    print t.interpolatePressure(247e6)
+    glist = [t.indoorTemperature(), t.outdoorTemperature(), t.pressure()]
+    for i, g in enumerate(glist):
         c = E3Canvas('c%d' % i)
         g.Draw('al')
         c.Update()

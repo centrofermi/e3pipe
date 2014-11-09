@@ -24,7 +24,7 @@
 from e3pipe.root.__ROOT__ import *
 
 
-filePath = '/data/work/EEE/data/SAVO-02-2014-10-27-2014-11-06-merged.root'
+filePath = '/data/work/EEE/data/SAVO-02-2014-10-27-2014-11-09-trending-merged.root'
 
 inputFile = ROOT.TFile(filePath)
 weatherTree = inputFile.Get('Weather')
