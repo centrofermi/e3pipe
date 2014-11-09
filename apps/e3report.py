@@ -58,12 +58,11 @@ if opts.station is None:
     parser.error('Please select the station (e3merge.py -s station)')
 
 # And now we are ready to go.
-end = opts.end
-if end is None:
+if opts.end is None:
     import datetime
     end = datetime.date.today()
 else:
     from e3pipe.dst.__time__ import str2date
-    end = str2date(end)
+    end = str2date(opts.end)
 
-e3report(opts.station, opts.end, opts.span, opts.out)
+e3report(opts.station, end, opts.span, opts.out)

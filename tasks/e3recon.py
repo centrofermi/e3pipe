@@ -57,7 +57,8 @@ def e3recon(rawFilePath, copyFiles = True, suffix = None):
         runInfo = E3RawDataInfo(rawFilePath)
         logger.info(runInfo)
         calibFilePath = os.path.join(E3PIPE_TEMP, E3_CALIB_FILE_NAME)
-        __utils__.cp(calibFilePath, runInfo.CalibFilePath, True)
+        if os.path.exists(calibFilePath):
+            __utils__.cp(calibFilePath, runInfo.CalibFilePath, True)
         __utils__.cp(dstFilePath, runInfo.DstFilePath, True)
         if os.path.exists(runInfo.DqmFolderPath):
             __utils__.rmdir(runInfo.DqmFolderPath)

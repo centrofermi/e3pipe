@@ -1,4 +1,16 @@
 
+* Station geometry added for PISA-01 in config/__stations__.py.
+
+-------------------------------------------------------------------------------
+e3pipe (1.1.1) - Fri, 07 Nov 2014 15:04:11 +0100
+-------------------------------------------------------------------------------
+* Minor fix for passing the end date to the e3report.py application.
+
+-------------------------------------------------------------------------------
+e3pipe (1.1.0) - Fri, 07 Nov 2014 11:01:03 +0100
+-------------------------------------------------------------------------------
+* Code in place to run the PISA-01 analyzer (for the data produced with the
+  custom DAQ).
 * Improved parsing of the binary file (geometry and GPS).
 * Added information about the location and geometry for all the operating
   stations.
