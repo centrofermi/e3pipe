@@ -28,7 +28,7 @@ from e3pipe.dst.__time__ import E3_TIME_OFFSET
 
 class E3H1D(ROOT.TH1D, E3RootObject):
 
-    """ Wrapper around the ROOT.TLatex object.
+    """ Wrapper around the ROOT.TH1D object.
     """
 
     def __init__(self, name, title, xbins, xmin, xmax, **kwargs):

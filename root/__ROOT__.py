@@ -104,6 +104,9 @@ STYLE.SetTitleYOffset(1.16)
 STYLE.SetTitleXOffset(1.08)
 STYLE.SetTitleOffset(1.0, 'Z')
 
+from e3pipe.root.E3ColorPalette import DEFAULT_COLOR_PALETTE 
+DEFAULT_COLOR_PALETTE.createGradientColorTable(STYLE)
+
 # Apply the style
 ROOT.gROOT.SetStyle(STYLE_NAME)
 ROOT.gROOT.ForceStyle()
