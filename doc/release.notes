@@ -1,5 +1,7 @@
 
 * Station geometry added for PISA-01 in config/__stations__.py.
+* Added facility to interpolate the environmental quantities in
+  dst/E3DstWeatherChain.py.
 
 -------------------------------------------------------------------------------
 e3pipe (1.1.1) - Fri, 07 Nov 2014 15:04:11 +0100
