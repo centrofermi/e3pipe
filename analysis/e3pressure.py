@@ -21,6 +21,39 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+_usage = 'usage: %prog [options] filePath'
+_synopsis = 'Calculate the pressure correction to the event rate'
+
+# Set up the command-line switches.
+from e3pipe.misc.E3OptionParser import E3OptionParser
+
+parser = E3OptionParser(_usage, _synopsis)
+parser.add_option('-o', '--output-folder', type = str, default = None,
+                  dest = 'output_folder',
+                  help = 'the output folder for the DQM products')
+parser.add_option('-m', '--min-rate', type = float, default = 0.,
+                  dest = 'min_rate',
+                  help = 'the minimum event rate for the analysis')
+parser.add_option('-M', '--max-rate', type = float, default = 100.,
+                  dest = 'max_rate',
+                  help = 'the maximum event rate for the analysis')
+parser.add_option('-i', '--interactive', action = 'store_true',
+                  default = False, dest = 'interactive',
+                  help = 'run interactively (show the plots)')
+(opts, args) = parser.parse_args()
+
+# Make sure we are passing some argument.
+if len(args) != 1:
+    parser.print_help()
+    parser.error('Please provide a single input file.')
+
+filePath = args[0]
+
+STD_PRESSURE = 1013.25
+RATE_EXPR = 'RateTrackEvents'
+RATE_ERR_EXPR = '%sErr' % RATE_EXPR
+
+
 import os
 
 from e3pipe.root.__ROOT__ import *
@@ -31,16 +64,6 @@ from e3pipe.dst.E3DstHeaderChain import E3DstHeaderChain
 from e3pipe.dst.E3DstTrendingChain import E3DstTrendingChain
 from e3pipe.dst.E3DstWeatherChain import E3DstWeatherChain
 
-
-STATION = 'SAVO-02'
-STD_PRESSURE = 1013.25
-RATE_EXPR = 'RateTrackEvents'
-MIN_RATE = 20.
-MAX_RATE = 50.
-FOLDER_PATH = '/data/work/EEE/data/trending/'
-
-fileName = '%s-2014-10-27-2014-11-09-trending-merged.root' % STATION
-filePath = os.path.join(FOLDER_PATH, fileName)
 
 trendingChain = E3DstTrendingChain(filePath)
 trendingChain.setupArrays()
@@ -56,8 +79,8 @@ minPres = weatherChain.GetMinimum('Pressure')
 maxPres = weatherChain.GetMaximum('Pressure')
 logger.info('Pressure: %d--%d hPa' % (minPres, maxPres))
 
-rmin = max(minRate - 0.1*(maxRate - minRate), MIN_RATE)
-rmax = min(maxRate + 0.1*(maxRate - minRate), MAX_RATE)
+rmin = max(minRate - 0.1*(maxRate - minRate), opts.min_rate)
+rmax = min(maxRate + 0.1*(maxRate - minRate), opts.max_rate)
 rbins = 100
 pmin = minPres - 0.5
 pmax = maxPres + 0.5
@@ -71,6 +94,8 @@ trendingChain.Project(h1.GetName(), RATE_EXPR)
 h1.Draw()
 c1.annotate(0.1, 0.94, station)
 c1.Update()
+if opts.output_folder:
+    c1.save(opts.output_folder)
 
 
 c2 = E3Canvas('%s_raw_rate_vs_pres' % station, RightMargin = 0.16)
@@ -103,20 +128,61 @@ m.SetMarkerColor(ROOT.kRed)
 m.SetMarkerSize(2)
 m.Draw()
 c2.Update()
+if opts.output_folder:
+    c2.save(opts.output_folder)
 
 
 c3 = E3Canvas('%s_corr_rate' % station)
 h3 = E3H1D('hcorrrate', 'Corrected rate', rbins, rmin, rmax,
            XTitle = 'Corrected rate of tracks [Hz]')
+h4 = E3H1D('hpull', 'Pulls', rbins, -5, 5,
+           XTitle = 'Pulls')
+graw = ROOT.TGraph()
+graw.SetLineColor(ROOT.kRed)
+gcor = ROOT.TGraph()
+gcor.SetLineColor(ROOT.kBlue)
+r0 = func.Eval(STD_PRESSURE)
 for i in xrange(trendingChain.GetEntries()):
     trendingChain.GetEntry(i)
     t = trendingChain.stripChartTime()
     p = weatherChain.interpolatePressure(t)
     r = trendingChain.arrayValue(RATE_EXPR)
-    corr = func.Eval(STD_PRESSURE)/func.Eval(p)
-    h3.Fill(r*corr)
+    rerr = trendingChain.arrayValue(RATE_ERR_EXPR)
+    corr = r0/func.Eval(p)
+    rcor = r*corr
+    rerrcor = rerr*corr
+    h3.Fill(rcor)
+    h4.Fill((rcor - r0)/rerrcor)
+    graw.SetPoint(i, t, r)
+    gcor.SetPoint(i, t, rcor)
 h3.Draw()
 c3.annotate(0.1, 0.94, station)
 exp = (func.Eval(STD_PRESSURE)/60)**0.5
 c3.annotate(0.65, 0.6, 'Exp. RMS = %.3f' % exp)
 c3.Update()
+if opts.output_folder:
+    c3.save(opts.output_folder)
+
+
+c4 = E3Canvas('%s_pulls' % station, Logy = True)
+h4.Draw()
+fgaus = ROOT.TF1('fgaus', 'gaus')
+fgaus.SetLineColor(ROOT.kRed)
+h4.Fit('fgaus')
+c4.annotate(0.1, 0.94, station)
+c4.annotate(0.5, 0.5, '#mu = %.3f' % fgaus.GetParameter(1))
+c4.annotate(0.5, 0.45, '#sigma = %.3f' % fgaus.GetParameter(2))
+c4.Update()
+if opts.output_folder:
+    c4.save(opts.output_folder)
+
+
+#c5 = E3Canvas('%s_stripchart' % station)
+#graw.Draw('al')
+#gcor.Draw('lsame')
+#c5.annotate(0.1, 0.94, station)
+#c5.Update()
+
+
+if opts.interactive:
+    os.environ['PYTHONINSPECT'] = 'True'
