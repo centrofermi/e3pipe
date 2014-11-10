@@ -135,7 +135,7 @@ if opts.output_folder:
 c3 = E3Canvas('%s_corr_rate' % station)
 h3 = E3H1D('hcorrrate', 'Corrected rate', rbins, rmin, rmax,
            XTitle = 'Corrected rate of tracks [Hz]')
-h4 = E3H1D('hpull', 'Pulls', rbins, -5, 5,
+h4 = E3H1D('hpull', 'Pulls', rbins, -8, 8,
            XTitle = 'Pulls')
 graw = ROOT.TGraph()
 graw.SetLineColor(ROOT.kRed)
