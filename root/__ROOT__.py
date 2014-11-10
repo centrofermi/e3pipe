@@ -141,10 +141,13 @@ def setupBox(box, x, y, numRows, width = 0.25):
     ROOT.gPad.Update()
 
 
+from e3pipe.dst.__time__ import E3_TIME_OFFSET
+
 def setupTimeDisplay(plot, **kwargs):
     """ Setup the x-axis labels for strip charts.
     """
     plot.GetXaxis().SetTimeDisplay(1)
+    plot.GetXaxis().SetTimeOffset(E3_TIME_OFFSET)
     plot.GetXaxis().SetNdivisions(kwargs.get('Ndivisions', 504))
     plot.GetXaxis().SetLabelOffset(kwargs.get('LabelOffset', 0.04))
     plot.GetXaxis().SetTimeFormat('#splitline{%d/%m/%y}{%H:%M:%S}')
