@@ -2,6 +2,8 @@
 * Station geometry added for PISA-01 in config/__stations__.py.
 * Added facility to interpolate the environmental quantities in
   dst/E3DstWeatherChain.py.
+* Some work on the analysis scripts.
+* Bug fix for the wrong date in the daily reports (issue #50).
 
 -------------------------------------------------------------------------------
 e3pipe (1.1.1) - Fri, 07 Nov 2014 15:04:11 +0100
