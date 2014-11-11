@@ -47,18 +47,27 @@ class E3BaseTelescope:
 
     WIDTH = 85.56
     LENGTH = 158.0
+    ACTIVE_AREA = WIDTH*LENGTH
     NUM_STRIPS_PER_PLANE = 24
 
-    def __init__(self, d12 = 50., d23 = 50., phiNorth = 0., triggerMask = 0b111,
-                 latitude = 0., longitude = 0, altitude = 0.):
+    def __init__(self, name = 'EEE-00',
+                 d12 = 50., d23 = 50., phiNorth = 0.,
+                 latitude = 0., longitude = 0, altitude = 0.,
+                 triggerMask = 0b111):
         """ Constructor.
         """
+        self.__Name = name
         self.__Z = [0., d12, d12 + d23]
         self.__PhiNorth = phiNorth
         self.__TriggerMask = triggerMask
         self.__Longitude = longitude
         self.__Latitude = latitude
         self.__Altitude = altitude
+
+    def name(self):
+        """ Return the name.
+        """
+        return self.__Name
 
     def z(self, plane):
         """ Return the z coordinate of a given plane (0 is the lowermost one,
@@ -81,6 +90,11 @@ class E3BaseTelescope:
         """
         return self.__Z[0]
 
+    def phiNorth(self):
+        """
+        """
+        return self.__PhiNorth
+
     def randomPoint(self, plane = 2):
         """ Return the position of a random hit on one of the planes.
         """
@@ -94,6 +108,12 @@ class E3BaseTelescope:
         the active area.
         """
         return x >= 0 and x <= self.LENGTH and y >= 0 and y <= self.WIDTH
+
+    def __str__(self):
+        """ String formatting.
+        """
+        return '%s: z = %s, phi to N = %.3f' %\
+            (self.name(), self.__Z, self.phiNorth(), )
 
 
 

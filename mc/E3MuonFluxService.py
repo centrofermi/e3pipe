@@ -31,7 +31,7 @@ from e3pipe.mc.E3Vector import E3Vector
 
 class E3MuonFluxService:
     
-    """
+    """ Flux service for muons.
     """
 
     def __init__(self):
