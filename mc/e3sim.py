@@ -45,33 +45,43 @@ parser.add_option('-i', '--interactive', action = 'store_true',
 
 from e3pipe.mc.E3BaseTelescope import E3BaseTelescope
 from e3pipe.mc.E3Telescope import E3Telescope
-from e3pipe.mc.E3MuonFluxService import E3MuonFluxService
-from e3pipe.mc.E3Track import E3Track
+from e3pipe.mc.E3McEventTree import E3McEventTree
+from e3pipe.root.E3OutputRootFile import E3OutputRootFile
 from e3pipe.__logging__ import logger
 
 
+# Setup the telscope...
 if opts.station is not None:
     telescope = E3Telescope(opts.station)
 else:
     telescope = E3BaseTelescope()
 logger.info('Simulating %s...' % telescope)
 
-fluxSvc = E3MuonFluxService()
+# Setup the output file...
+outputFilePath = opts.outputFile
+if outputFilePath is None:
+    outputFilePath = '%s_mc.root' % telescope.name()
+    logger.info('No output file specified, using %s...' % outputFilePath)
+outputFile = E3OutputRootFile(outputFilePath, 'e3sim.py')
+outputTree = E3McEventTree()
 
+# Finally: get started.
 logger.info('Entering the event loop...')
 numGenerated = 0
 numTriggered = 0
 for i in xrange(opts.numEvents):
-    p0 = telescope.randomPoint()
-    v0 = fluxSvc.randomDirection()
-    track = E3Track(p0, v0)
+    event = telescope.shootMuon()
+    event['EventNumber'] = i
     numGenerated += 1
-    p1 = track.extrapolate(telescope.zbot())
-    if telescope.withinActiveArea(p1.x(), p1.y()):
+    if event['Trigger']:
         numTriggered += 1
+    outputTree.fillRow(event)
 fracTriggered = float(numTriggered)/numGenerated
 logger.info('Done. %d event(s) generated, %d triggered (%.2f %%).' %\
             (numGenerated, numTriggered, fracTriggered*100))
 
 estimatedRate = 100*fracTriggered
 logger.info('Estimated rate: %.1f Hz' % estimatedRate)
+
+outputTree.Write()
+outputFile.Close()

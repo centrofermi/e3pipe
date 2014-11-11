@@ -22,8 +22,13 @@
 
 
 import random
+import math
 
 from e3pipe.mc.E3Point import E3Point
+from e3pipe.mc.E3Vector import E3Vector
+from e3pipe.mc.E3Track import E3Track
+from e3pipe.mc.E3MuonFluxService import E3MuonFluxService
+
 
 
 class E3BaseTelescope:
@@ -63,6 +68,7 @@ class E3BaseTelescope:
         self.__Longitude = longitude
         self.__Latitude = latitude
         self.__Altitude = altitude
+        self.__FluxService = E3MuonFluxService()
 
     def name(self):
         """ Return the name.
@@ -91,17 +97,36 @@ class E3BaseTelescope:
         return self.__Z[0]
 
     def phiNorth(self):
-        """
+        """ Return the angle w.r.t. the magnetic North,
         """
         return self.__PhiNorth
 
-    def randomPoint(self, plane = 2):
-        """ Return the position of a random hit on one of the planes.
+    def shootMuon(self):
+        """ Generate and propagate a muon track through the detector. 
         """
+        # Extract a random point on the top plane.
         x = random.uniform(0., self.LENGTH)
         y = random.uniform(0., self.WIDTH)
-        z = self.z(plane)
-        return E3Point(x, y, z)
+        z = self.ztop()
+        p0 = E3Point(x, y, z)
+        # Extract a random direction from the flux service.
+        theta, phi = self.__FluxService.randomDirection()
+        # Rotate phi from instrument coordinates to absolute coordinates.
+        phi += math.radians(self.phiNorth())
+        if phi > math.pi:
+            phi -= 2*math.pi
+        # Calculate the cosine directors.
+        xdir = math.cos(phi)*math.sin(theta)
+        ydir = math.sin(phi)*math.sin(theta)
+        zdir = math.cos(theta)
+        v0 = E3Vector(xdir, ydir, zdir)
+        event = {'XDir': xdir, 'YDir': ydir, 'ZDir': zdir}
+        # Create the MC track object.
+        track = E3Track(p0, v0)
+        # Extrapolate the track to the bottom plane.
+        pextr = track.extrapolate(self.zbot())
+        event['Trigger'] = self.withinActiveArea(pextr.x(), pextr.y())
+        return event
 
     def withinActiveArea(self, x, y):
         """ Return whether a given (x, y) two-dimensional point is within
