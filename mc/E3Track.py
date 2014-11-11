@@ -105,5 +105,6 @@ if __name__ == '__main__':
     v = E3Vector(0, 0, 1)
     t = E3Track(p, v)
     print t
+    print t.phi(), t.theta()
     print t.extrapolate(0)
 

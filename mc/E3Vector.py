@@ -32,6 +32,23 @@ class E3Vector(E3Point):
     """ Small class encapsulating a point in the three-dimensional space.
     """
 
+    def __mul__(self, scalar):
+        """
+        """
+        return E3Vector(self.x()*scalar, self.y()*scalar, self.z()*scalar)
+
+    def __div__(self, scalar):
+        """
+        """
+        if scalar == 0:
+            raise ZeroDivisionError
+        return E3Vector(self.x()/scalar, self.y()/scalar, self.z()/scalar)
+
+    def unit(self):
+        """
+        """
+        return self/self.mag()
+
     def mag2(self):
         """ Return the magnutude squared of the vector.
         """
