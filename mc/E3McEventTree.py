@@ -36,12 +36,12 @@ class E3McEventTree(E3Tree):
     NAME = 'McEvents'
     BRANCHES = [E3BranchDescriptor('EventNumber', 'i'),
                 E3BranchDescriptor('Trigger', 'i'),
-                E3BranchDescriptor('XDir', 'F'),
-                E3BranchDescriptor('YDir', 'F'),
-                E3BranchDescriptor('ZDir', 'F'),
+                E3BranchDescriptor('McXDir', 'F'),
+                E3BranchDescriptor('McYDir', 'F'),
+                E3BranchDescriptor('McZDir', 'F')
             ]
-    ALIAS_DICT = {'Theta'    : '57.29577951308232*acos(ZDir)',
-                  'Phi'      : '57.29577951308232*atan2(YDir, XDir)'}
+    ALIAS_DICT = {'McTheta': '57.29577951308232*acos(McZDir)',
+                  'McPhi'  : '57.29577951308232*atan2(McYDir, McXDir)'}
 
     def __init__(self):
         """ Constructor.

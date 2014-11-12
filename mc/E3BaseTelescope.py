@@ -111,22 +111,25 @@ class E3BaseTelescope:
         p0 = E3Point(x, y, z)
         # Extract a random direction from the flux service.
         theta, phi = self.__FluxService.randomDirection()
-        # Rotate phi from instrument coordinates to absolute coordinates.
-        phi += math.radians(self.phiNorth())
-        if phi > math.pi:
-            phi -= 2*math.pi
         # Calculate the cosine directors.
         xdir = math.cos(phi)*math.sin(theta)
         ydir = math.sin(phi)*math.sin(theta)
         zdir = math.cos(theta)
         v0 = E3Vector(xdir, ydir, zdir)
-        event = {'XDir': xdir, 'YDir': ydir, 'ZDir': zdir}
-        # Create the MC track object.
+        # Extrapolate the MC track to the bottom plane---note this has to be
+        # done in instrument coordinates, e.g., before we rotate taking the
+        # angle to North into account.
         track = E3Track(p0, v0)
-        # Extrapolate the track to the bottom plane.
         pextr = track.extrapolate(self.zbot())
-        event['Trigger'] = self.withinActiveArea(pextr.x(), pextr.y())
-        return event
+        trg = self.withinActiveArea(pextr.x(), pextr.y())
+        # Rotate phi from instrument coordinates to absolute coordinates.
+        phi += math.radians(self.phiNorth())
+        if phi > math.pi:
+            phi -= 2*math.pi
+        # Calculate the new xdir and ydir.
+        xdir = math.cos(phi)*math.sin(theta)
+        ydir = math.sin(phi)*math.sin(theta)
+        return {'McXDir': xdir, 'McYDir': ydir, 'McZDir': zdir, 'Trigger': trg}
 
     def withinActiveArea(self, x, y):
         """ Return whether a given (x, y) two-dimensional point is within

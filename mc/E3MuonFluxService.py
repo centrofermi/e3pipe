@@ -37,8 +37,9 @@ class E3MuonFluxService:
         """ Constructor.
         """
         logger.info('Initializing muon flux service...')
-        self.__ThetaDist = ROOT.TF1('muon_theta', 'cos(x)**[0]', 0, math.pi/2.)
-        self.__ThetaDist.SetParameter(0, 1.85)
+        self.__ThetaDist = ROOT.TF1('muon_theta', 'sin(x)*cos(x)**[0]',
+                                    0, math.pi/2.)
+        self.__ThetaDist.SetParameter(0, 2.0)
         self.__PhiDist = ROOT.TF1('muon_phi', '1', -math.pi, math.pi)
 
     def randomDirection(self):
