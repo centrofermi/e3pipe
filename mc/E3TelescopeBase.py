@@ -28,7 +28,7 @@ from e3pipe.mc.E3Point import E3Point
 from e3pipe.mc.E3Vector import E3Vector
 from e3pipe.mc.E3Track import E3Track
 from e3pipe.mc.E3MuonFluxService import E3MuonFluxService
-
+from e3pipe.mc.E3FittingTool import E3FittingTool
 
 
 class E3TelescopeBase:
@@ -50,10 +50,12 @@ class E3TelescopeBase:
     lowermost RPC plane.
     """
 
-    WIDTH = 85.56
+    WIDTH = 82./23.*24.
     LENGTH = 158.0
     ACTIVE_AREA = WIDTH*LENGTH
     NUM_STRIPS_PER_PLANE = 24
+    STRIP_PITCH = WIDTH/float(NUM_STRIPS_PER_PLANE)
+    LONGITUDINAL_SIGMA = 1.5
 
     def __init__(self, name = 'EEE-00',
                  d12 = 50., d23 = 50., phiNorth = 0.,
@@ -69,6 +71,7 @@ class E3TelescopeBase:
         self.__Latitude = latitude
         self.__Altitude = altitude
         self.__FluxService = E3MuonFluxService()
+        self.__FittingTool = E3FittingTool()
 
     def name(self):
         """ Return the name.
@@ -101,42 +104,86 @@ class E3TelescopeBase:
         """
         return self.__PhiNorth
 
-    def shootMuon(self):
-        """ Generate and propagate a muon track through the detector. 
+    def randomPoint(self, plane = 2):
         """
-        # Extract a random point on the top plane.
+        """
         x = random.uniform(0., self.LENGTH)
         y = random.uniform(0., self.WIDTH)
-        z = self.ztop()
-        ptop = E3Point(x, y, z)
+        z = self.z(plane)
+        return E3Point(x, y, z)
+
+    def shootMuon(self):
+        """ Generate and propagate a muon track through the detector.
+
+        This is actually the main class method as far as Monte Carlo
+        simulations are concerned.
+        
+        TODO: we have to generalize for a generic trigger mask, which
+        shouldn't be too hard.
+        """
+        # Extract a random point on the top plane.
+        ptop = self.randomPoint(plane = 2)
+        hits = [self.digitize(ptop)]
+        trig = False
         # Extract a random direction from the flux service.
-        theta, phi = self.__FluxService.randomDirection()
+        mcTheta, mcPhi = self.__FluxService.randomDirection()
         # Calculate the cosine directors.
-        xdir = math.cos(phi)*math.sin(theta)
-        ydir = math.sin(phi)*math.sin(theta)
-        zdir = math.cos(theta)
-        v0 = E3Vector(xdir, ydir, zdir)
+        mcXdir = math.cos(mcPhi)*math.sin(mcTheta)
+        mcYdir = math.sin(mcPhi)*math.sin(mcTheta)
+        mcZdir = math.cos(mcTheta)
+        v0 = E3Vector(mcXdir, mcYdir, mcZdir)
         # Extrapolate the MC track to the bottom plane---note this has to be
         # done in instrument coordinates, e.g., before we rotate taking the
         # angle to North into account.
-        track = E3Track(ptop, v0)
-        pmid = track.extrapolate(self.zmid())
-        pbot = track.extrapolate(self.zbot())
-        trg = self.withinActiveArea(pbot.x(), pbot.y())
+        mcTrack = E3Track(ptop, v0)
+        pmid = mcTrack.extrapolate(self.zmid())
+        if self.withinActiveArea(pmid.x(), pmid.y()):
+            hits.append(self.digitize(pmid))
+        pbot = mcTrack.extrapolate(self.zbot())
+        if self.withinActiveArea(pbot.x(), pbot.y()):
+            hits.append(self.digitize(pbot))
+            trig = True
+        # If we have more than three hits we can run the reconstruction!
+        self.__FittingTool.clear()
+        if len(hits) == 3:
+            self.__FittingTool.run(hits)
+        recTrack = self.__FittingTool.track()
+        recTheta = math.radians(recTrack.theta())
+        recPhi = math.radians(recTrack.phi())
         # Rotate phi from instrument coordinates to absolute coordinates.
-        phi += math.radians(self.phiNorth())
-        if phi > math.pi:
-            phi -= 2*math.pi
+        mcPhi += math.radians(self.phiNorth())
+        recPhi += math.radians(self.phiNorth())
+        if mcPhi > math.pi:
+            mcPhi -= 2*math.pi
+        if recPhi > math.pi:
+            recPhi -= 2*math.pi
         # Calculate the new xdir and ydir.
-        xdir = math.cos(phi)*math.sin(theta)
-        ydir = math.sin(phi)*math.sin(theta)
-        return {'McXDir': xdir, 'McYDir': ydir, 'McZDir': zdir, 'Trigger': trg}
+        mcXdir = math.cos(mcPhi)*math.sin(mcTheta)
+        mcYdir = math.sin(mcPhi)*math.sin(mcTheta)
+        recXdir = math.cos(recPhi)*math.sin(recTheta)
+        recYdir = math.sin(recPhi)*math.sin(recTheta)
+        recZdir = math.cos(recTheta)
+        return {'McXDir' : mcXdir,
+                'McYDir' : mcYdir,
+                'McZDir' : mcZdir,
+                'XDir'   : recXdir,
+                'YDir'   : recYdir,
+                'ZDir'   : recZdir,
+                'Trigger': trig}
 
     def withinActiveArea(self, x, y):
         """ Return whether a given (x, y) two-dimensional point is within
         the active area.
         """
         return x >= 0 and x <= self.LENGTH and y >= 0 and y <= self.WIDTH
+
+    def digitize(self, point):
+        """
+        """
+        x = random.gauss(point.x(), self.LONGITUDINAL_SIGMA)
+        y = int(point.y()/self.STRIP_PITCH)*self.STRIP_PITCH
+        z = point.z()
+        return E3Point(x, y, z)
 
     def __str__(self):
         """ String formatting.
@@ -149,3 +196,5 @@ class E3TelescopeBase:
 if __name__ == '__main__':
     telescope = E3TelescopeBase()
     print telescope
+    p = telescope.randomPoint(2)
+    print p, telescope.digitize(p)

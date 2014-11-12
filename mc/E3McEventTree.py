@@ -38,10 +38,15 @@ class E3McEventTree(E3Tree):
                 E3BranchDescriptor('Trigger', 'i'),
                 E3BranchDescriptor('McXDir', 'F'),
                 E3BranchDescriptor('McYDir', 'F'),
-                E3BranchDescriptor('McZDir', 'F')
+                E3BranchDescriptor('McZDir', 'F'),
+                E3BranchDescriptor('XDir', 'F'),
+                E3BranchDescriptor('YDir', 'F'),
+                E3BranchDescriptor('ZDir', 'F')
             ]
     ALIAS_DICT = {'McTheta': '57.29577951308232*acos(McZDir)',
-                  'McPhi'  : '57.29577951308232*atan2(McYDir, McXDir)'}
+                  'McPhi'  : '57.29577951308232*atan2(McYDir, McXDir)',
+                  'Theta'  : '57.29577951308232*acos(ZDir)',
+                  'Phi'    : '57.29577951308232*atan2(YDir, XDir)'}
 
     def __init__(self):
         """ Constructor.
@@ -57,6 +62,13 @@ class E3McEventTree(E3Tree):
         self.hist1d('McPhi', cut = 'Trigger == 1',
                     xmin = -180., xmax = 180., xbins = 50,
                     XTitle = 'Monte Carlo #phi [#circ]', Minimum = 0.)
+        self.hist1d('Theta', cut = 'Trigger == 1',
+                    xmin = 0., xmax = 70., xbins = 50,
+                    XTitle = '#theta [#circ]')
+        self.hist1d('Phi', cut = 'Trigger == 1',
+                    xmin = -180., xmax = 180., xbins = 50,
+                    XTitle = '#phi [#circ]', Minimum = 0.)
+
 
 def test():
     """
