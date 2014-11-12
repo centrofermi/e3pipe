@@ -31,7 +31,7 @@ from e3pipe.mc.E3MuonFluxService import E3MuonFluxService
 
 
 
-class E3BaseTelescope:
+class E3TelescopeBase:
 
     """ Base class describing the basic geometry of a telescope.
 
@@ -147,7 +147,5 @@ class E3BaseTelescope:
 
 
 if __name__ == '__main__':
-    telescope = E3BaseTelescope()
-    p = telescope.randomPoint()
-    print p
-    print telescope.withinActiveArea(p.x(), p.y())
+    telescope = E3TelescopeBase()
+    print telescope

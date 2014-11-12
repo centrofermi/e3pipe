@@ -43,7 +43,7 @@ parser.add_option('-i', '--interactive', action = 'store_true',
 (opts, args) = parser.parse_args()
 
 
-from e3pipe.mc.E3BaseTelescope import E3BaseTelescope
+from e3pipe.mc.E3TelescopeBase import E3TelescopeBase
 from e3pipe.mc.E3Telescope import E3Telescope
 from e3pipe.mc.E3McEventTree import E3McEventTree
 from e3pipe.root.E3OutputRootFile import E3OutputRootFile
@@ -54,7 +54,7 @@ from e3pipe.__logging__ import logger
 if opts.station is not None:
     telescope = E3Telescope(opts.station)
 else:
-    telescope = E3BaseTelescope()
+    telescope = E3TelescopeBase()
 logger.info('Simulating %s...' % telescope)
 
 # Setup the output file...

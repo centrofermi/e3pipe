@@ -21,12 +21,12 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-from e3pipe.mc.E3BaseTelescope import E3BaseTelescope
+from e3pipe.mc.E3TelescopeBase import E3TelescopeBase
 from e3pipe.config.__stations__ import E3_LOCATION_DICT, E3_GEOMETRY_DICT
 
 
 
-class E3Telescope(E3BaseTelescope):
+class E3Telescope(E3TelescopeBase):
 
     """ Derived class to construct actual instances of the telescopes in
     operation.
@@ -37,7 +37,7 @@ class E3Telescope(E3BaseTelescope):
         """
         geo = E3_GEOMETRY_DICT[stationName]
         loc = E3_LOCATION_DICT[stationName]
-        E3BaseTelescope.__init__(self, stationName,
+        E3TelescopeBase.__init__(self, stationName,
                                  geo['d12'], geo['d23'], geo['phi_north'],
                                  loc['lat'], loc['lon'], loc['alt'],
                                  triggerMask)
