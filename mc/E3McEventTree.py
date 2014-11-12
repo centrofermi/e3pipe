@@ -51,12 +51,12 @@ class E3McEventTree(E3Tree):
     def doMonitoring(self):
         """ Create the standard set of monitoring plots.
         """
-        self.hist1d('Theta', cut = CUT_GOOD_TRACK,
+        self.hist1d('McTheta', cut = 'Trigger == 1',
                     xmin = 0., xmax = 70., xbins = 50,
-                    XTitle = '#theta [#circ]')
-        self.hist1d('Phi', cut = CUT_GOOD_TRACK,
+                    XTitle = 'Monte Carlo #theta [#circ]')
+        self.hist1d('McPhi', cut = 'Trigger == 1',
                     xmin = -180., xmax = 180., xbins = 50,
-                    XTitle = '#phi [#circ]', Minimum = 0.)
+                    XTitle = 'Monte Carlo #phi [#circ]', Minimum = 0.)
 
 def test():
     """

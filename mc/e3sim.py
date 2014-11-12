@@ -79,9 +79,12 @@ for i in xrange(opts.numEvents):
 fracTriggered = float(numTriggered)/numGenerated
 logger.info('Done. %d event(s) generated, %d triggered (%.2f %%).' %\
             (numGenerated, numTriggered, fracTriggered*100))
-
 estimatedRate = 100*fracTriggered
 logger.info('Estimated rate: %.1f Hz' % estimatedRate)
 
+#Finalize.
+outputTree.doMonitoring()
+for plot in outputTree.plots():
+    plot.Write()
 outputTree.Write()
 outputFile.Close()

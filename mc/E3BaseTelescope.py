@@ -108,7 +108,7 @@ class E3BaseTelescope:
         x = random.uniform(0., self.LENGTH)
         y = random.uniform(0., self.WIDTH)
         z = self.ztop()
-        p0 = E3Point(x, y, z)
+        ptop = E3Point(x, y, z)
         # Extract a random direction from the flux service.
         theta, phi = self.__FluxService.randomDirection()
         # Calculate the cosine directors.
@@ -119,9 +119,10 @@ class E3BaseTelescope:
         # Extrapolate the MC track to the bottom plane---note this has to be
         # done in instrument coordinates, e.g., before we rotate taking the
         # angle to North into account.
-        track = E3Track(p0, v0)
-        pextr = track.extrapolate(self.zbot())
-        trg = self.withinActiveArea(pextr.x(), pextr.y())
+        track = E3Track(ptop, v0)
+        pmid = track.extrapolate(self.zmid())
+        pbot = track.extrapolate(self.zbot())
+        trg = self.withinActiveArea(pbot.x(), pbot.y())
         # Rotate phi from instrument coordinates to absolute coordinates.
         phi += math.radians(self.phiNorth())
         if phi > math.pi:
