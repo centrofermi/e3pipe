@@ -35,26 +35,15 @@ class E3TelescopeBase:
 
     """ Base class describing the basic geometry of a telescope.
 
-    Here is an extract from the analyzer:
-
-    Y-coordinate is perpendicular to strip direction:
-    Y=0 for strip 1 Y=82 for strip 24
-
-    X-coordinate is along the strip direction and obtained from the
-    time-difference is proportional to (T_left-T_right) which goes from -10 ns
-    to +10 ns:
-    (T_left - T_right)=-9 X=0
-    (T_left - T_right)=+9 X=158
-
     We use a coordinate system whose origin is in one of the corners of the
     lowermost RPC plane.
     """
 
-    WIDTH = 82./23.*24.
+    STRIP_PITCH = 3.2
+    NUM_STRIPS_PER_PLANE = 24
+    WIDTH = STRIP_PITCH*NUM_STRIPS_PER_PLANE
     LENGTH = 158.0
     ACTIVE_AREA = WIDTH*LENGTH
-    NUM_STRIPS_PER_PLANE = 24
-    STRIP_PITCH = WIDTH/float(NUM_STRIPS_PER_PLANE)
     LONGITUDINAL_SIGMA = 1.5
 
     def __init__(self, name = 'EEE-00',
