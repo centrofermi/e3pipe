@@ -67,6 +67,11 @@ class E3TelescopeBase:
         """
         return self.__Name
 
+    def fluxService(self):
+        """
+        """
+        return self.__FluxService
+
     def z(self, plane):
         """ Return the z coordinate of a given plane (0 is the lowermost one,
         2 is the uppermost one.)

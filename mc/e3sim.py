@@ -37,6 +37,9 @@ parser.add_option('-n', '--numEvents', type = int, default = 100000,
 parser.add_option('-s', '--station', type = str, default = None,
                   dest = 'station',
                   help = 'the actual telescope to simulate')
+parser.add_option('-p', '--theta-power', type = float, default = 2.0,
+                  dest = 'thetaPower',
+                  help = 'the power for the cos(theta) term in the muon flux')
 parser.add_option('-i', '--interactive', action = 'store_true',
                   default = False, dest = 'interactive',
                   help = 'run interactively (show the plots)')
@@ -56,6 +59,7 @@ if opts.station is not None:
 else:
     telescope = E3TelescopeBase()
 logger.info('Simulating %s...' % telescope)
+telescope.fluxService().setThetaDistParameter(0, opts.thetaPower)
 
 # Setup the output file...
 outputFilePath = opts.outputFile

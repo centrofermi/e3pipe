@@ -21,6 +21,24 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+_usage = 'usage: %prog [options] dataFilePath mcFilePath'
+_synopsis = 'Macro to search for the east-west effect'
+
+# Set up the command-line switches.
+from e3pipe.misc.E3OptionParser import E3OptionParser
+
+parser = E3OptionParser(_usage, _synopsis)
+parser.add_option('-o', '--output-dir', type = str, default = None,
+                  dest = 'outputDir',
+                  help = 'path to the output folder for the plots')
+parser.add_option('-i', '--interactive', action = 'store_true',
+                  default = False, dest = 'interactive',
+                  help = 'run interactively (show the plots)')
+(opts, args) = parser.parse_args()
+
+if len(args) != 2:
+    parser.error('Please pass the data and MC file paths')
+
 from e3pipe.__logging__ import logger
 from e3pipe.root.__ROOT__ import *
 from e3pipe.root.E3H1D import E3H1D
@@ -28,15 +46,15 @@ from e3pipe.root.E3Canvas import E3Canvas
 from e3pipe.dst.E3DstEventChain import E3DstEventChain
 from e3pipe.mc.E3McEventChain import E3McEventChain
 from e3pipe.root.E3Legend import E3Legend
+from e3pipe.config.__storage__ import splitFilePath
 
 
-DATA_FILE_PATH = '/data/work/EEE/data/events/SAVO-01-2014-10-28-merged.root'
-MC_FILE_PATH = '/data/work/EEE/data/mc/SAVO-01_mc.root'
 THETA_CUT = 'Theta > 0'
-STATION = 'SAVO-01'
 
-dataChain = E3DstEventChain(DATA_FILE_PATH)
-mcChain = E3McEventChain(MC_FILE_PATH)
+dataFilePath, mcFilePath = args
+station = splitFilePath(dataFilePath)[0]
+dataChain = E3DstEventChain(dataFilePath)
+mcChain = E3McEventChain(mcFilePath)
 
 htheta = E3H1D('htheta', 'Theta', 75, 0, 90, Minimum = 0,
                XTitle = '#theta [#circ]')
@@ -72,25 +90,27 @@ hphimc.Scale(1./hphimc.GetSumOfWeights())
 hthetamc.SetMinimum(0)
 hphimc.SetMinimum(0)
 
-c1 = E3Canvas('%s_theta_datamc' % STATION)
+c1 = E3Canvas('%s_theta_datamc' % station)
 hthetadata.Draw()
 hthetamc.Draw('same')
 l1 = E3Legend(0.6, 0.6, entries = [hthetadata, hthetamc])
 l1.Draw()
 c1.Update()
-c1.save()
+if opts.outputDir is not None:
+    c1.save(opts.outputDir)
 
 
-c2 = E3Canvas('%s_phi_datamc' % STATION)
+c2 = E3Canvas('%s_phi_datamc' % station)
 hphidata.Draw()
 hphimc.Draw('same')
 l2 = E3Legend(0.4, 0.8, entries = [hphidata, hphimc])
 l2.Draw()
 c2.Update()
-c2.save()
+if opts.outputDir is not None:
+    c2.save(opts.outputDir)
 
 
-c3 = E3Canvas('%s_phi_modulation' % STATION)
+c3 = E3Canvas('%s_phi_modulation' % station)
 hphiratio = hphidata.Clone('hphiratio')
 hphiratio.Divide(hphimc)
 hphiratio.SetLineColor(ROOT.kBlack)
@@ -115,4 +135,5 @@ c3.annotate(90, 0.8, 'East', ndc = False, align = 21)
 c3.annotate(-90, 0.8, 'West', ndc = False, align = 21)
 
 c3.Update()
-c3.save()
+if opts.outputDir is not None:
+    c3.save(opts.outputDir)

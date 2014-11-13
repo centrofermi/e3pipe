@@ -42,6 +42,13 @@ class E3MuonFluxService:
         self.__ThetaDist.SetParameter(0, 2.0)
         self.__PhiDist = ROOT.TF1('muon_phi', '1', -math.pi, math.pi)
 
+    def setThetaDistParameter(self, i, value):
+        """ Set a parameter for the theta distribution.
+        """
+        logger.info('Setting parameter %d for theta distribution to %.3f...' %\
+                    (i, value))
+        self.__ThetaDist.SetParameter(i, value)
+
     def randomDirection(self):
         """ Return a random muon direction.
         """
