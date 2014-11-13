@@ -95,6 +95,7 @@ hthetadata.Draw()
 hthetamc.Draw('same')
 l1 = E3Legend(0.6, 0.6, entries = [hthetadata, hthetamc])
 l1.Draw()
+c1.annotate(0.1, 0.94, station)
 c1.Update()
 if opts.outputDir is not None:
     c1.save(opts.outputDir)
@@ -105,6 +106,7 @@ hphidata.Draw()
 hphimc.Draw('same')
 l2 = E3Legend(0.4, 0.8, entries = [hphidata, hphimc])
 l2.Draw()
+c2.annotate(0.1, 0.94, station)
 c2.Update()
 if opts.outputDir is not None:
     c2.save(opts.outputDir)
@@ -133,7 +135,7 @@ for x in [-135, -45, 45, 135]:
 c3.annotate(0, 0.8, 'North', ndc = False, align = 21)
 c3.annotate(90, 0.8, 'East', ndc = False, align = 21)
 c3.annotate(-90, 0.8, 'West', ndc = False, align = 21)
-
+c3.annotate(0.1, 0.94, station)
 c3.Update()
 if opts.outputDir is not None:
     c3.save(opts.outputDir)
