@@ -4,6 +4,8 @@ END_DATE="2014-11-14"
 DAYS_SPANNED=19 
 OUTPUT_FOLDER=~/eeedata
 
+export E3PIPE_RECON_BASE=/recon
+
 for station in \
     ALTA-01 \
     BARI-01 \
@@ -29,7 +31,7 @@ for station in \
     VIAR-01 \
     VIAR-02
 do
-    basename=${OUTPUT_FOLDER}/${station}-trending-pilot
+    basename=${OUTPUT_FOLDER}/${station}_trending_pilot
     e3merge.py -t trending -s ${station} -E ${END_DATE} -N ${DAYS_SPANNED} \
 	-o ${basename}.root
     e3root2text.py -t Header ${basename}.root
