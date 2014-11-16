@@ -145,7 +145,7 @@ class E3LockFileCrawlerStat(E3LockFileCrawler):
         for filePath in glob.glob(os.path.join(folderPath, '*.lock')):
             fileList.append(filePath)
             self.__StatDict['num_files'] += 1
-            sc = open(filePath).readline()
+            sc = open(filePath).readline().strip('\n')
             try:
                 self.__StatDict['status_code'][sc] += 1
             except KeyError:
@@ -163,11 +163,11 @@ class E3LockFileCrawlerStat(E3LockFileCrawler):
 def e3stat():
     """
     """
-    #rawCrawler = E3RawFileCrawlerStat()
-    #dstCrawler = E3DstFileCrawlerStat()
+    rawCrawler = E3RawFileCrawlerStat()
+    dstCrawler = E3DstFileCrawlerStat()
     lockCrawler = E3LockFileCrawlerStat()
-    #logger.info('Raw data stat: %s' % rawCrawler)
-    #logger.info('DST file stat: %s' % dstCrawler)
+    logger.info('Raw data stat: %s' % rawCrawler)
+    logger.info('DST file stat: %s' % dstCrawler)
     logger.info('Locked file stat: %s' % lockCrawler)
 
 
