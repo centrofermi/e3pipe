@@ -77,10 +77,6 @@ class E3RawFileCrawlerStat(E3RawFileCrawler):
 
     def crawlFolder(self, folderPath):
         """  Overloaded class method.
-
-        Mind that here we skip the last file, after we sorted the list,
-        as that (though older than self.__MinHoursSinceSynch) might still
-        being transferred from the school.
         """
         fileList = []
         for filePath in glob.glob(os.path.join(folderPath, '*.bin')):
@@ -113,10 +109,6 @@ class E3DstFileCrawlerStat(E3FileCrawlerBase, E3DstFileCrawler):
 
     def crawlFolder(self, folderPath):
         """  Overloaded class method.
-
-        Mind that here we skip the last file, after we sorted the list,
-        as that (though older than self.__MinHoursSinceSynch) might still
-        being transferred from the school.
         """
         fileList = []
         for filePath in glob.glob(os.path.join(folderPath, '*_dst.root')):
@@ -141,21 +133,23 @@ class E3LockFileCrawlerStat(E3LockFileCrawler):
     def __init__(self):
         """ Constructor.
         """
-        self.__StatDict = {'num_files'  : 0
+        self.__StatDict = {'num_files'  : 0,
+                           'status_code': {}
                            }
         E3LockFileCrawler.__init__(self, STATIONS, END_DATE, DAYS_SPANNED)
 
     def crawlFolder(self, folderPath):
         """  Overloaded class method.
-
-        Mind that here we skip the last file, after we sorted the list,
-        as that (though older than self.__MinHoursSinceSynch) might still
-        being transferred from the school.
         """
         fileList = []
         for filePath in glob.glob(os.path.join(folderPath, '*.lock')):
             fileList.append(filePath)
             self.__StatDict['num_files'] += 1
+            sc = open(filePath).readline()
+            try:
+                self.__StatDict['status_code'][sc] += 1
+            except KeyError:
+                self.__StatDict['status_code'][sc] = 1
         return fileList
 
     def __str__(self):
@@ -169,11 +163,11 @@ class E3LockFileCrawlerStat(E3LockFileCrawler):
 def e3stat():
     """
     """
-    rawCrawler = E3RawFileCrawlerStat()
-    dstCrawler = E3DstFileCrawlerStat()
+    #rawCrawler = E3RawFileCrawlerStat()
+    #dstCrawler = E3DstFileCrawlerStat()
     lockCrawler = E3LockFileCrawlerStat()
-    logger.info('Raw data stat: %s' % rawCrawler)
-    logger.info('DST file stat: %s' % dstCrawler)
+    #logger.info('Raw data stat: %s' % rawCrawler)
+    #logger.info('DST file stat: %s' % dstCrawler)
     logger.info('Locked file stat: %s' % lockCrawler)
 
 
