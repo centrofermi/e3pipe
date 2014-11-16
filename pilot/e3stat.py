@@ -28,6 +28,7 @@ from e3pipe.__logging__ import logger
 from e3pipe.misc.E3FileCrawlerBase import E3FileCrawlerBase
 from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
 from e3pipe.misc.E3DstFileCrawler import E3DstFileCrawler
+from e3pipe.misc.E3LockFileCrawler import E3LockFileCrawler
 from e3pipe.dst.__time__ import str2date, date2str
 
 
@@ -130,6 +131,39 @@ class E3DstFileCrawlerStat(E3FileCrawlerBase, E3DstFileCrawler):
         return '%s' % self.__StatDict
 
 
+class E3LockFileCrawlerStat(E3LockFileCrawler):
+
+    """
+    """
+
+    ROOT_FOLDER = '/home/analisi/eeelock'
+
+    def __init__(self):
+        """ Constructor.
+        """
+        self.__StatDict = {'num_files'  : 0
+                           }
+        E3LockFileCrawler.__init__(self, STATIONS, END_DATE, DAYS_SPANNED)
+
+    def crawlFolder(self, folderPath):
+        """  Overloaded class method.
+
+        Mind that here we skip the last file, after we sorted the list,
+        as that (though older than self.__MinHoursSinceSynch) might still
+        being transferred from the school.
+        """
+        fileList = []
+        for filePath in glob.glob(os.path.join(folderPath, '*.lock')):
+            fileList.append(filePath)
+            self.__StatDict['num_files'] += 1
+        return fileList
+
+    def __str__(self):
+        """
+        """
+        return '%s' % self.__StatDict
+
+
 
 
 def e3stat():
@@ -137,8 +171,10 @@ def e3stat():
     """
     rawCrawler = E3RawFileCrawlerStat()
     dstCrawler = E3DstFileCrawlerStat()
+    lockCrawler = E3LockFileCrawlerStat()
     logger.info('Raw data stat: %s' % rawCrawler)
     logger.info('DST file stat: %s' % dstCrawler)
+    logger.info('Locked file stat: %s' % lockCrawler)
 
 
 if __name__ == '__main__':
