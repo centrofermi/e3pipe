@@ -26,6 +26,7 @@ import glob
 
 from e3pipe.__logging__ import logger
 from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
+from e3pipe.misc.E3DstFileCrawler import E3DstFileCrawler
 from e3pipe.dst.__time__ import str2date, date2str
 
 
@@ -58,6 +59,7 @@ STATIONS = [
 ]
 
 
+
 class E3RawFileCrawlerStat(E3RawFileCrawler):
 
     """
@@ -71,10 +73,39 @@ class E3RawFileCrawlerStat(E3RawFileCrawler):
                            }
         E3RawFileCrawler.__init__(self, STATIONS, END_DATE, DAYS_SPANNED)
 
-    def folderPath(self, station, date):
-        """ Overloaded class method.
+    def crawlFolder(self, folderPath):
+        """  Overloaded class method.
+
+        Mind that here we skip the last file, after we sorted the list,
+        as that (though older than self.__MinHoursSinceSynch) might still
+        being transferred from the school.
         """
-        return os.path.join(self.ROOT_FOLDER, station, 'data', date2str(date))
+        fileList = []
+        for filePath in glob.glob(os.path.join(folderPath, '*.bin')):
+            fileList.append(filePath)
+            self.__StatDict['num_files'] += 1
+            self.__StatDict['disk_space'] += os.stat(filePath).st_size
+        return fileList
+
+    def __str__(self):
+        """
+        """
+        return '%s' % self.__StatDict
+
+
+
+class E3DstFileCrawlerStat(E3DstFileCrawler):
+
+    """
+    """
+
+    def __init__(self):
+        """ Constructor.
+        """
+        self.__StatDict = {'num_files'  : 0,
+                           'disk_space' : 0
+                           }
+        E3DstFileCrawler.__init__(self, STATIONS, END_DATE, DAYS_SPANNED)
 
     def crawlFolder(self, folderPath):
         """  Overloaded class method.
@@ -102,8 +133,9 @@ def e3stat():
     """
     """
     rawCrawler = E3RawFileCrawlerStat()
-    
+    dstCrawler = E3DstFileCrawlerStat()
     logger.info('Raw data stat: %s' % rawCrawler)
+    logger.info('DST file stat: %s' % dstCrawler)
 
 
 if __name__ == '__main__':
