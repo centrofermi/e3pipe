@@ -21,11 +21,16 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import os
+import glob
+
+from e3pipe.__logging__ import logger
 from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
+from e3pipe.dst.__time__ import str2date, date2str
 
 
-END_DATE = '2014-11-14'
-DAYS_SPANNED = 19 
+END_DATE = str2date('2014-11-14')
+DAYS_SPANNED = 19
 STATIONS = [
     'ALTA-01',
     'BARI-01',
@@ -58,10 +63,13 @@ class E3RawFileCrawlerStat(E3RawFileCrawler):
     """
     """
 
-        def __init__(self):
+    def __init__(self):
         """ Constructor.
         """
-        E3FileCrawlerBase.__init__(self, STATIONS, END_DATE, DAYS_SPANNED)
+        self.__StatDict = {'num_files'  : 0,
+                           'disk_space' : 0
+                           }
+        E3RawFileCrawler.__init__(self, STATIONS, END_DATE, DAYS_SPANNED)
 
     def folderPath(self, station, date):
         """ Overloaded class method.
@@ -77,7 +85,26 @@ class E3RawFileCrawlerStat(E3RawFileCrawler):
         """
         fileList = []
         for filePath in glob.glob(os.path.join(folderPath, '*.bin')):
-            logger.info(filePath)
             fileList.append(filePath)
-        fileList.sort()
+            self.__StatDict['num_files'] += 1
+            self.__StatDict['disk_space'] += os.stat(filePath).st_size
         return fileList
+
+    def __str__(self):
+        """
+        """
+        return '%s' % self.__StatDict
+
+
+
+
+def e3stat():
+    """
+    """
+    rawCrawler = E3RawFileCrawlerStat()
+    
+    logger.info('Raw data stat: %s' % rawCrawler)
+
+
+if __name__ == '__main__':
+    e3stat()
