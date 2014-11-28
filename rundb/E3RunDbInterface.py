@@ -56,6 +56,26 @@ class E3RunDbInterface:
         """
         return self.__Cursor.fetchall()
 
+    def commit(self):
+        """
+        """
+        self.__Database.commit()
+
+
+    def rollback(self):
+        """
+        """
+        self.__Database.rollback()
+
+    def close(self):
+        """
+        """
+        logger.info('Closing cobbection to db...')
+        self.__Database.close()
+
+    def __del__(self):
+        self.close()
+
 
 
 if __name__ == '__main__':
