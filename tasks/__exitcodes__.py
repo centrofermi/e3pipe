@@ -29,6 +29,7 @@ E3PIPE_EXIT_CODE_ANALYZER_SEGFAULT = 139
 E3PIPE_EXIT_CODE_ANALYZER_KILLED = 137
 E3PIPE_EXIT_CODE_NO_HITS_EVENTS = 100
 E3PIPE_EXIT_CODE_RUN_TOO_LONG = 101
+E3PIPE_EXIT_CODE_UNKNOWN = 17
 
 
 E3PIPE_EXIT_CODE_INTENT_DICT = {
@@ -39,7 +40,9 @@ E3PIPE_EXIT_CODE_INTENT_DICT = {
     E3PIPE_EXIT_CODE_NO_HITS_EVENTS:
     'no events with hits in the file',
     E3PIPE_EXIT_CODE_RUN_TOO_LONG:
-    'difference between the largest and smallest timestamp too large'
+    'difference between the largest and smallest timestamp too large',
+    E3PIPE_EXIT_CODE_UNKNOWN:
+    'unknown error'
 }
 
 
