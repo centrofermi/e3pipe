@@ -37,6 +37,7 @@ E3PIPE_MC = os.path.join(E3PIPE_BASE, 'mc')
 E3PIPE_MISC = os.path.join(E3PIPE_BASE, 'misc')
 E3PIPE_PILOT = os.path.join(E3PIPE_BASE, 'pilot')
 E3PIPE_ROOT = os.path.join(E3PIPE_BASE, 'root')
+E3PIPE_RUNDB = os.path.join(E3PIPE_BASE, 'rundb')
 E3PIPE_TASKS = os.path.join(E3PIPE_BASE, 'tasks')
 E3PIPE_TEST = os.path.join(E3PIPE_BASE, 'test')
 
