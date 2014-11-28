@@ -21,12 +21,12 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-import MySQLdb
+import MySQLdb.connections
 
 from e3pipe.__logging__ import logger
 
 
-class E3RunDbInterface:
+class E3RunDbInterface(MySQLdb.connections.Connection):
 
     """ Basic interface to the run database.
     """
@@ -35,43 +35,35 @@ class E3RunDbInterface:
         """ Constructor.
         """
         logger.info('Connecting to %s on %s (as %s)' % (dbname, host, user))
-        self.__Database = MySQLdb.connect(host, user, passwd, dbname)
+        MySQLdb.connections.Connection.__init__(self, host, user, passwd, dbname)
         logger.info('Done, setting up cursor...')
-        self.__Cursor = self.__Database.cursor()
+        self.__Cursor = self.cursor()
         logger.info('Interface to the run database ready.')
 
-    def cursor(self):
-        """
-        """
-        return self.__Cursor
-
-    def execute(self, query):
+    def execute(self, query, commit = True):
         """ Execute a query.
         """
         logger.info('About to execute "%s"...' % query)
-        return self.__Cursor.execute(query)
+        if commit:
+            try:
+                self.__Cursor.execute(query)
+                self.commit()
+            except Exception, e:
+                logger.error('%s, rolling back change...' % e)
+                self.rollback()
+        else:
+            self.__Cursor.execute(query)
        
     def fetchall(self):
         """
         """
         return self.__Cursor.fetchall()
 
-    def commit(self):
-        """
-        """
-        self.__Database.commit()
-
-
-    def rollback(self):
-        """
-        """
-        self.__Database.rollback()
-
     def close(self):
         """
         """
         logger.info('Closing cobbection to db...')
-        self.__Database.close()
+        MySQLdb.connections.Connection.close(self)
 
     def __del__(self):
         self.close()

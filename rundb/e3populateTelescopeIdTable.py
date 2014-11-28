@@ -30,18 +30,12 @@ db = E3RunDbInterface('131.154.96.193', 'eee', 'eee-monitoring', 'eee_rundb2')
 table = 'telescope_id_table'
 logger.info('Truncating table %s...' % table)
 query = 'TRUNCATE TABLE %s' % table
-db.execute(query)
-db.commit()
+db.execute(query, commit = True)
 logger.info('Populating %s...' % table)
 for stationName, stationId in E3_STATION_DICT.items():
     query = 'INSERT INTO %s (id, name) VALUES(%d, "%s");' %\
             (table, stationId, stationName)
-    try:
-        db.execute(query)
-        db.commit()
-    except Exception, e:
-        logger.info('%s, trying to roll back...' % e)
-        db.rollback()
+    db.execute(query, commit = True)
 logger.info('Done.')
 query = 'SELECT * from %s;' % table
 db.execute(query)
