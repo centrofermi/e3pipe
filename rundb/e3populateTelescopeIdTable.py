@@ -27,7 +27,7 @@ from e3pipe.config.__stations__ import E3_STATION_DICT
 
 db = E3RunDbInterface('131.154.96.193', 'eee', 'eee-monitoring', 'eee_rundb2')
 for stationName, stationId in E3_STATION_DICT.items():
-    query = 'INSERT INTO telescope_id_table (id, name) VALUES(%s, %d)' %\
-            (stationName, stationId)
+    query = 'INSERT INTO telescope_id_table (id, name) VALUES(%d, "%s")' %\
+            (stationId, stationName)
     db.execute(query)
 

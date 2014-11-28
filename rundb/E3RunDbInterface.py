@@ -40,16 +40,28 @@ class E3RunDbInterface:
         self.__Cursor = self.__Database.cursor()
         logger.info('Interface to the run database ready.')
 
+    def cursor(self):
+        """
+        """
+        return self.__Cursor
+
     def execute(self, query):
         """ Execute a query.
         """
         logger.info('About to execute "%s"...' % query)
-        self.__Cursor.execute(query)
-        
+        return self.__Cursor.execute(query)
+       
+    def fetchall(self):
+        """
+        """
+        return self.__Cursor.fetchall()
 
 
 
 if __name__ == '__main__':
     db = E3RunDbInterface('131.154.96.193', 'eee', 'eee-monitoring',
                           'eee_rundb2')
-    db.execute('SELECT * FROM telescope_id_table')
+    numrows = db.execute('SELECT * FROM telescope_id_table')
+    print numrows
+    for row in db.fetchall():
+        print row
