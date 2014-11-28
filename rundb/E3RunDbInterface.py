@@ -21,6 +21,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import MySQLdb
+
 from e3pipe.__logging__ import logger
 
 
@@ -32,7 +34,7 @@ class E3RunDbInterface:
     def __init__(self, host, user, passwd, dbname):
         """ Constructor.
         """
-        logger.info('Connecting to %s on %s (as %d)' % (dbname, host, user))
+        logger.info('Connecting to %s on %s (as %s)' % (dbname, host, user))
         self.__Database = MySQLdb.connect(host, user, passwd, dbname)
         logger.info('Done, setting up cursor...')
         self.__Cursor = self.__Database.cursor()
