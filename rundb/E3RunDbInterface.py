@@ -94,3 +94,4 @@ if __name__ == '__main__':
     print numrows
     for row in db.fetchall():
         print row
+    db.close()

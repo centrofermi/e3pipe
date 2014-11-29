@@ -26,18 +26,27 @@ from e3pipe.tasks.__exitcodes__ import E3PIPE_EXIT_CODE_INTENT_DICT
 from e3pipe.__logging__ import logger
 
 
-db = E3RunDbInterface()
-table = 'processing_status_code_table'
-logger.info('Truncating table %s...' % table)
-query = 'TRUNCATE TABLE %s' % table
-db.execute(query, commit = True)
-logger.info('Populating %s...' % table)
-for code, intent in E3PIPE_EXIT_CODE_INTENT_DICT.items():
-    query = 'INSERT INTO %s (id, description) VALUES(%d, "%s");' %\
-            (table, code, intent)
+def e3populateProcessingStatusCodeTable():
+    """
+    """
+    db = E3RunDbInterface()
+    table = 'processing_status_code_table'
+    logger.info('Truncating table %s...' % table)
+    query = 'TRUNCATE TABLE %s' % table
     db.execute(query, commit = True)
-logger.info('Done.')
-query = 'SELECT * from %s;' % table
-db.execute(query)
-for row in db.fetchall():
-    print row
+    logger.info('Populating %s...' % table)
+    for code, intent in E3PIPE_EXIT_CODE_INTENT_DICT.items():
+        query = 'INSERT INTO %s (id, description) VALUES(%d, "%s");' %\
+                (table, code, intent)
+        db.execute(query, commit = True)
+    logger.info('Done.')
+    query = 'SELECT * from %s;' % table
+    db.execute(query)
+    for row in db.fetchall():
+        print row
+    db.close()
+
+
+
+if __name__ == '__main__':
+    e3populateProcessingStatusCodeTable()

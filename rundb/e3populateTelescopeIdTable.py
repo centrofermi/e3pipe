@@ -26,18 +26,27 @@ from e3pipe.config.__stations__ import E3_STATION_DICT
 from e3pipe.__logging__ import logger
 
 
-db = E3RunDbInterface()
-table = 'telescope_id_table'
-logger.info('Truncating table %s...' % table)
-query = 'TRUNCATE TABLE %s' % table
-db.execute(query, commit = True)
-logger.info('Populating %s...' % table)
-for stationName, stationId in E3_STATION_DICT.items():
-    query = 'INSERT INTO %s (id, name) VALUES(%d, "%s");' %\
-            (table, stationId, stationName)
+def e3populateTelescopeIdTable():
+    """
+    """
+    db = E3RunDbInterface()
+    table = 'telescope_id_table'
+    logger.info('Truncating table %s...' % table)
+    query = 'TRUNCATE TABLE %s' % table
     db.execute(query, commit = True)
-logger.info('Done.')
-query = 'SELECT * from %s;' % table
-db.execute(query)
-for row in db.fetchall():
-    print row
+    logger.info('Populating %s...' % table)
+    for stationName, stationId in E3_STATION_DICT.items():
+        query = 'INSERT INTO %s (id, name) VALUES(%d, "%s");' %\
+                (table, stationId, stationName)
+        db.execute(query, commit = True)
+    logger.info('Done.')
+    query = 'SELECT * from %s;' % table
+    db.execute(query)
+    for row in db.fetchall():
+        print row
+    db.close()
+
+
+
+if __name__ == '__main__':
+    e3populateTelescopeIdTable()
