@@ -24,6 +24,7 @@
 from e3pipe.rundb.E3RunDbInterface import E3RunDbInterface
 from e3pipe.__logging__ import logger
 from e3pipe.config.__storage__ import E3RawDataInfo
+from e3pipe.dst.__runid__ import uniqueRunIdFromFilePath
 
 
 
@@ -32,6 +33,8 @@ def e3insertRun(rawFilePath):
     """
     info = E3RawDataInfo(rawFilePath)
     print info
+    uniqueId = uniqueRunIdFromFilePath(rawFilePath)
+    print uniqueId
 
 
 
