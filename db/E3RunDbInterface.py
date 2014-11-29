@@ -26,7 +26,7 @@ import os
 import ConfigParser
 
 from e3pipe.__logging__ import logger, abort
-from e3pipe.__package__ import E3PIPE_RUNDB
+from e3pipe.__package__ import E3PIPE_DB
 
 
 class E3RunDbInterface(MySQLdb.connections.Connection):
@@ -34,7 +34,7 @@ class E3RunDbInterface(MySQLdb.connections.Connection):
     """ Basic interface to the run database.
     """
 
-    CFG_FILE_PATH = os.path.join(E3PIPE_RUNDB, 'rundb.cfg')
+    CFG_FILE_PATH = os.path.join(E3PIPE_DB, 'rundb.cfg')
 
     def __init__(self):
         """ Constructor.

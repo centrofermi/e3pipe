@@ -21,23 +21,23 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-from e3pipe.rundb.E3RunDbInterface import E3RunDbInterface
-from e3pipe.config.__stations__ import E3_STATION_DICT
+from e3pipe.db.E3RunDbInterface import E3RunDbInterface
+from e3pipe.tasks.__exitcodes__ import E3PIPE_EXIT_CODE_INTENT_DICT
 from e3pipe.__logging__ import logger
 
 
-def e3populateTelescopeIdTable():
+def e3populateProcessingStatusCodeTable():
     """
     """
     db = E3RunDbInterface()
-    table = 'telescope_id_table'
+    table = 'processing_status_code_table'
     logger.info('Truncating table %s...' % table)
     query = 'TRUNCATE TABLE %s' % table
     db.execute(query, commit = True)
     logger.info('Populating %s...' % table)
-    for stationName, stationId in E3_STATION_DICT.items():
-        query = 'INSERT INTO %s (id, name) VALUES(%d, "%s");' %\
-                (table, stationId, stationName)
+    for code, intent in E3PIPE_EXIT_CODE_INTENT_DICT.items():
+        query = 'INSERT INTO %s (id, description) VALUES(%d, "%s");' %\
+                (table, code, intent)
         db.execute(query, commit = True)
     logger.info('Done.')
     query = 'SELECT * from %s;' % table
@@ -49,4 +49,4 @@ def e3populateTelescopeIdTable():
 
 
 if __name__ == '__main__':
-    e3populateTelescopeIdTable()
+    e3populateProcessingStatusCodeTable()

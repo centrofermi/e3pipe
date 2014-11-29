@@ -21,15 +21,14 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-from e3pipe.rundb.E3RunDbInterface import E3RunDbInterface
+from e3pipe.db.E3RunDbInterface import E3RunDbInterface
 from e3pipe.__logging__ import logger
 from e3pipe.config.__storage__ import E3RawDataInfo
 from e3pipe.dst.__runid__ import uniqueRunIdFromFilePath
-from e3pipe.rundb.E3RunDbInterface import E3RunDbInterface
 
 
 
-def e3insertRun(rawFilePath, db):
+def e3registerRun(rawFilePath, db):
     """
     """
     info = E3RawDataInfo(rawFilePath)
@@ -45,4 +44,4 @@ if __name__ == '__main__':
     (opts, args) = parser.parse_args()
     db = E3RunDbInterface()
     for arg in args:
-        e3insertRun(arg, db)
+        e3registerRun(arg, db)
