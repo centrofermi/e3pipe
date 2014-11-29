@@ -34,6 +34,7 @@ from e3pipe.config.__storage__ import E3PIPE_LOG_BASE, E3RawDataInfo
 from e3pipe.dst.__time__ import date2str
 from e3pipe.tasks.__exitcodes__ import lockFileMessage
 from e3pipe.db.e3registerRun import e3registerRun
+from e3pipe.db.E3RunDbInterface import E3RunDbInterface
 
 
 
@@ -74,7 +75,9 @@ def e3crawl(stations = None, endDate = None, daysSpanned = 2,
         else:
             logger.info('Run processed in %.3f s.' % chrono.stop())
         if register:
-            e3registerRun(filePath)
+            db = E3RunDbInterface()
+            e3registerRun(filePath, db)
+            db.close()
         if maxNumRuns is not None and curFile >= maxNumRuns:
             break
         curFile += 1

@@ -80,7 +80,7 @@ class E3RunDbInterface(MySQLdb.connections.Connection):
         """ Close the connection to the database, if open.
         """
         if self.open:
-            logger.info('Closing cobbection to db...')
+            logger.info('Closing connection to db...')
             MySQLdb.connections.Connection.close(self)
 
     def __del__(self):
