@@ -22,8 +22,11 @@
 
 
 import MySQLdb.connections
+import os
+import ConfigParser
 
-from e3pipe.__logging__ import logger
+from e3pipe.__logging__ import logger, abort
+from e3pipe.__package__ import E3PIPE_RUNDB
 
 
 class E3RunDbInterface(MySQLdb.connections.Connection):
@@ -31,11 +34,25 @@ class E3RunDbInterface(MySQLdb.connections.Connection):
     """ Basic interface to the run database.
     """
 
-    def __init__(self, host, user, passwd, dbname):
+    CFG_FILE_PATH = os.path.join(E3PIPE_RUNDB, 'rundb.cfg')
+
+    def __init__(self):
         """ Constructor.
         """
+        if not os.path.exists(self.CFG_FILE_PATH):
+            abort('Could not find configuration file %s' % self.CFG_FILE_PATH)
+        logger.info('Reading db configuration file %s...' % self.CFG_FILE_PATH)
+        parser = ConfigParser.ConfigParser()
+        parser.read(self.CFG_FILE_PATH)
+        try:
+            host = parser.get('General', 'host')
+            user = parser.get('General', 'user')
+            dbname = parser.get('General', 'dbname')
+            pwd = parser.get('General', 'pwd')
+        except ConfigParser.NoOptionError, e:
+            abort(e)
         logger.info('Connecting to %s on %s (as %s)' % (dbname, host, user))
-        MySQLdb.connections.Connection.__init__(self, host, user, passwd, dbname)
+        MySQLdb.connections.Connection.__init__(self, host, user, pwd, dbname)
         logger.info('Done, setting up cursor...')
         self.__Cursor = self.cursor()
         logger.info('Interface to the run database ready.')
@@ -55,15 +72,16 @@ class E3RunDbInterface(MySQLdb.connections.Connection):
             self.__Cursor.execute(query)
        
     def fetchall(self):
-        """
+        """ Fetch all the values from the cursor.
         """
         return self.__Cursor.fetchall()
 
     def close(self):
+        """ Close the connection to the database, if open.
         """
-        """
-        logger.info('Closing cobbection to db...')
-        MySQLdb.connections.Connection.close(self)
+        if self.open:
+            logger.info('Closing cobbection to db...')
+            MySQLdb.connections.Connection.close(self)
 
     def __del__(self):
         self.close()
@@ -71,8 +89,7 @@ class E3RunDbInterface(MySQLdb.connections.Connection):
 
 
 if __name__ == '__main__':
-    db = E3RunDbInterface('131.154.96.193', 'eee', 'eee-monitoring',
-                          'eee_rundb2')
+    db = E3RunDbInterface()
     numrows = db.execute('SELECT * FROM telescope_id_table')
     print numrows
     for row in db.fetchall():

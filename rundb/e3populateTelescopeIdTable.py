@@ -26,7 +26,7 @@ from e3pipe.config.__stations__ import E3_STATION_DICT
 from e3pipe.__logging__ import logger
 
 
-db = E3RunDbInterface('131.154.96.193', 'eee', 'eee-monitoring', 'eee_rundb2')
+db = E3RunDbInterface()
 table = 'telescope_id_table'
 logger.info('Truncating table %s...' % table)
 query = 'TRUNCATE TABLE %s' % table

@@ -26,7 +26,7 @@ from e3pipe.tasks.__exitcodes__ import E3PIPE_EXIT_CODE_INTENT_DICT
 from e3pipe.__logging__ import logger
 
 
-db = E3RunDbInterface('131.154.96.193', 'eee', 'eee-monitoring', 'eee_rundb2')
+db = E3RunDbInterface()
 table = 'processing_status_code_table'
 logger.info('Truncating table %s...' % table)
 query = 'TRUNCATE TABLE %s' % table
