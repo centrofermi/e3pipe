@@ -46,6 +46,9 @@ parser.add_option('-s', '--station', action = 'append', type = str,
 parser.add_option('-f', '--force-overwrite', action = 'store_true',
                   default = False, dest = 'overwrite',
                   help = 'overwrite runs that are already processed')
+parser.add_option('-r', '--register', action = 'store_true',
+                  default = False, dest = 'register',
+                  help = 'register the run(s) into the run database')
 parser.add_option('-d', '--dry-run', action = 'store_true',
                   default = False, dest = 'dry',
                   help = 'do not process (only populate the file list)')
@@ -72,4 +75,4 @@ else:
     from e3pipe.dst.__time__ import str2date
     end = str2date(end)
 e3crawl(opts.stations, end, opts.span, opts.hours, opts.overwrite,\
-        opts.maxruns, opts.dry)
+        opts.maxruns, opts.dry, opts.register)
