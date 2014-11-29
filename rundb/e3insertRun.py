@@ -25,10 +25,11 @@ from e3pipe.rundb.E3RunDbInterface import E3RunDbInterface
 from e3pipe.__logging__ import logger
 from e3pipe.config.__storage__ import E3RawDataInfo
 from e3pipe.dst.__runid__ import uniqueRunIdFromFilePath
+from e3pipe.rundb.E3RunDbInterface import E3RunDbInterface
 
 
 
-def e3insertRun(rawFilePath):
+def e3insertRun(rawFilePath, db):
     """
     """
     info = E3RawDataInfo(rawFilePath)
@@ -42,5 +43,6 @@ if __name__ == '__main__':
     from optparse import OptionParser
     parser = OptionParser()
     (opts, args) = parser.parse_args()
+    db = E3RunDbInterface()
     for arg in args:
-        e3insertRun(arg)
+        e3insertRun(arg, db)
