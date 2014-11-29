@@ -43,7 +43,7 @@ def e3registerSuccess(uniqueId, dstFilePath, db):
     dstFile = E3InputRootFile(dstFilePath)
     header = dstFile.Get('Header')
     header.GetEntry(0)
-    query = 'INSERT INTO run_table (unique_run_id, run_start, run_stop, num_events, num_hit_events, num_track_events, num_no_hit_events, num_no_hits_events, num_malformed_events, num_backward_events, processing_status_code, e3pipe_version, last_processing, last_update) VALUES(%d, %f, %f, %d, %d, %d, %d, %d, %d, %d, %d, "%s", "%s", NOW())' %\
+    query = 'REPLACE INTO run_table (unique_run_id, run_start, run_stop, num_events, num_hit_events, num_track_events, num_no_hit_events, num_no_hits_events, num_malformed_events, num_backward_events, processing_status_code, e3pipe_version, last_processing, last_update) VALUES(%d, %f, %f, %d, %d, %d, %d, %d, %d, %d, %d, "%s", "%s", NOW())' %\
         (uniqueId, header.RunStart, header.RunStop, header.NumEvents,
          header.NumHitEvents, header.NumTrackEvents,
          header.NumNoHitEvents, header.NumNoHitsEvents,
@@ -61,11 +61,11 @@ def e3registerFailure(uniqueId, lockFilePath, db):
                                             lockLastModTime)
         statusCode = open(lockFilePath).readline().strip('\n')
         statusCode = int(statusCode.split()[2])
-        query = 'INSERT INTO run_table (unique_run_id, processing_status_code, last_processing, last_update) VALUES(%d, %d, "%s", NOW())' %\
+        query = 'REPLACE INTO run_table (unique_run_id, processing_status_code, last_processing, last_update) VALUES(%d, %d, "%s", NOW())' %\
             (uniqueId, statusCode, lockLastModDatetime)
     except Exception, e:
         logger.info(e)
-        query = 'INSERT INTO run_table (unique_run_id, processing_status_code, last_update) VALUES(%d, %d, NOW())' %\
+        query = 'REPLACE INTO run_table (unique_run_id, processing_status_code, last_update) VALUES(%d, %d, NOW())' %\
             (uniqueId, E3PIPE_EXIT_CODE_UNKNOWN)
     db.execute(query, commit = True)
 
