@@ -21,6 +21,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import glob
+
 from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
 from e3pipe.__logging__ import logger
 from e3pipe.db.e3registerRun import e3registerRun
