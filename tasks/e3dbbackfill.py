@@ -22,6 +22,7 @@
 
 
 import glob
+import os
 
 from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
 from e3pipe.__logging__ import logger
