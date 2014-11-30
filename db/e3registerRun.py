@@ -50,6 +50,7 @@ def e3registerSuccess(uniqueId, dstFilePath, db):
          header.NumMalformedEvents, header.NumBackwardEvents,
          E3PIPE_EXIT_CODE_SUCCESS, dstFile.version(), dstLastModDatetime)
     db.execute(query, commit = True)
+    dstFile.Close()
 
 
 def e3registerFailure(uniqueId, lockFilePath, db):
