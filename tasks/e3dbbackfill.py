@@ -28,12 +28,28 @@ from e3pipe.db.E3RunDbInterface import E3RunDbInterface
 
 
 
-def e3dbbackfill(stations = None, endDate = None, daysSpanned = 2,
-                 minHoursSinceSynch = 2., maxNumRuns = None):
+class E3RawFileCrawlerSimple(E3RawFileCrawler):
+
+    """
+    """
+
+    def __init__(self, stations = None, endDate = None, daysSpanned = 2,):
+        """ Constructor.
+        """
+        E3RawFileCrawler.__init__(self, stations, endDate, daysSpanned)
+
+    def crawlFolder(self, folderPath):
+        """  Overloaded class method.
+        """
+        fileList = glob.glob(os.path.join(folderPath, '*.bin'))
+        fileList.sort()
+        return fileList
+
+
+def e3dbbackfill(stations = None, endDate = None, daysSpanned = 2):
     """ Crawl the raw data and process the files.
     """
-    crawler = E3RawFileCrawler(stations, endDate, daysSpanned,
-                               minHoursSinceSynch)
+    crawler = E3RawFileCrawlerSimple(stations, endDate, daysSpanned)
     logger.info(crawler)
     numFiles = maxNumRuns or len(crawler)
     curFile = 1
