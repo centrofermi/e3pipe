@@ -34,9 +34,6 @@ parser.add_option('-E', '--end-date', type = str,
 parser.add_option('-N', '--days-spanned', type = int,
                   default = 2, dest = 'span',
                   help = 'the duration (in days) of the time span of interest')
-parser.add_option('-H', '--min-hours', type = int,
-                  default = 2, dest = 'hours',
-                  help = 'the minimum time (in hours) since the rsynch')
 parser.add_option('-m', '--max-runs', type = int,
                   default = None, dest = 'maxruns',
                   help = 'the maximum number of runs to be processed')
@@ -65,5 +62,4 @@ if end is None:
 else:
     from e3pipe.dst.__time__ import str2date
     end = str2date(end)
-e3dbbackfill(opts.stations, end, opts.span, opts.hours,\
-             opts.maxruns)
+e3dbbackfill(opts.stations, end, opts.span, opts.maxruns)

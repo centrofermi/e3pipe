@@ -46,7 +46,8 @@ class E3RawFileCrawlerSimple(E3RawFileCrawler):
         return fileList
 
 
-def e3dbbackfill(stations = None, endDate = None, daysSpanned = 2):
+def e3dbbackfill(stations = None, endDate = None, daysSpanned = 2,
+                 maxNumRuns = None):
     """ Crawl the raw data and process the files.
     """
     crawler = E3RawFileCrawlerSimple(stations, endDate, daysSpanned)
