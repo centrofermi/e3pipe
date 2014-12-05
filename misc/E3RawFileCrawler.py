@@ -82,11 +82,15 @@ class E3RawFileCrawler(E3FileCrawlerBase):
             if (not _processed or self.__Overwrite) and \
                not _new and not _locked:
                 fileList.append(runInfo.RawFilePath)
-        logger.info('%d file(s), %d ready, %d processed, %d locked, %d new, '
-                    'skipping last ready...' %\
+        logger.info('%d file(s), %d ready, %d processed, %d locked, %d new.' %\
                     (numTotal, numReady, numProcessed, numLocked, numNew))
         fileList.sort()
-        return fileList[:-1]
+        return fileList
+
+    def postcrawl():
+        """ Overloaded method.
+        """
+        pass
 
 
     

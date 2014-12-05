@@ -79,6 +79,27 @@ class E3FileCrawlerBase:
         """
         return len(self.__FileList)
 
+    def precrawl(self):
+        """ Do-nothing hook to be used by subclasses.
+        """
+        pass
+
+    def postcrawl(self):
+        """ Do-nothing hook to be used by subclasses.
+        """
+        pass
+
+    def popLastFiles(self):
+        """
+        """
+        logger.info('Popping out last file found for each station...')
+        nstart = len(self)
+        self.__FileList = []
+        for station in self.stations():
+            self.__FileDict[station] = self.__FileDict[station][:-1]
+            self.__FileList += self.__FileDict[station]
+        logger.info('Done, %d file(s) left (were %d).' % (len(self), nstart))
+
     def __crawl(self):
         """ Crawl into the directory structure and fill the file list.
 
@@ -92,6 +113,7 @@ class E3FileCrawlerBase:
         logger.info('Time range: %s--%s' % (startDate, self.endDate()))
         dates = [startDate + datetime.timedelta(i) for \
                  i in range(self.daysSpanned())]
+        self.precrawl()
         for station in self.stations():
             self.__FileDict[station] = []
             logger.info('Searching for data products for station %s...' %\
@@ -103,6 +125,7 @@ class E3FileCrawlerBase:
                 logger.info('%d file(s) found.' % len(fileList))
                 self.__FileDict[station] += fileList
                 self.__FileList += fileList
+        self.postcrawl()
 
     def folderPath(self, station, date):
         """ Return the path to the data folder for a given station and date
