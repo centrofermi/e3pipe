@@ -1,0 +1,2 @@
+export E3PIPE_TEMP=~/eeetmpdev
+echo "E3PIPE_TEMP set to " $E3PIPE_TEMP
