@@ -87,10 +87,10 @@ class E3RawFileCrawler(E3FileCrawlerBase):
         fileList.sort()
         return fileList
 
-    def postcrawl():
+    def postcrawl(self):
         """ Overloaded method.
         """
-        pass
+        self.popLastFiles()
 
 
     
