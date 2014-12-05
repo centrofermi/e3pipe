@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (1.5.1) - Fri, 05 Dec 2014 14:45:47 +0100
+-------------------------------------------------------------------------------
 * Added a small top-level file (.tmpdev) that can be sourced to process files
   into an alternative tmp folder.
 
