@@ -40,8 +40,8 @@ _LICENSE = 'GNU General Public License v3 or later'
 _URL = 'https://bitbucket.org/lbaldini/e3pipe'
 
 _PACKAGES = [
-    'e3pipe', 'e3pipe.dqm', 'e3pipe.dst',
-    'e3pipe.misc', 'e3pipe.root', 'e3pipe.tasks', 'e3pipe.test'
+    'e3pipe', 'e3pipe.analysis', 'e3pipe.config', 'e3pipe.dqm', 'e3pipe.dst',
+    'e3pipe.mc', 'e3pipe.misc', 'e3pipe.root', 'e3pipe.tasks', 'e3pipe.test'
     ]
 
 _PACKAGE_DIR = {
@@ -49,7 +49,7 @@ _PACKAGE_DIR = {
     }
 
 _PACKAGE_DATA = {
-    'e3pipe'      : ['LICENSE', 'README', 'doc'],
+    'e3pipe'      : ['LICENSE', 'README', 'doc/*', 'pilot/*'],
     'e3pipe.doc'  : [],
     'e3pipe.dqm'  : [],
     'e3pipe.dst'  : [],
