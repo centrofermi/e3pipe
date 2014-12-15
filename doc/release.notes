@@ -1,5 +1,6 @@
 
 * Added auxiliary columns to the db (issues #62 and #63).
+* Modified queries in db/e3registerRun.py
 
 -------------------------------------------------------------------------------
 e3pipe (1.6.2) - Mon, 15 Dec 2014 12:48:10 +0100
