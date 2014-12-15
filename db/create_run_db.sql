@@ -96,6 +96,10 @@ DROP TABLE IF EXISTS `run_table`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `run_table` (
+  `station_name` char(7) DEFAULT NULL,
+  `run_date` date DEFAULT NULL,
+  `run_id` int(10) unsigned DEFAULT NULL,
+  `transfer_timestamp` datetime DEFAULT NULL,
   `unique_run_id` bigint(20) unsigned NOT NULL,
   `run_start` double DEFAULT NULL,
   `run_stop` double DEFAULT NULL,
