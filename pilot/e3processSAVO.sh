@@ -1,7 +1,7 @@
 #!/bin/bash
 
 END_DATE="2014-10-20"
-DAYS_SPANNED=365
+DAYS_SPANNED=10
 
 export PYTHONPATH=/opt/eee:$PYTHOPATH
 export PATH=/opt/eee/e3pipe/apps:/opt/eee/bin:$PATH
