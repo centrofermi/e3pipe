@@ -47,7 +47,7 @@ def e3registerSuccess(uniqueId, dstFilePath, db):
     dstFile = E3InputRootFile(dstFilePath)
     header = dstFile.Get('Header')
     header.GetEntry(0)
-    query = 'REPLACE INTO run_table (station_name, run_date, run_id, unique_run_id, run_start, run_stop, num_events, num_hit_events, num_track_events, num_no_hit_events, num_no_hits_events, num_malformed_events, num_backward_events, processing_status_code, e3pipe_version, last_processing, last_update) VALUES(%s, "%s", %d, %d, %f, %f, %d, %d, %d, %d, %d, %d, %d, %d, "%s", "%s", NOW())' %\
+    query = 'REPLACE INTO run_table (station_name, run_date, run_id, unique_run_id, run_start, run_stop, num_events, num_hit_events, num_track_events, num_no_hit_events, num_no_hits_events, num_malformed_events, num_backward_events, processing_status_code, e3pipe_version, last_processing, last_update) VALUES("%s", "%s", %d, %d, %f, %f, %d, %d, %d, %d, %d, %d, %d, %d, "%s", "%s", NOW())' %\
         (_runStation, _runDate, _runId,
          uniqueId, header.RunStart, header.RunStop, header.NumEvents,
          header.NumHitEvents, header.NumTrackEvents,
@@ -70,7 +70,7 @@ def e3registerFailure(uniqueId, lockFilePath, db):
                                             lockLastModTime)
         statusCode = open(lockFilePath).readline().strip('\n')
         statusCode = int(statusCode.split()[2])
-        query = 'REPLACE INTO run_table (station_name, run_date, run_id, unique_run_id, processing_status_code, last_processing, last_update) VALUES(%s, "%s", %d, %d, %d, "%s", NOW())' %\
+        query = 'REPLACE INTO run_table (station_name, run_date, run_id, unique_run_id, processing_status_code, last_processing, last_update) VALUES("%s", "%s", %d, %d, %d, "%s", NOW())' %\
             (_runStation, _runDate, _runId, uniqueId, statusCode,\
              lockLastModDatetime)
     except Exception, e:
