@@ -40,7 +40,7 @@ def e3registerSuccess(uniqueId, dstFilePath, db):
     """ Register into the database a run successfully processed.
     """
     _runStation = runStation(uniqueId)
-    _runDate = time.strftime('%Y-%m-%d', runDate(uniqueId))
+    _runDate = '%s' % runDate(uniqueId)
     _runId = runId(uniqueId)
     dstLastModTime = time.gmtime(os.path.getmtime(dstFilePath))
     dstLastModDatetime = time.strftime('%Y-%m-%d %H:%M:%S', dstLastModTime)
@@ -62,7 +62,7 @@ def e3registerFailure(uniqueId, lockFilePath, db):
     """ Register into the run database a run that we failed to process.
     """
     _runStation = runStation(uniqueId)
-    _runDate = time.strftime('%Y-%m-%d', runDate(uniqueId))
+    _runDate = '%s' % runDate(uniqueId)
     _runId = runId(uniqueId)
     try:
         lockLastModTime = time.gmtime(os.path.getmtime(lockFilePath))
