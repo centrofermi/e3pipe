@@ -22,6 +22,7 @@
 
 
 from e3pipe.db.E3RunDbInterface import E3RunDbInterface
+from dst.__runid__ import runStation, runDate, runId
 from e3pipe.__logging__ import logger
 
 
@@ -31,9 +32,17 @@ def e3backfillRunInfo():
     db = E3RunDbInterface()
     query = 'SELECT * from run_table WHERE station_name is NULL;'
     db.execute(query)
+    i = 0
     for row in db.fetchall():
-        print row
-        break
+        logger.info('Processing row %d' % i)
+        uniqueId = row[4]
+        _runStation = runStation(uniqueId)
+        _runDate = '%s' % runDate(uniqueId)
+        _runId = runId(uniqueId)
+        query = 'UPDATE run_table SET station_name = "%s", run_date = "%s", run_id = %d WHERE unique_run_id = %d' %\
+            (_runStation, _runDate, _runId, uniqueId)
+        db.execute(query, commit = True)
+        i += 1
     db.close()
 
 
