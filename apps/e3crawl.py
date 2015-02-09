@@ -36,13 +36,13 @@ parser.add_option('-N', '--days-spanned', type = int,
                   help = 'the duration (in days) of the time span of interest')
 parser.add_option('-S', '--min-size', type = int,
                   default = 100000, dest = 'minsize',
-                  help = 'the maximum number of runs to be processed')
+                  help = 'the minimum bin file size (in bytes)')
 parser.add_option('-m', '--max-runs', type = int,
                   default = None, dest = 'maxruns',
                   help = 'the maximum number of runs to be processed')
 parser.add_option('-x', '--black-list', action = 'append', type = str,
                   default = None, dest = 'blacklist',
-                  help = 'the station(s) to be processed')
+                  help = 'optional stations to be masked from the processing')
 parser.add_option('-f', '--force-overwrite', action = 'store_true',
                   default = False, dest = 'overwrite',
                   help = 'overwrite runs that are already processed')
