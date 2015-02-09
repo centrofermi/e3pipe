@@ -1,6 +1,8 @@
 
 * All db table names updated to the new naming conventions (necessary for
   cakePhp).
+* Added a new class db/E3RunDbRawFileCrawler.py to populate the file list
+  for the data processing directly from the run database.
 
 -------------------------------------------------------------------------------
 e3pipe (1.7.0) - Mon, 15 Dec 2014 15:26:27 +0100
