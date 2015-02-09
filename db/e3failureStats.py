@@ -23,18 +23,12 @@
 
 from e3pipe.db.E3RunDbInterface import E3RunDbInterface
 from e3pipe.tasks.__exitcodes__ import *
-from e3pipe.config.__storage__ import rawDataFolder
+from e3pipe.config.__storage__ import binFilePath
 from e3pipe.__logging__ import logger
 
 import os
 
 
-def binFilePath(station, date, runId):
-    """
-    """
-    folderPath = rawDataFolder(station, date)
-    fileName = '%s-%s-%05d.bin' % (station, date, runId)
-    return os.path.join(folderPath, fileName)
 
 
 def e3failureStats(exitCode):

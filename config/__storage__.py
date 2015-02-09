@@ -294,6 +294,14 @@ def rawDataFolders(station, endDate = datetime.date.today(), daysSpanned = 2):
         folders.append(rawDataFolder(station, date))
     return folders
 
+def binFilePath(station, date, runId):
+    """ Return the bin file path for a given set of db primary keys
+    (station, date, runI)
+    """
+    folderPath = rawDataFolder(station, date)
+    fileName = '%s-%s-%05d.bin' % (station, date, runId)
+    return os.path.join(folderPath, fileName)
+
 def dataProductLocations(rawFilePath):
     """ Return the file paths for the relevant output files corresponding to
     a given input raw data (.bin) file path
