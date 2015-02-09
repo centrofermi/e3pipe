@@ -27,6 +27,8 @@ ways things can go wrong.
 """
 E3PIPE_EXIT_CODE_SUCCESS = 0
 E3PIPE_EXIT_CODE_UNKNOWN = 17
+E3PIPE_EXIT_CODE_FILE_TOO_SMALL = 98
+E3PIPE_EXIT_CODE_NO_GPS = 99
 E3PIPE_EXIT_CODE_ANALYZER_SEGFAULT = 139
 E3PIPE_EXIT_CODE_ANALYZER_KILLED = 137
 E3PIPE_EXIT_CODE_NO_HITS_EVENTS = 100
@@ -39,6 +41,10 @@ E3PIPE_EXIT_CODE_INTENT_DICT = {
     'success',
     E3PIPE_EXIT_CODE_UNKNOWN:
     'unknown error',
+    E3PIPE_EXIT_CODE_FILE_TOO_SMALL:
+    'the input binary file is too small',
+    E3PIPE_EXIT_CODE_NO_GPS:
+    'no GPS events found in the input binary file', 
     E3PIPE_EXIT_CODE_ANALYZER_SEGFAULT:
     'the EEE analyzer exited with a segmentation fault',
     E3PIPE_EXIT_CODE_ANALYZER_KILLED:
@@ -75,4 +81,5 @@ if __name__ == '__main__':
         exitCodeIntent(E3PIPE_EXIT_CODE_ANALYZER_SEGFAULT)
     print lockFileMessage(E3PIPE_EXIT_CODE_ANALYZER_SEGFAULT)
     print lockFileMessage(E3PIPE_EXIT_CODE_ANALYZER_SEGFAULT, 'run.log')
+    print lockFileMessage(E3PIPE_EXIT_CODE_NO_GPS)
     print lockFileMessage(46)
