@@ -1,5 +1,6 @@
 
 * Updated table of exit codes.
+* Minimum file size set to 0 for the time being.
 
 -------------------------------------------------------------------------------
 e3pipe (1.8.0) - Mon, 09 Feb 2015 15:10:47 +0100
