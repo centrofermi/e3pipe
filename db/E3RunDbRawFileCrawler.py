@@ -34,13 +34,14 @@ class E3RunDbRawFileCrawler:
     """
 
     def __init__(self, endDate = None, daysSpanned = 2, minSize = 100000,
-                 blackList = [], overwrite = False):
+                 blackList = None, overwrite = False):
         """
         """
         self.__Stations = []
         self.__EndDate = endDate or datetime.date.today()
         self.__DaysSpanned = daysSpanned
         self.__MinSize = minSize
+        self.__BlackList = blackList or []
         self.__FileList = []
         self.__FileDict = {}
         self.__Index = 0
@@ -51,7 +52,7 @@ class E3RunDbRawFileCrawler:
         query += ';'
         db.execute(query, commit = False)
         for station, date, runId in db.fetchall():
-            if station not in blackList:
+            if station not in self.__BlackList:
                 if station not in self.__Stations:
                     self.__Stations.append(station)
                     self.__FileDict[station] = []

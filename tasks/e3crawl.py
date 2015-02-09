@@ -26,7 +26,7 @@ import datetime
 
 import e3pipe.__utils__ as __utils__
 
-from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
+from e3pipe.db.E3RunDbRawFileCrawler import E3RunDbRawFileCrawler
 from e3pipe.config.__stations__ import E3_ACTIVE_STATIONS
 from e3pipe.__logging__ import logger, abort, E3FileHandler
 from e3pipe.misc.E3Chrono import E3Chrono
@@ -38,8 +38,8 @@ from e3pipe.db.E3RunDbInterface import E3RunDbInterface
 
 
 
-def e3crawl(stations = None, endDate = None, daysSpanned = 2,
-            minHoursSinceSynch = 2., overwrite = False, maxNumRuns = None,
+def e3crawl(endDate = None, daysSpanned = 2, minSize = 100000,
+            blackList = [], overwrite = False, maxNumRuns = None,
             dryRun = False, register = False):
     """ Crawl the raw data and process the files.
     """
@@ -50,8 +50,8 @@ def e3crawl(stations = None, endDate = None, daysSpanned = 2,
     logFolder = os.path.dirname(logFilePath)
     __utils__.createFolder(logFolder)
     logFileHandler = E3FileHandler(logFilePath)
-    crawler = E3RawFileCrawler(stations, endDate, daysSpanned,
-                               minHoursSinceSynch, overwrite)
+    crawler = E3RunDbRawFileCrawler(endDate, daysSpanned, minSize,
+                                    blackList, overwrite)
     logger.info(crawler)
     if dryRun:
         logger.info('Just kidding, dry run :-)')

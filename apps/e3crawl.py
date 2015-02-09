@@ -34,14 +34,14 @@ parser.add_option('-E', '--end-date', type = str,
 parser.add_option('-N', '--days-spanned', type = int,
                   default = 2, dest = 'span',
                   help = 'the duration (in days) of the time span of interest')
-parser.add_option('-H', '--min-hours', type = int,
-                  default = 2, dest = 'hours',
-                  help = 'the minimum time (in hours) since the rsynch')
+parser.add_option('-S', '--min-size', type = int,
+                  default = 100000, dest = 'minsize',
+                  help = 'the maximum number of runs to be processed')
 parser.add_option('-m', '--max-runs', type = int,
                   default = None, dest = 'maxruns',
                   help = 'the maximum number of runs to be processed')
-parser.add_option('-s', '--station', action = 'append', type = str,
-                  default = None, dest = 'stations',
+parser.add_option('-x', '--black-list', action = 'append', type = str,
+                  default = None, dest = 'blacklist',
                   help = 'the station(s) to be processed')
 parser.add_option('-f', '--force-overwrite', action = 'store_true',
                   default = False, dest = 'overwrite',
@@ -74,5 +74,5 @@ if end is None:
 else:
     from e3pipe.dst.__time__ import str2date
     end = str2date(end)
-e3crawl(opts.stations, end, opts.span, opts.hours, opts.overwrite,\
+e3crawl(end, opts.span, opts.minsize, opts.blacklist, opts.overwrite,
         opts.maxruns, opts.dry, opts.register)
