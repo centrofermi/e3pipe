@@ -47,13 +47,13 @@ def e3registerSuccess(uniqueId, dstFilePath, db):
     dstFile = E3InputRootFile(dstFilePath)
     header = dstFile.Get('Header')
     header.GetEntry(0)
-    query = 'REPLACE INTO runs (station_name, run_date, run_id, unique_run_id, run_start, run_stop, num_events, num_hit_events, num_track_events, num_no_hit_events, num_no_hits_events, num_malformed_events, num_backward_events, processing_status_code, e3pipe_version, last_processing, last_update) VALUES("%s", "%s", %d, %d, %f, %f, %d, %d, %d, %d, %d, %d, %d, %d, "%s", "%s", NOW())' %\
-        (_runStation, _runDate, _runId,
-         uniqueId, header.RunStart, header.RunStop, header.NumEvents,
+    query = 'UPDATE runs SET unique_run_id = %d, run_start = %f, run_stop = %f, num_events = %d, num_hit_events = %d, num_track_events = %d, num_no_hit_events = %d, num_no_hits_events = %d, num_malformed_events = %d, num_backward_events = %d, processing_status_code = %d, e3pipe_version = "%s", last_processing = "%s", last_update = NOW() WHERE station_name = "%s" AND run_date = "%s" AND run_id = %d' %\
+        (uniqueId, header.RunStart, header.RunStop, header.NumEvents,
          header.NumHitEvents, header.NumTrackEvents,
          header.NumNoHitEvents, header.NumNoHitsEvents,
          header.NumMalformedEvents, header.NumBackwardEvents,
-         E3PIPE_EXIT_CODE_SUCCESS, dstFile.version(), dstLastModDatetime)
+         E3PIPE_EXIT_CODE_SUCCESS, dstFile.version(), dstLastModDatetime,
+         _runStation, _runDate, _runId)
     db.execute(query, commit = True)
     dstFile.Close()
 
@@ -70,13 +70,13 @@ def e3registerFailure(uniqueId, lockFilePath, db):
                                             lockLastModTime)
         statusCode = open(lockFilePath).readline().strip('\n')
         statusCode = int(statusCode.split()[2])
-        query = 'REPLACE INTO runs (station_name, run_date, run_id, unique_run_id, processing_status_code, last_processing, last_update) VALUES("%s", "%s", %d, %d, %d, "%s", NOW())' %\
-            (_runStation, _runDate, _runId, uniqueId, statusCode,\
-             lockLastModDatetime)
+        query = 'UPDATE runs SET unique_run_id = %d, processing_status_code = %d, last_processing = "%s", last_update = NOW() WHERE station_name = "%s" AND run_date = "%s" AND run_id = %d' %\
+            (uniqueId, statusCode, lockLastModDatetime, _runStation, _runDate,
+             _runId)
     except Exception, e:
         logger.info(e)
-        query = 'REPLACE INTO runs (station_name, run_date, run_id, unique_run_id, processing_status_code, last_update) VALUES(%d, %d, NOW())' %\
-            (_runStation, _runDate, _runId, uniqueId, E3PIPE_EXIT_CODE_UNKNOWN)
+        query = 'UPDATE runs SET unique_run_id = %d, processing_status_code = %d, last_update = NOW() WHERE station_name = "%s" AND run_date = "%s" AND run_id = %d' %\
+            (uniqueId, E3PIPE_EXIT_CODE_UNKNOWN, _runStation, _runDate, _runId)
     db.execute(query, commit = True)
 
 
