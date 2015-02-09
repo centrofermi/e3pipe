@@ -30,7 +30,7 @@ def e3populateTelescopeIdTable():
     """
     """
     db = E3RunDbInterface()
-    table = 'telescope_id_table'
+    table = 'telescope_ids'
     logger.info('Truncating table %s...' % table)
     query = 'TRUNCATE TABLE %s' % table
     db.execute(query, commit = True)

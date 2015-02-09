@@ -30,7 +30,7 @@ def e3backfillRunInfo():
     """
     """
     db = E3RunDbInterface()
-    query = 'SELECT * from run_table WHERE station_name is NULL;'
+    query = 'SELECT * from runs WHERE station_name is NULL;'
     db.execute(query)
     i = 0
     for row in db.fetchall():
@@ -39,7 +39,7 @@ def e3backfillRunInfo():
         _runStation = runStation(uniqueId)
         _runDate = '%s' % runDate(uniqueId)
         _runId = runId(uniqueId)
-        query = 'UPDATE run_table SET station_name = "%s", run_date = "%s", run_id = %d WHERE unique_run_id = %d' %\
+        query = 'UPDATE runs SET station_name = "%s", run_date = "%s", run_id = %d WHERE unique_run_id = %d' %\
             (_runStation, _runDate, _runId, uniqueId)
         db.execute(query, commit = True)
         i += 1

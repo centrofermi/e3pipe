@@ -30,7 +30,7 @@ def e3populateProcessingStatusCodeTable():
     """
     """
     db = E3RunDbInterface()
-    table = 'processing_status_code_table'
+    table = 'processing_status_codes'
     logger.info('Truncating table %s...' % table)
     query = 'TRUNCATE TABLE %s' % table
     db.execute(query, commit = True)

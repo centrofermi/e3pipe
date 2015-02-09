@@ -90,7 +90,7 @@ class E3RunDbInterface(MySQLdb.connections.Connection):
 
 if __name__ == '__main__':
     db = E3RunDbInterface()
-    numrows = db.execute('SELECT * FROM telescope_id_table')
+    numrows = db.execute('SELECT * FROM telescope_ids')
     print numrows
     for row in db.fetchall():
         print row

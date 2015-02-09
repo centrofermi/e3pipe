@@ -1,5 +1,5 @@
-SELECT COUNT(*) AS `Total number of runs` from run_table;
+SELECT COUNT(*) AS `Total number of runs` from runs;
 
-SELECT * from processing_status_code_table;
+SELECT * from processing_status_codes;
 
-SELECT processing_status_code, COUNT(*) from run_table GROUP BY processing_status_code;
+SELECT processing_status_code, COUNT(*) from runs GROUP BY processing_status_code;

@@ -35,9 +35,7 @@ def e3failureStats(exitCode):
     """
     """
     db = E3RunDbInterface()
-    table = 'run_table'
-    query = 'SELECT station_name, run_date, run_id from %s WHERE processing_status_code = %d' %\
-        (table, exitCode)
+    query = 'SELECT station_name, run_date, run_id from runs WHERE processing_status_code = %d' % exitCode
     db.execute(query, commit = False)
     outputFilePath = 'failures_%d.dat' % exitCode
     logger.info('Opening output file %s...' % outputFilePath)
