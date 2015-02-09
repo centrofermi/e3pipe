@@ -51,12 +51,13 @@ class E3RunDbRawFileCrawler:
         query += ';'
         db.execute(query, commit = False)
         for station, date, runId in db.fetchall():
-            if station not in self.__Stations:
-                self.__Stations.append(station)
-                self.__FileDict[station] = []
-            filePath = binFilePath(station, date, runId)
-            self.__FileDict[station].append(filePath)
-            self.__FileList.append(filePath)
+            if station not in blackList:
+                if station not in self.__Stations:
+                    self.__Stations.append(station)
+                    self.__FileDict[station] = []
+                filePath = binFilePath(station, date, runId)
+                self.__FileDict[station].append(filePath)
+                self.__FileList.append(filePath)
         db.close()
 
     def __iter__(self):
@@ -120,7 +121,8 @@ class E3RunDbRawFileCrawler:
 def test():
     """ Test program.
     """
-    crawler = E3RunDbRawFileCrawler(daysSpanned = 1)
+    crawler = E3RunDbRawFileCrawler(daysSpanned = 1,
+                                    blackList = ['FRAS-03'])
     print crawler
   
 
