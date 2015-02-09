@@ -38,7 +38,7 @@ from e3pipe.db.E3RunDbInterface import E3RunDbInterface
 
 
 
-def e3crawl(endDate = None, daysSpanned = 2, minSize = 100000,
+def e3crawl(endDate = None, daysSpanned = 2, minSize = 0,
             blackList = [], overwrite = False, maxNumRuns = None,
             dryRun = False, register = False):
     """ Crawl the raw data and process the files.

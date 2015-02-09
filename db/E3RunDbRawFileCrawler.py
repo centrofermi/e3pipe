@@ -33,7 +33,7 @@ class E3RunDbRawFileCrawler:
     """
     """
 
-    def __init__(self, endDate = None, daysSpanned = 2, minSize = 100000,
+    def __init__(self, endDate = None, daysSpanned = 2, minSize = 0,
                  blackList = None, overwrite = False):
         """
         """

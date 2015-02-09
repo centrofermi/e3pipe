@@ -35,7 +35,7 @@ parser.add_option('-N', '--days-spanned', type = int,
                   default = 2, dest = 'span',
                   help = 'the duration (in days) of the time span of interest')
 parser.add_option('-S', '--min-size', type = int,
-                  default = 100000, dest = 'minsize',
+                  default = 0, dest = 'minsize',
                   help = 'the minimum bin file size (in bytes)')
 parser.add_option('-m', '--max-runs', type = int,
                   default = None, dest = 'maxruns',
