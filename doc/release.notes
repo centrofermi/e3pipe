@@ -4,6 +4,7 @@
 * Added a new class db/E3RunDbRawFileCrawler.py to populate the file list
   for the data processing directly from the run database.
 * New db crawler in the main processing script.
+* All db insert queries updated.
 
 -------------------------------------------------------------------------------
 e3pipe (1.7.0) - Mon, 15 Dec 2014 15:26:27 +0100
