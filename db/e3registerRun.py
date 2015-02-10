@@ -74,9 +74,9 @@ def registerSuccess(runInfo, db = None):
         'num_hit_events'        : header.NumHitEvents,
         'num_track_events'      : header.NumTrackEvents,
         'num_no_hit_events'     : header.NumNoHitEvents,
-        'num_no_hits_events'    : header.NumNoHitsEvent,
+        'num_no_hits_events'    : header.NumNoHitsEvents,
         'num_malformed_events'  : header.NumMalformedEvents,
-        'num_backward_events'   : header.NumBackwardEvent,
+        'num_backward_events'   : header.NumBackwardEvents,
         'processing_status_code': E3PIPE_EXIT_CODE_SUCCESS,
         'e3pipe_version'        : dstFile.version()
     }
