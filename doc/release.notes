@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (1.9.0) - Tue, 10 Feb 2015 14:19:57 +0100
+-------------------------------------------------------------------------------
 * Run registered automatically when writing on /recon (issue #70).
 * Run registering move to the new app e3process.py, now called from e3crawl.py
   (issue #67).
