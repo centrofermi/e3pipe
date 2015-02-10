@@ -29,9 +29,6 @@ from e3pipe.misc.E3OptionParser import E3OptionParser
 parser = E3OptionParser(_usage, _synopsis)
 parser.add_option('-s', '--suffix', type = str, default = None, dest = 'suffix',
                   help = 'a text label to be attached to the output file names')
-#parser.add_option('-e', '--export', action = 'store_true', default = False,
-#                  dest = 'export',
-#                  help = 'export the DQM products to the Centro Fermi server')
 (opts, args) = parser.parse_args()
 
 # Make sure we are passing some argument.
