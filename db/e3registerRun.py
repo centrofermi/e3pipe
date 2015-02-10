@@ -36,11 +36,11 @@ from e3pipe.tasks.__exitcodes__ import E3PIPE_EXIT_CODE_SUCCESS,\
 def _register(runInfo, db = None, **kwargs):
     """ Base function.
     """
-    station = info['Station']
-    date = info['DateString']
-    runId = info['RunNumber']
+    station = runInfo['Station']
+    date = runInfo['DateString']
+    runId = runInfo['RunNumber']
     kwargs['unique_run_id'] = uniqueRunId(station, date, runId)
-    dstFilePath = info['DstFilePath']
+    dstFilePath = runInfo['DstFilePath']
     if os.path.exists(dstFilePath):
         dstLastModTime = time.gmtime(os.path.getmtime(dstFilePath))
         dstLastModDatetime = time.strftime('%Y-%m-%d %H:%M:%S', dstLastModTime)
