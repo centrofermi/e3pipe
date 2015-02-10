@@ -26,7 +26,7 @@ import os
 
 from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
 from e3pipe.__logging__ import logger
-from e3pipe.db.e3registerRun import e3registerRun
+from e3pipe.db.e3registerRun import registerRun
 from e3pipe.db.E3RunDbInterface import E3RunDbInterface
 
 
@@ -61,7 +61,7 @@ def e3dbbackfill(stations = None, endDate = None, daysSpanned = 2,
     for filePath in crawler:
         logger.info('Registering file %d/%d: %s' %\
                     (curFile, numFiles, filePath))
-        e3registerRun(filePath, db)
+        registerRun(filePath, db)
         if maxNumRuns is not None and curFile >= maxNumRuns:
             break
         curFile += 1
