@@ -60,6 +60,15 @@ except KeyError:
     E3PIPE_RECON_BASE = '/recon'
 
 
+def doDbRegister():
+    """ Return true if E3PIPE_RECON_BASE is pointing to /recon.
+
+    (This means that we are writing in the actual recon space and
+    we should register any action into the db.)
+    """
+    return E3PIPE_RECON_BASE = '/recon'
+
+
 """ Base folder for the eee_calib.txt files.
 """
 try:
