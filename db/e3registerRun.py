@@ -63,7 +63,7 @@ def _register(runInfo, db = None, **kwargs):
 def registerSuccess(runInfo, db = None):
     """ Register a success.
     """
-    dstFilePath = info['DstFilePath']
+    dstFilePath = runInfo['DstFilePath']
     dstFile = E3InputRootFile(dstFilePath)
     header = dstFile.Get('Header')
     header.GetEntry(0)
