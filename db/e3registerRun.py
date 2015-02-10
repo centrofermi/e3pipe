@@ -37,7 +37,8 @@ def _register(runInfo, db = None, **kwargs):
     """ Base function.
     """
     station = runInfo['Station']
-    date = runInfo['DateString']
+    date = runInfo['Date']
+    datestr = runInfo['DateString']
     runId = runInfo['RunNumber']
     kwargs['unique_run_id'] = uniqueRunId(station, date, runId)
     dstFilePath = runInfo['DstFilePath']
@@ -55,7 +56,7 @@ def _register(runInfo, db = None, **kwargs):
         query += '%s = %s, ' % (key, value)
     query = query.strip(' ,')
     query += ' WHERE station_name = "%s" AND run_date = "%s" AND run_id = %d' %\
-             (station, date, runId)
+             (station, datestr, runId)
     db.execute(query, commit = True)
     if _closeOnExit:
         db.close()
