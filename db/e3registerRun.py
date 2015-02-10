@@ -26,6 +26,7 @@ import time
 
 from e3pipe.db.E3RunDbInterface import E3RunDbInterface
 from e3pipe.__logging__ import logger
+from e3pipe.__version__ import TAG
 from e3pipe.dst.E3DstHeaderChain import E3DstHeaderChain
 from e3pipe.dst.__runid__ import uniqueRunId
 from e3pipe.root.E3InputRootFile import E3InputRootFile
@@ -47,6 +48,7 @@ def _register(runInfo, db = None, **kwargs):
         dstLastModDatetime = time.strftime('%Y-%m-%d %H:%M:%S', dstLastModTime)
         kwargs['last_processing'] = '"%s"' % dstLastModDatetime
     kwargs['last_update'] = 'NOW()'
+    kwargs['e3pipe_version'] = '"%s"' % TAG
     _closeOnExit = False
     if db is None:
         db = E3RunDbInterface()
@@ -78,8 +80,7 @@ def registerSuccess(runInfo, db = None):
         'num_no_hits_events'    : header.NumNoHitsEvents,
         'num_malformed_events'  : header.NumMalformedEvents,
         'num_backward_events'   : header.NumBackwardEvents,
-        'processing_status_code': E3PIPE_EXIT_CODE_SUCCESS,
-        'e3pipe_version'        : '"%s"' % dstFile.version()
+        'processing_status_code': E3PIPE_EXIT_CODE_SUCCESS
     }
     dstFile.Close()
     _register(runInfo, db, **kwargs)
@@ -88,8 +89,7 @@ def registerFailure(runInfo, exitCode, db = None):
     """ Registed a failure.
     """
     kwargs = {
-        'processing_status_code': exitCode,
-        'e3pipe_version'        : dstFile.version()
+        'processing_status_code': exitCode
     }
     _register(runInfo, db, **kwargs)
 
