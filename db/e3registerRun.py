@@ -45,7 +45,7 @@ def _register(runInfo, db = None, **kwargs):
     if os.path.exists(dstFilePath):
         dstLastModTime = time.gmtime(os.path.getmtime(dstFilePath))
         dstLastModDatetime = time.strftime('%Y-%m-%d %H:%M:%S', dstLastModTime)
-        kwargs['last_processing'] = dstLastModDatetime
+        kwargs['last_processing'] = '"%s"' % dstLastModDatetime
     kwargs['last_update'] = 'NOW()'
     _closeOnExit = False
     if db is None:
@@ -79,7 +79,7 @@ def registerSuccess(runInfo, db = None):
         'num_malformed_events'  : header.NumMalformedEvents,
         'num_backward_events'   : header.NumBackwardEvents,
         'processing_status_code': E3PIPE_EXIT_CODE_SUCCESS,
-        'e3pipe_version'        : dstFile.version()
+        'e3pipe_version'        : '"%s"' % dstFile.version()
     }
     dstFile.Close()
     _register(runInfo, db, **kwargs)
