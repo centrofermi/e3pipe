@@ -96,7 +96,7 @@ def e3dst(baseFilePath):
         outFile.close()
         sumFile.close()
         __utils__.rm(dstFilePath)
-        logger.info('No events with hits, processing terminated %.3f s.' %\
+        logger.info('No events with hits, processing terminated after %.3f s.' %\
                     chrono.stop())
         sys.exit(E3PIPE_EXIT_CODE_NO_HITS_EVENTS)
     logger.info('Event stats: %s' % eventStat)
