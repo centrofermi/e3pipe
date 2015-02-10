@@ -87,10 +87,20 @@ def registerFailure(runInfo, exitCode, db = None):
     """ Registed a failure.
     """
     kwargs = {
-        'processing_status_code': E3PIPE_EXIT_CODE_SUCCESS,
+        'processing_status_code': exitCode,
         'e3pipe_version'        : dstFile.version()
     }
     _register(runInfo, db, **kwargs)
+
+def registerRun(runInfo, exitCode, db = None):
+    """
+    """
+    if exitCode == E3PIPE_EXIT_CODE_SUCCESS:
+        registerSuccess(runInfo, db)
+    else:
+        registerFailure(runInfo, exitCode, db)
+
+
     
 
 
