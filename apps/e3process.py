@@ -23,6 +23,12 @@
 
 import e3pipe.__utils__ as __utils__
 
+from e3pipe.misc.E3Chrono import E3Chrono
+from e3pipe.__logging__ import logger
+from e3pipe.config.__storage__ import doDbRegister, E3RawDataInfo
+from e3pipe.dst.__runid__ import uniqueRunId
+from e3pipe.db.e3registerRun import registerRun
+
 
 _usage = 'usage: %prog [options] binfile'
 _synopsis = 'Run the full e3recon in a shell and, if needed, register the results in the database'
@@ -51,20 +57,6 @@ if exitCode == 0:
 else:
     logger.error('Processing terminated with exit code %d after %.3f s.' %\
                  (exitCode, chrono.stop()))
-
-
-#if exitCode:
-#    runInfo = E3RawDataInfo(filePath)
-#    lockFilePath = runInfo.LockFilePath
-#    __utils__.createFolder(os.path.dirname(lockFilePath))
-#    logger.info('Writing lock file %s...' % lockFilePath)
-#    msg = lockFileMessage(exitCode, logFilePath)
-#    open(lockFilePath, 'w').write(msg)
-#    logger.info('Done.')
-#    logger.error('Processing terminated after %.3f s.' % chrono.stop())
-#else:
-#    logger.info('Run processed in %.3f s.' % chrono.stop())
-#if register:
-#    db = E3RunDbInterface()
-#    e3registerRun(filePath, db)
-#    db.close()
+if doDbRegister():
+    runInfo = E3RawDataInfo(rawFilePath)
+    registerRun(runInfo, exitCode)
