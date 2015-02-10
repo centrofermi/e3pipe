@@ -43,8 +43,16 @@ from e3pipe.__logging__ import startmsg
 startmsg()
 
 # Run e3recon
+chrono = E3Chrono()
 _cmd = 'e3recon.py %s' % rawFilePath
 exitCode = __utils__.cmd(_cmd)
+if exitCode == 0:
+    logger.info('Run processed in %.3f s.' % chrono.stop())
+else:
+    logger.error('Processing terminated with exit code %d after %.3f s.' %\
+                 (exitCode, chrono.stop()))
+
+
 #if exitCode:
 #    runInfo = E3RawDataInfo(filePath)
 #    lockFilePath = runInfo.LockFilePath
