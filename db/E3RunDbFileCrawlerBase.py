@@ -51,6 +51,15 @@ class E3RunDbFileCrawlerBase:
             return filePath
         except IndexError:
             raise StopIteration()
+        
+    def addFilePath(self, station, filePath):
+        """ Add a file path for a specific station.
+        """
+        if station not in self.__Stations:
+            self.__Stations.append(station)
+            self.__FileDict[station] = []        
+        self.__FileDict[station].append(filePath)
+        self.__FileList.append(filePath)
 
     def __len__(self):
         """ Return the length of the underlying file list.

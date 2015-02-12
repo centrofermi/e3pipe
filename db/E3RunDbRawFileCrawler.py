@@ -43,16 +43,12 @@ class E3RunDbRawFileCrawler(E3RunDbFileCrawlerBase):
         E3RunDbFileCrawlerBase.__init__(self, startDate, endDate)
         self.__MinSize = minSize
         self.__BlackList = blackList or []
-        runList = selectRunsToBeProcessed(startDate, self.__EndDate,
-                                          minSize, overwrite)
+        runList = selectRunsToBeProcessed(startDate, endDate, minSize,
+                                          overwrite)
         for station, date, runId in runList:
             if station not in self.__BlackList:
-                if station not in self.__Stations:
-                    self.__Stations.append(station)
-                    self.__FileDict[station] = []
                 filePath = binFilePath(station, date, runId)
-                self.__FileDict[station].append(filePath)
-                self.__FileList.append(filePath)
+                self.addFilePath(station, filePath)
 
 
 def test():
