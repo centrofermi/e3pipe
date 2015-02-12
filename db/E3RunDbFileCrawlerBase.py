@@ -21,6 +21,10 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import os
+
+from e3pipe.__logging__ import logger
+
 
 class E3RunDbFileCrawlerBase:
     
@@ -57,6 +61,10 @@ class E3RunDbFileCrawlerBase:
     def addFilePath(self, station, filePath):
         """ Add a file path for a specific station.
         """
+        if not os.path.exists(filePath):
+            logger.error('Could not find %s, file will not be added.' %\
+                         filePath)
+            return
         if station not in self.__Stations:
             self.__Stations.append(station)
             self.__FileDict[station] = []

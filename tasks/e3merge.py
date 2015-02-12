@@ -34,7 +34,7 @@ from e3pipe.dst.E3DstEventChain import E3DstEventChain
 from e3pipe.dst.E3DstTrendingChain import E3DstTrendingChain
 from e3pipe.dst.E3DstWeatherChain import E3DstWeatherChain
 from e3pipe.root.E3OutputRootFile import E3OutputRootFile
-from e3pipe.misc.E3DstFileCrawler import E3DstFileCrawler
+from e3pipe.db.E3RunDbDstFileCrawler import E3RunDbDstFileCrawler
 from e3pipe.dst.__time__ import date2str
 
 
@@ -93,7 +93,7 @@ def e3mergeTimeSpan(outputFilePath, station, endDate, daysSpanned = 1,
     Note that we are not offering a sub-daily granularity at this point.
     That might come in the future if needed.
     """
-    crawler = E3DstFileCrawler(station, endDate, daysSpanned)
+    crawler = E3RunDbDstFileCrawler(station, endDate, daysSpanned)
     fileList = crawler.fileList()
     # The crawler return an ordered file list, so no need for an extra sort.
     kwargs['sort'] = False
