@@ -26,7 +26,7 @@ import os
 
 from e3pipe.misc.E3RawFileCrawler import E3RawFileCrawler
 from e3pipe.__logging__ import logger
-from e3pipe.db.e3registerRun import registerRun
+from e3pipe.db.__register__ import registerRun
 from e3pipe.db.E3RunDbInterface import E3RunDbInterface
 
 
