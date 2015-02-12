@@ -54,7 +54,7 @@ parser.add_option('-d', '--dry-run', action = 'store_true',
 # Make sure we are passing some argument.
 if len(args):
     parser.print_help()
-    parser.error('This apps only takes options.')
+    parser.error('This app only takes options.')
 
 # Print the start message.
 from e3pipe.__logging__ import startmsg
