@@ -23,31 +23,26 @@
 
 import datetime
 
+from e3pipe.db.E3RunDbFileCrawlerBase import E3RunDbFileCrawlerBase
 from e3pipe.config.__storage__ import binFilePath
 from e3pipe.db.__select__ import selectRunsToBeProcessed
-from e3pipe.db.E3RunDbInterface import E3RunDbInterface
 
 
 
-class E3RunDbRawFileCrawler:
+class E3RunDbRawFileCrawler(E3RunDbFileCrawlerBase):
     
-    """
+    """ db-based crawler for the binary files.
     """
 
     def __init__(self, endDate = None, daysSpanned = 2, minSize = 0,
                  blackList = None, overwrite = False):
         """
         """
-        self.__Stations = []
-        self.__EndDate = endDate or datetime.date.today()
-        self.__DaysSpanned = daysSpanned
+        endDate = endDate or datetime.date.today()
+        startDate = endDate - datetime.timedelta(daysSpanned)
+        E3RunDbFileCrawlerBase.__init__(self, startDate, endDate)
         self.__MinSize = minSize
         self.__BlackList = blackList or []
-        self.__FileList = []
-        self.__FileDict = {}
-        self.__Index = 0
-        startDate = self.__EndDate -\
-            datetime.timedelta(self.__DaysSpanned)
         runList = selectRunsToBeProcessed(startDate, self.__EndDate,
                                           minSize, overwrite)
         for station, date, runId in runList:
@@ -59,69 +54,11 @@ class E3RunDbRawFileCrawler:
                 self.__FileDict[station].append(filePath)
                 self.__FileList.append(filePath)
 
-    def __iter__(self):
-        """ Overloaded methos to make the object iterable.
-        """
-        return self
-
-    def next(self):
-        """ Iterator next() method.
-        """
-        try:
-            filePath = self.__FileList[self.__Index]
-            self.__Index += 1
-            return filePath
-        except IndexError:
-            raise StopIteration()
-
-    def __len__(self):
-        """ Return the length of the underlying file list.
-        """
-        return len(self.__FileList)
-
-    def stations(self):
-        """ Return the list of stations.
-        """
-        return self.__Stations
-
-    def endDate(self):
-        """ Return the end date of the period of interest.
-        """
-        return self.__EndDate
-
-    def daysSpanned(self):
-        """ Return the length of the period of interest in days.
-        """
-        return self.__DaysSpanned
-
-    def fileDict(self):
-        """ Return the file dict, i.e., a dictionary of file lists indexed
-        by station.
-        """
-        return self.__FileDict
-
-    def fileList(self):
-        """ Return the complete file list.
-        """
-        return self.__FileList
-
-    def __str__(self):
-        """ String formatting.
-        """
-        text = 'DbCrawler file summary:\n'
-        for station in self.stations():
-            text += '%s: %d file(s)\n' %\
-                    (station, len(self.__FileDict[station]))
-        text += 'Total number of files: %d' % len(self.__FileList)
-        return text
-
-
 
 def test():
     """ Test program.
     """
-    crawler = E3RunDbRawFileCrawler(daysSpanned = 1,
-                                    blackList = ['FRAS-03'])
+    crawler = E3RunDbRawFileCrawler(daysSpanned = 1, blackList = ['FRAS-03'])
     print crawler
   
 
