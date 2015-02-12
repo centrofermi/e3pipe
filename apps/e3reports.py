@@ -46,7 +46,7 @@ parser.add_option('-o', '--output-folder', type = str,
 (opts, args) = parser.parse_args()
 
 # Print the start message.
-from e3pipe.__logging__ import startmsg, abort
+from e3pipe.__logging__ import logger, startmsg, abort
 startmsg()
 
 # Import the necessary stuff.
@@ -55,7 +55,7 @@ from e3pipe.tasks.e3report import e3report
 if len(args):
     parser.error('This app only takes options.')
 if opts.statfile is None:
-    parser.error('Please select the station (e3report.py -s station)')
+    parser.error('Please select an input file (e3report.py -F file)')
 
 # And now we are ready to go.
 if opts.end is None:
@@ -67,10 +67,15 @@ else:
 
 import os
     
-if not os.path.exists(opts.statfile):
+if not os.path.isfile(opts.statfile):
     abort('Could not find input file %s' % opts.statfile)
 stations = [line.split()[0] for line in open(opts.statfile)]
-for station in stations:
-    print station
 
-#e3report(opts.station, end, opts.span, opts.out)
+import e3pipe.__utils__ as __utils__
+
+for station in stations:
+    logger.info('Creating report for %s...' % station)
+    _cmd = 'e3report.py -s %s -E %s -N %d -o %s' %\
+        (station, end, opts.span, opts.out)
+    exitCode = __utils__.cmd(_cmd)
+
