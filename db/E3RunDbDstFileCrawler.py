@@ -29,7 +29,7 @@ from e3pipe.db.__select__ import selectProcessedRuns
 
 
 
-class E3RunDbDtsFileCrawler(E3RunDbFileCrawlerBase):
+class E3RunDbDstFileCrawler(E3RunDbFileCrawlerBase):
     
     """ db-based crawler for the binary files.
     """
@@ -52,6 +52,8 @@ def test():
     """
     crawler = E3RunDbDstFileCrawler('BOLO-03')
     print crawler
+    for filePath in crawler:
+        print filePath
   
 
   

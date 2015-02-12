@@ -56,6 +56,8 @@ def test():
     """
     crawler = E3RunDbRawFileCrawler(daysSpanned = 1, blackList = ['FRAS-03'])
     print crawler
+    for filePath in crawler:
+        print filePath
   
 
   

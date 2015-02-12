@@ -35,6 +35,8 @@ class E3RunDbFileCrawlerBase:
         self.__EndDate = endDate
         self.__FileList = []
         self.__FileDict = {}
+        for station in stations:
+            self.__FileDict[station] = []
         self.__Index = 0
 
     def __iter__(self):
@@ -57,7 +59,7 @@ class E3RunDbFileCrawlerBase:
         """
         if station not in self.__Stations:
             self.__Stations.append(station)
-            self.__FileDict[station] = []        
+            self.__FileDict[station] = []
         self.__FileDict[station].append(filePath)
         self.__FileList.append(filePath)
 
