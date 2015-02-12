@@ -55,7 +55,7 @@ from e3pipe.tasks.e3report import e3report
 if len(args):
     parser.error('This apps only takes options.')
 if opts.station is None:
-    parser.error('Please select the station (e3merge.py -s station)')
+    parser.error('Please select the station (e3report.py -s station)')
 
 # And now we are ready to go.
 if opts.end is None:
