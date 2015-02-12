@@ -20,3 +20,53 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+
+def _select(startDate, endDate, selection = None, db = None):
+    """ Base function.
+    """
+    _closeOnExit = False
+    if db is None:
+        db = E3RunDbInterface()
+        _closeOnExit = True
+    query = 'SELECT station_name, run_date, run_id from runs WHERE '
+    query += 'run_date BETWEEN %s AND %s ' % (startDate, endDate)
+    if selection:
+        query += 'AND %s' % selection
+    query = query.strip()
+    query += ';'
+    db.execute(query, commit = False)
+    runList = [item for item in db.fetchall()]
+    if _closeOnExit:
+        db.close()
+    return runList
+
+
+def selectRunsToBeProcessed(startDate, endDate, minSize = 0, overwrite = False,
+                            db = None):
+    """
+    """
+    selection = 'bin_file_size > %d' % minSize
+    if not overwrite:
+        selection += ' AND processing_status_code IS NULL'
+    return _select(startDate, endDate, selection, db)
+
+
+def selectProcessedRuns(startDate, endDate, selection):
+    """
+    """
+    pass
+
+
+def test():
+    """ Test program.
+    """
+    endDate = datetime.date.today()
+    startDate = stopDate - datetime.timedelta(1)
+    for run in selectRunsToBeProcessed(startDate, endDate):
+        print run
+
+  
+
+
+if __name__ == '__main__':
+    test()
