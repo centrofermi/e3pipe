@@ -311,6 +311,19 @@ def binFilePath(station, date, runId):
     fileName = '%s-%s-%05d.bin' % (station, date, runId)
     return os.path.join(folderPath, fileName)
 
+def dstDataFolder(station, date = datetime.date.today()):
+    """ Return the base folder for the DST products.
+    """
+    return os.path.join(E3PIPE_RECON_BASE, station, date2str(date))
+
+def dstFilePath(station, date, runId):
+    """ Return the bin file path for a given set of db primary keys
+    (station, date, runI)
+    """
+    folderPath = dstDataFolder(station, date)
+    fileName = '%s-%s-%05d_dst.root' % (station, date, runId)
+    return os.path.join(folderPath, fileName)
+
 def dataProductLocations(rawFilePath):
     """ Return the file paths for the relevant output files corresponding to
     a given input raw data (.bin) file path

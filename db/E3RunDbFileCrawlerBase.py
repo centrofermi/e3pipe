@@ -27,10 +27,10 @@ class E3RunDbFileCrawlerBase:
     """ Base class for the db crawler.
     """
 
-    def __init__(self, startDate, endDate):
+    def __init__(self, stations, startDate, endDate):
         """
         """
-        self.__Stations = []
+        self.__Stations = stations
         self.__StartDate = startDate
         self.__EndDate = endDate
         self.__FileList = []
