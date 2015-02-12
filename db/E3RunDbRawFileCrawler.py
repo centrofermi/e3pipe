@@ -39,7 +39,7 @@ class E3RunDbRawFileCrawler(E3RunDbFileCrawlerBase):
         """
         """
         endDate = endDate or datetime.date.today()
-        startDate = endDate - datetime.timedelta(daysSpanned)
+        startDate = endDate - datetime.timedelta(daysSpanned - 1)
         E3RunDbFileCrawlerBase.__init__(self, [], startDate, endDate)
         self.__MinSize = minSize
         self.__BlackList = blackList or []

@@ -38,7 +38,7 @@ class E3RunDbDstFileCrawler(E3RunDbFileCrawlerBase):
         """
         """
         endDate = endDate or datetime.date.today()
-        startDate = endDate - datetime.timedelta(daysSpanned)
+        startDate = endDate - datetime.timedelta(daysSpanned - 1)
         E3RunDbFileCrawlerBase.__init__(self, [station], startDate, endDate)
         selection = 'station_name = "%s"' % station
         runList = selectProcessedRuns(startDate, endDate, selection)
