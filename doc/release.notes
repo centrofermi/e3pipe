@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (1.10.0) - Fri, 13 Feb 2015 00:56:22 +0100
+-------------------------------------------------------------------------------
 * Base class added for the db crawlers, and minor refactoring.
 * db crawler for the DST files added and interfaced to e3merge.
 
