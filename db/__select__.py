@@ -21,6 +21,12 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import datetime
+
+from e3pipe.db.E3RunDbInterface import E3RunDbInterface
+
+
+
 def _select(startDate, endDate, selection = None, db = None):
     """ Base function.
     """
@@ -29,13 +35,13 @@ def _select(startDate, endDate, selection = None, db = None):
         db = E3RunDbInterface()
         _closeOnExit = True
     query = 'SELECT station_name, run_date, run_id from runs WHERE '
-    query += 'run_date BETWEEN %s AND %s ' % (startDate, endDate)
+    query += 'run_date BETWEEN "%s" AND "%s"' % (startDate, endDate)
     if selection:
-        query += 'AND %s' % selection
-    query = query.strip()
+        query += ' AND %s' % selection
     query += ';'
     db.execute(query, commit = False)
-    runList = [item for item in db.fetchall()]
+    runList = [(station, str(date), runId) for \
+                   (station, date, runId) in db.fetchall()]
     if _closeOnExit:
         db.close()
     return runList
@@ -61,7 +67,7 @@ def test():
     """ Test program.
     """
     endDate = datetime.date.today()
-    startDate = stopDate - datetime.timedelta(1)
+    startDate = endDate - datetime.timedelta(1)
     for run in selectRunsToBeProcessed(startDate, endDate):
         print run
 
