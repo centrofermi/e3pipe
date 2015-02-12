@@ -24,6 +24,7 @@
 import datetime
 
 from e3pipe.config.__storage__ import binFilePath
+from e3pipe.db.__select__ import selectRunsToBeProcessed
 from e3pipe.db.E3RunDbInterface import E3RunDbInterface
 
 
@@ -45,13 +46,11 @@ class E3RunDbRawFileCrawler:
         self.__FileList = []
         self.__FileDict = {}
         self.__Index = 0
-        db = E3RunDbInterface()
-        query = 'SELECT station_name,run_date,run_id from runs WHERE run_date BETWEEN DATE_SUB("%s", INTERVAL %d DAY) AND "%s" AND bin_file_size > %d' % (self.__EndDate, self.__DaysSpanned, self.__EndDate, self.__MinSize)
-        if not overwrite:
-            query += ' AND processing_status_code IS NULL'
-        query += ';'
-        db.execute(query, commit = False)
-        for station, date, runId in db.fetchall():
+        startDate = self.__EndDate -\
+            datetime.timedelta(self.__DaysSpanned)
+        runList = selectRunsToBeProcessed(startDate, self.__EndDate,
+                                          minSize, overwrite)
+        for station, date, runId in runList:
             if station not in self.__BlackList:
                 if station not in self.__Stations:
                     self.__Stations.append(station)
@@ -59,7 +58,6 @@ class E3RunDbRawFileCrawler:
                 filePath = binFilePath(station, date, runId)
                 self.__FileDict[station].append(filePath)
                 self.__FileList.append(filePath)
-        db.close()
 
     def __iter__(self):
         """ Overloaded methos to make the object iterable.

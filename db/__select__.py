@@ -41,8 +41,7 @@ def _select(startDate, endDate, selection = None, db = None):
         query += ' AND %s' % selection
     query += ';'
     db.execute(query, commit = False)
-    runList = [(station, str(date), runId) for \
-                   (station, date, runId) in db.fetchall()]
+    runList = [item for item in db.fetchall()]
     if _closeOnExit:
         db.close()
     return runList
