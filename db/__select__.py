@@ -24,6 +24,7 @@
 import datetime
 
 from e3pipe.db.E3RunDbInterface import E3RunDbInterface
+from e3pipe.tasks.__exitcodes__ import E3PIPE_EXIT_CODE_SUCCESS
 
 
 
@@ -49,7 +50,7 @@ def _select(startDate, endDate, selection = None, db = None):
 
 def selectRunsToBeProcessed(startDate, endDate, minSize = 0, overwrite = False,
                             db = None):
-    """
+    """ Select the runs to be processed.
     """
     selection = 'bin_file_size > %d' % minSize
     if not overwrite:
@@ -57,10 +58,16 @@ def selectRunsToBeProcessed(startDate, endDate, minSize = 0, overwrite = False,
     return _select(startDate, endDate, selection, db)
 
 
-def selectProcessedRuns(startDate, endDate, selection):
+def selectProcessedRuns(startDate, endDate, selection = None, db = None):
+    """ Select the runs that have been correctly processed, subjected to some
+    condition.
     """
-    """
-    pass
+    _scsel = 'processing_status_code = %d' % E3PIPE_EXIT_CODE_SUCCESS
+    if selection is None:
+        selection = _scsel
+    else:
+        selection += ' AND %s' % _scsel
+    return _select(startDate, endDate, selection, db)
 
 
 def test():
@@ -69,6 +76,13 @@ def test():
     endDate = datetime.date.today()
     startDate = endDate - datetime.timedelta(1)
     for run in selectRunsToBeProcessed(startDate, endDate):
+        print run
+    print
+    for run in selectProcessedRuns(startDate, endDate):
+        print run
+    print
+    for run in selectProcessedRuns(startDate, endDate,
+                                   'station_name = "BOLO-03"'):
         print run
 
   
