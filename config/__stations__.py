@@ -70,7 +70,8 @@ E3_STATION_DICT = {
     'TREV-01': 44, 
     'TRIN-01': 45,
     'VIAR-01': 46,
-    'VIAR-02': 47
+    'VIAR-02': 47,
+    'FRAS-03': 48
 }
 
 
