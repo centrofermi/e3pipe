@@ -82,33 +82,6 @@ for key, value in E3_STATION_DICT.items():
     E3_STATION_ID_DICT[value] = key
 
 
-E3_ACTIVE_STATIONS = [
-    'ALTA-01',
-    'BARI-01',
-    'BOLO-03',
-    'CAGL-01',
-    'CAGL-02',
-    'CAGL-03',
-    'CATA-02',
-    'CATZ-01',
-    'FRAS-02',
-    'GROS-01',
-    'LAQU-01',
-    'LAQU-02',
-    'LECC-01',
-    'LECC-02',
-    'LODI-01',
-    'PISA-01',
-    'SAVO-01',
-    'SAVO-02',
-    'TORI-04',
-    'TRAP-01',
-    'TRIN-01',
-    'VIAR-01',
-    'VIAR-02'
-]
-
-
 E3_LOCATION_DICT = {
     'ALTA-01': {'lat': 40.823383333333, 'lon': 16.553683333333, 'alt': 541.0},
     #'ANCO-01': {'lat': , 'lon': , 'alt': },
@@ -228,6 +201,5 @@ E3_GEOMETRY_DICT = {
 
 if __name__ == '__main__':
     print E3_STATION_DICT
-    print E3_ACTIVE_STATIONS
     print len(E3_STATION_DICT)
-    print len(E3_ACTIVE_STATIONS)
+

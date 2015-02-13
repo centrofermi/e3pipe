@@ -25,7 +25,6 @@ import datetime
 import glob
 import os
 
-from e3pipe.config.__stations__ import E3_ACTIVE_STATIONS
 from e3pipe.dst.__time__ import date2str
 from e3pipe.__logging__ import logger
 
@@ -51,7 +50,7 @@ class E3FileCrawlerBase:
     def __init__(self, stations = None, endDate = None, daysSpanned = 2):
         """ Constructor.
         """
-        self.__Stations = stations or E3_ACTIVE_STATIONS
+        self.__Stations = stations
         self.__EndDate = endDate or datetime.date.today()
         self.__DaysSpanned = daysSpanned
         self.__FileList = []
