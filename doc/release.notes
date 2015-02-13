@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (1.10.3) - Fri, 13 Feb 2015 10:02:05 +0100
+-------------------------------------------------------------------------------
 * Obsolete E3_ACTIVE_STATIONS variable removed from config/__stations__.py.
 * Station geometry/location updated.
 
