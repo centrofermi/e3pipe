@@ -112,7 +112,7 @@ class E3DstEventTree(E3Tree):
         xmin -= 1.e-3
         xmax = xmax or self.runStop()
         xmax += 1.e-3
-        xbins = max(1, int(self.runDuration()/float(timeDelta) + 0.5))
+        xbins = max(1, int((xmax - xmin)/float(timeDelta) + 0.5))
         hist = self.hist1d('Timestamp', cut, name, title, xmin, xmax, xbins,
                            **kwargs)
         hist.Sumw2()

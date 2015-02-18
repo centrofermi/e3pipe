@@ -1,4 +1,8 @@
 
+* Bug fix in doTrending (now taking the actual difference between the maximum
+  and minimum timestamps when calculating the binning for the trending histos
+  and tree).
+
 -------------------------------------------------------------------------------
 e3pipe (1.10.3) - Fri, 13 Feb 2015 10:02:05 +0100
 -------------------------------------------------------------------------------
