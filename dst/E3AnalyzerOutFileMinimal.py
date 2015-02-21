@@ -62,6 +62,8 @@ class E3AnalyzerOutFileMinimal(E3TextTupleBase):
     def __split(self, line):
         """
         """
+        if 'hit' in line:
+            return None
         try:
             data = [int(item) for item in line.split(None, 4)[:4]]
         except:
@@ -82,7 +84,6 @@ class E3AnalyzerOutFileMinimal(E3TextTupleBase):
             data = self.__split(file.next(self))
             self.__CurrentLine += 1
         return data
-        #return '%5d%10d%15d%15d' % tuple(data)
 
 
 
