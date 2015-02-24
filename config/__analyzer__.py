@@ -36,7 +36,7 @@ A little bit of history, here (last updated on October 7, 2014).
 try:
     E3_ANALYZER  = os.environ['E3_ANALYZER']
 except KeyError:
-    E3_ANALYZER = '/opt/eee/bin/EEE_Analyzer_V0'
+    E3_ANALYZER = '/opt/eee/bin/EEE_Analyzer_V3.1'
 
 
 """ And of course we have a custom DAQ in Pisa and need a different

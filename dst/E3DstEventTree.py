@@ -43,17 +43,37 @@ class E3DstEventTree(E3Tree):
                 E3BranchDescriptor('StatusCode', 'i'),
                 E3BranchDescriptor('Seconds', 'i'),
                 E3BranchDescriptor('Nanoseconds', 'l'),
+                E3BranchDescriptor('PosXBot', 'F'),
+                E3BranchDescriptor('PosYBot', 'F'),
+                E3BranchDescriptor('TimeBot', 'F'),
+                E3BranchDescriptor('PosXMid', 'F'),
+                E3BranchDescriptor('PosYMid', 'F'),
+                E3BranchDescriptor('TimeMid', 'F'),
+                E3BranchDescriptor('PosXTop', 'F'),
+                E3BranchDescriptor('PosYTop', 'F'),
+                E3BranchDescriptor('TimeTop', 'F'),
+                E3BranchDescriptor('IntersectXMid', 'F'),
+                E3BranchDescriptor('IntersectYMid', 'F'),
+                E3BranchDescriptor('IntersectZMid', 'F'),
                 E3BranchDescriptor('XDir', 'F'),
                 E3BranchDescriptor('YDir', 'F'),
                 E3BranchDescriptor('ZDir', 'F'),
+                E3BranchDescriptor('NumHitsBot', 'i'),
+                E3BranchDescriptor('NumHitsMid', 'i'),
+                E3BranchDescriptor('NumHitsTop', 'i'),
+                E3BranchDescriptor('NumClustersBot', 'i'),
+                E3BranchDescriptor('NumClustersMid', 'i'),
+                E3BranchDescriptor('NumClustersTop', 'i'),
                 E3BranchDescriptor('ChiSquare', 'F'),
                 E3BranchDescriptor('TimeOfFlight', 'F'),
                 E3BranchDescriptor('TrackLength', 'F'),
                 E3BranchDescriptor('DeltaTime', 'D')
             ]
-    ALIAS_DICT = {'Timestamp': 'Seconds + 1.e-9*Nanoseconds',
-                  'Theta'    : '57.29577951308232*acos(ZDir)',
-                  'Phi'      : '57.29577951308232*atan2(YDir, XDir)'}
+    ALIAS_DICT = {'Timestamp'  : 'Seconds + 1.e-9*Nanoseconds',
+                  'Theta'      : '57.29577951308232*acos(ZDir)',
+                  'Phi'        : '57.29577951308232*atan2(YDir, XDir)',
+                  'NumHits'    : 'NumHitsBot + NumHitsMid + NumHitsTop',
+                  'NumClusters': 'NumClustersBot + NumClustersMid + NumClustersTop'}
 
     def __init__(self):
         """ Constructor.

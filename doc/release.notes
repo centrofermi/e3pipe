@@ -1,6 +1,10 @@
 
 * Created a copy of the dst/E3AnalyzerOutFile class reading the files produced
   by the V0 version of the analyzer for future reference.
+* dst/E3AnalyzerOutFile.py and dst/dst/E3DstEventTree.py modified to read
+  the output files from the new 3.1 Analyzer.
+* config/__analyzer__.py changed to point to the 3.1 version of the Analyzer
+  by default.
 
 -------------------------------------------------------------------------------
 e3pipe (1.11.1) - Tue, 24 Feb 2015 09:00:32 +0100

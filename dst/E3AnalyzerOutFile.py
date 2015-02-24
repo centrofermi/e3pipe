@@ -42,6 +42,7 @@ class E3AnalyzerOutFile(E3TextTupleBase):
     STATUS_CODE_NO_HIT = 0x10
     STATUS_CODE_MALFORMED = 0x100
     STATUS_CODE_UNDEFINED = 0x1000000
+    NON_PHYSICAL_FLOAT_VALUE = -999.
 
     def __init__(self, filePath):
         """ Constructor.
@@ -88,32 +89,54 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         out of the iterator to fill the output ROOT tree.
         """
         # Initialize the output dictionary with sensible default values.
-        outputData = {'RunNumber'   : None,
-                      'EventNumber' : None,
-                      'StatusCode'  : self.STATUS_CODE_UNDEFINED,
-                      'Seconds'     : 0,
-                      'Nanoseconds' : 0,
-                      'Microseconds': 0,
-                      'XDir'        : -1.,
-                      'YDir'        : -1.,
-                      'ZDir'        : -1.,
-                      'ChiSquare'   : -1.,
-                      'TimeOfFlight': -99.,
-                      'TrackLength' : -1.,
-                      'DeltaTime'   : -1.
+        outputData = {'RunNumber'     : None,
+                      'EventNumber'   : None,
+                      'StatusCode'    : self.STATUS_CODE_UNDEFINED,
+                      'Seconds'       : 0,
+                      'Nanoseconds'   : 0,
+                      'Microseconds'  : 0,
+                      'PosXBot'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosYBot'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeBot'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosXMid'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosYMid'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeMid'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosXTop'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosYTop'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeTop'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'IntersectXMid' : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'IntersectYMid' : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'IntersectZMid' : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'XDir'          : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'YDir'          : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'ZDir'          : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'NumHitsBot'    : 0,
+                      'NumHitsMid'    : 0,
+                      'NumHitsTop'    : 0,
+                      'NumClustersBot': 0,
+                      'NumClustersMid': 0,
+                      'NumClustersTop': 0,
+                      'ChiSquare'     : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeOfFlight'  : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TrackLength'   : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'DeltaTime'     : self.NON_PHYSICAL_FLOAT_VALUE
                   }
         data = file.next(self)
         self.__CurrentLine += 1
         self.__EventStat['total'] += 1
-        # Does the line end with "no hits" (whatever that means)?
-        if data.endswith('no hits\n'):
+        # Does the line end with "no physical hits" (whatever that means)?
+        # Note that this used to be "no hits". We are assuming that the
+        # current "no physical hits" is just the equivalent of such old label.
+        if data.endswith('no physical hits\n'):
             self.__EventStat['no_hits'] += 1
-            run, evt, dummy = data.split(None, 2)
+            run, evt, sec, ns, dummy = data.split(None, 4)
             outputData['RunNumber'] = int(run)
             outputData['EventNumber'] = int(evt)
+            outputData['Seconds'] = int(sec)
+            outputData['Nanoseconds'] = int(ns)
             outputData['StatusCode'] = self.STATUS_CODE_NO_HITS
             return outputData
-        # Does the line end with "no hits" (whatever that means)?
+        # Does the line end with "no hit" (whatever that means)?
         # Note that this is different wrt the previous case.
         if data.endswith('no hit\n'):
             self.__EventStat['no_hit'] += 1
@@ -124,16 +147,36 @@ class E3AnalyzerOutFile(E3TextTupleBase):
             return outputData
         # At this point we try and parse the line as if it was normal.
         try:
-            run, evt, sec, ns, us, xdir, ydir, zdir, chi2, tof,\
-                length = data.split()
+            run, evt, sec, ns, us, xbot, ybot, tbot, xmid, ymid, tmid, xtop,\
+                ytop, ttop, intxmid, intymid, intzmid, xdir, ydir, zdir,\
+                nhitbot, nhitmid, nhittop, nclubot, nclumid, nclutop, chi2,\
+                tof, length = data.split()
             run = int(run)
             evt = int(evt)
             sec = int(sec)
             ns = int(ns)
             us = int(us)
+            xbot = float(xbot)
+            ybot = float(ybot)
+            tbot = float(tbot)
+            xmid = float(xmid)
+            ymid = float(ymid)
+            tmid = float(tmid)
+            xtop = float(xtop)
+            ytop = float(ytop)
+            ttop = float(ttop)
+            intxmid = float(intxmid)
+            intymid = float(intymid)
+            intzmid = float(intzmid)
             xdir = float(xdir)
             ydir = float(ydir)
             zdir = float(zdir)
+            nhitbot = int(nhitbot)
+            nhitmid = int(nhitmid)
+            nhittop = int(nhittop)
+            nclubot = int(nclubot)
+            nclumid = int(nclumid)
+            nclutop = int(nclutop)
             chi2 = float(chi2)
             tof = float(tof)
             length = float(length)
@@ -170,9 +213,27 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         outputData['Seconds'] = sec
         outputData['Nanoseconds'] = ns
         outputData['Microseconds'] = us
+        outputData['PosXBot'] = xbot
+        outputData['PosYBot'] = ybot
+        outputData['TimeBot'] = tbot
+        outputData['PosXMid'] = xmid
+        outputData['PosYMid'] = ymid
+        outputData['TimeMid'] = tmid
+        outputData['PosXTop'] = xtop
+        outputData['PosYTop'] = ytop
+        outputData['TimeTop'] = ttop
+        outputData['IntersectXMid'] = intxmid
+        outputData['IntersectYMid'] = intymid
+        outputData['IntersectZMid'] = intzmid
         outputData['XDir'] = xdir
         outputData['YDir'] = ydir
         outputData['ZDir'] = zdir
+        outputData['NumHitsBot'] = nhitbot
+        outputData['NumHitsMid'] = nhitmid
+        outputData['NumHitsTop'] = nhittop
+        outputData['NumClustersBot'] = nclubot
+        outputData['NumClustersMid'] = nclumid
+        outputData['NumClustersTop'] = nclutop
         outputData['ChiSquare'] = chi2
         outputData['TimeOfFlight'] = tof
         outputData['TrackLength'] = length
