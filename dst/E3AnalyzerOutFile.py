@@ -129,11 +129,9 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         # current "no physical hits" is just the equivalent of such old label.
         if data.endswith('no physical hits\n'):
             self.__EventStat['no_hits'] += 1
-            run, evt, sec, ns, dummy = data.split(None, 4)
+            run, evt, dummy = data.split(None, 2)
             outputData['RunNumber'] = int(run)
             outputData['EventNumber'] = int(evt)
-            outputData['Seconds'] = int(sec)
-            outputData['Nanoseconds'] = int(ns)
             outputData['StatusCode'] = self.STATUS_CODE_NO_HITS
             return outputData
         # Does the line end with "no hit" (whatever that means)?
