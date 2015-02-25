@@ -21,34 +21,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-from e3pipe.dst.E3TextTupleField import E3TextTupleField
-from e3pipe.dst.E3TextTupleRow import E3TextTupleRow
 from e3pipe.dst.E3TextTupleBase import E3TextTupleBase
-
-
-class E3Analyzer2ttRow(E3TextTupleRow):
-    
-    """ Class encapsulating a row of a .out file from the analyzer.
-    """
-
-    FIELDS = [E3TextTupleField('RunNumber', int),
-              E3TextTupleField('EventNumber', int),
-              E3TextTupleField('Seconds', int, 's'),
-              E3TextTupleField('Nanoseconds', int, 'ns'),
-              E3TextTupleField('Microseconds', int, 'us'),
-              E3TextTupleField('XDir1', float),
-              E3TextTupleField('YDir1', float),
-              E3TextTupleField('ZDir1', float),
-              E3TextTupleField('ChiSquare1', float),
-              E3TextTupleField('TimeOfFlight1', float, 'ns'),
-              E3TextTupleField('TrackLength1', float, 'cm'),
-              E3TextTupleField('XDir2', float),
-              E3TextTupleField('YDir2', float),
-              E3TextTupleField('ZDir2', float),
-              E3TextTupleField('ChiSquare2', float),
-              E3TextTupleField('TimeOfFlight2', float, 'ns'),
-              E3TextTupleField('TrackLength2', float, 'cm')
-          ]
+from e3pipe.__logging__ import logger
 
 
 
@@ -60,7 +34,7 @@ class E3Analyzer2ttFile(E3TextTupleBase):
     getting out structured objects rather than text lines, e.g.
     """
 
-    ROW_DESCRIPTOR = E3Analyzer2ttRow
+    NON_PHYSICAL_FLOAT_VALUE = -999.
 
     def __init__(self, filePath):
         """ Constructor.
@@ -70,15 +44,78 @@ class E3Analyzer2ttFile(E3TextTupleBase):
         """
         E3TextTupleBase.__init__(self, filePath, '.2tt')
         file.next(self)
+        self.__EventDict = {}
+
+    def next(self):
+        """ Overloaded next() method.
+        """
+        outputData = {'EventNumber'     : None,
+                      'XDir2T'          : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'YDir2T'          : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'ZDir2T'          : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'ChiSquare2T'     : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeOfFlight2T'  : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TrackLength2T'   : self.NON_PHYSICAL_FLOAT_VALUE
+                  }
+        data = file.next(self)
+        data = data.split()
+        evt = int(data[1])
+        outputData['EventNumber'] = evt
+        try:
+            xdir2t = float(data[20])
+            ydir2t = float(data[21])
+            zdir2t = float(data[22])
+            chi22t = float(data[29])
+            tof2t = float(data[30])
+            length2t = float(data[31])
+        except:
+            return outputData
+        outputData['XDir2T'] = xdir2t
+        outputData['YDir2T'] = ydir2t
+        outputData['ZDir2T'] = zdir2t
+        outputData['ChiSquare2T'] = chi22t
+        outputData['TimeOfFlight2T'] = tof2t
+        outputData['TrackLength2T'] = length2t
+        return outputData
+
+    def fillEventDict(self):
+        """ Fill a dictionary with the information about the second tracks.
+        """
+        logger.info('Parsing .2tt file and filling the event dict...')
+        for event in self:
+            self.__EventDict[event['EventNumber']] = event
+        logger.info('Done, %d event(s) with two tracks found.' %\
+                    len(self.__EventDict))
+
+    def eventDict(self):
+        """
+        """
+        return self.__EventDict
+
+    def hasEvent(self, eventNumber):
+        """
+        """
+        return self.__EventDict.has_key(eventNumber)
+
+    def event(self, eventNumber):
+        """
+        """
+        try:
+            return self.__EventDict[eventNumber]
+        except KeyError:
+            return None
 
 
 
-def test(filePath, numEvents = 5):
+def test(filePath, numEvents = 100):
     """ Test code.
     """
     f = E3Analyzer2ttFile(filePath)
+    f.fillEventDict()
     for i in range(numEvents):
-        print f.next()
+        evt = f.event(i)
+        if evt is not None:
+            print i, evt
 
 
 

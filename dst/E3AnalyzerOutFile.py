@@ -24,6 +24,7 @@
 from e3pipe.dst.E3TextTupleField import E3TextTupleField
 from e3pipe.dst.E3TextTupleRow import E3TextTupleRow
 from e3pipe.dst.E3TextTupleBase import E3TextTupleBase
+from e3pipe.dst.E3Analyzer2ttFile import E3Analyzer2ttFile
 from e3pipe.__logging__ import logger
 from e3pipe.config.__dst__ import MAX_GOOD_CHISQUARE
 
@@ -44,7 +45,7 @@ class E3AnalyzerOutFile(E3TextTupleBase):
     STATUS_CODE_UNDEFINED = 0x1000000
     NON_PHYSICAL_FLOAT_VALUE = -999.
 
-    def __init__(self, filePath):
+    def __init__(self, filePath, read2tt = True):
         """ Constructor.
         
         Note we call the base class next() method once, right at the
@@ -53,17 +54,24 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         E3TextTupleBase.__init__(self, filePath, '.out')
         self.__CurrentLine = 1
         self.__LastGoodTimestamp = None
-        self.__EventStat = {'total'    : 0, 
-                            'hits'     : 0,
-                            'track'    : 0,
-                            'malformed': 0,
-                            'no_hits'  : 0,
-                            'no_hit'   : 0,
-                            'backward' : 0
+        self.__EventStat = {'total'     : 0, 
+                            'hits'      : 0,
+                            'track'     : 0,
+                            'two_tracks': 0,
+                            'malformed' : 0,
+                            'no_hits'   : 0,
+                            'no_hit'    : 0,
+                            'backward'  : 0
                             }
         self.__MinTimestamp = None
         self.__MaxTimestamp = None
         file.next(self)
+        self.__Dict2T = {}
+        if read2tt:
+            f2tt = E3Analyzer2ttFile(filePath.replace('.out', '.2tt'))
+            f2tt.fillEventDict()
+            self.__Dict2T = f2tt.eventDict()
+            f2tt.close()
 
     def eventStat(self):
         """ Return the event statistics.
@@ -89,37 +97,55 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         out of the iterator to fill the output ROOT tree.
         """
         # Initialize the output dictionary with sensible default values.
-        outputData = {'RunNumber'     : None,
-                      'EventNumber'   : None,
-                      'StatusCode'    : self.STATUS_CODE_UNDEFINED,
-                      'Seconds'       : 0,
-                      'Nanoseconds'   : 0,
-                      'Microseconds'  : 0,
-                      'PosXBot'       : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'PosYBot'       : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'TimeBot'       : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'PosXMid'       : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'PosYMid'       : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'TimeMid'       : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'PosXTop'       : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'PosYTop'       : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'TimeTop'       : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'IntersectXMid' : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'IntersectYMid' : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'IntersectZMid' : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'XDir'          : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'YDir'          : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'ZDir'          : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'NumHitsBot'    : 0,
-                      'NumHitsMid'    : 0,
-                      'NumHitsTop'    : 0,
-                      'NumClustersBot': 0,
-                      'NumClustersMid': 0,
-                      'NumClustersTop': 0,
-                      'ChiSquare'     : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'TimeOfFlight'  : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'TrackLength'   : self.NON_PHYSICAL_FLOAT_VALUE,
-                      'DeltaTime'     : self.NON_PHYSICAL_FLOAT_VALUE
+        outputData = {'RunNumber'       : None,
+                      'EventNumber'     : None,
+                      'StatusCode'      : self.STATUS_CODE_UNDEFINED,
+                      'Seconds'         : 0,
+                      'Nanoseconds'     : 0,
+                      'Microseconds'    : 0,
+                      'PosXBot'         : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosYBot'         : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeBot'         : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosXMid'         : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosYMid'         : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeMid'         : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosXTop'         : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosYTop'         : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeTop'         : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'IntersectXMid'   : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'IntersectYMid'   : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'IntersectZMid'   : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'XDir'            : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'YDir'            : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'ZDir'            : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'NumHitsBot'      : 0,
+                      'NumHitsMid'      : 0,
+                      'NumHitsTop'      : 0,
+                      'NumClustersBot'  : 0,
+                      'NumClustersMid'  : 0,
+                      'NumClustersTop'  : 0,
+                      'ChiSquare'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeOfFlight'    : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TrackLength'     : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'DeltaTime'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosXBot2T'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosYBot2T'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeBot2T'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosXMid2T'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosYMid2T'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeMid2T'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosXTop2T'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'PosYTop2T'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeTop2T'       : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'IntersectXMid2T' : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'IntersectYMid2T' : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'IntersectZMid2T' : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'XDir2T'          : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'YDir2T'          : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'ZDir2T'          : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'ChiSquare2T'     : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TimeOfFlight2T'  : self.NON_PHYSICAL_FLOAT_VALUE,
+                      'TrackLength2T'   : self.NON_PHYSICAL_FLOAT_VALUE
                   }
         data = file.next(self)
         self.__CurrentLine += 1
@@ -235,6 +261,13 @@ class E3AnalyzerOutFile(E3TextTupleBase):
         outputData['ChiSquare'] = chi2
         outputData['TimeOfFlight'] = tof
         outputData['TrackLength'] = length
+        # Do we have two tracks?
+        if self.__Dict2T.has_key(evt):
+            info2t = self.__Dict2T[evt]
+            for key, value in info2t.items():
+                outputData[key] = value
+            if info2t['ChiSquare2T'] < MAX_GOOD_CHISQUARE:
+                self.__EventStat['two_tracks'] += 1
         # And if the chisquare is low enough, it even has tracks!
         if chi2 < MAX_GOOD_CHISQUARE:
             self.__EventStat['track'] += 1
@@ -255,6 +288,7 @@ def test(filePath, numEvents = 20):
     f = E3AnalyzerOutFile(filePath)
     for i in range(numEvents):
         print f.next()
+    print f.eventStat()
 
 
 
