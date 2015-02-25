@@ -7,6 +7,7 @@
 * Data structure in dst/dst/E3DstEventTree.py updated accordingly.
 * config/__analyzer__.py changed to point to the 3.1 version of the Analyzer
   by default.
+* Two track into from the .2tt file into the DST.
 
 -------------------------------------------------------------------------------
 e3pipe (1.11.1) - Tue, 24 Feb 2015 09:00:32 +0100
