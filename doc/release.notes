@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (2.0.0) - Wed, 25 Feb 2015 11:47:36 +0100
+-------------------------------------------------------------------------------
 * Created a copy of the dst/E3AnalyzerOutFile.py and dst/E3AnalyzerSumFile.py
   classes reading the files produced by the V0 version of the analyzer for
   future reference.
