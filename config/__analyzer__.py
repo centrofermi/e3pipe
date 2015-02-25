@@ -45,7 +45,7 @@ analyzer, otherwise life would have been too simple.
 try:
     E3_ANALYZER_PI  = os.environ['E3_ANALYZER_PI']
 except KeyError:
-    E3_ANALYZER_PI = '/opt/eee/bin/EEE_Analyzer_PI_V2'
+    E3_ANALYZER_PI = '/opt/eee/bin/EEE_Analyzer_PI_V3.1'
 
 
 """ Name of the calibration file that is created on the fly by the analysis

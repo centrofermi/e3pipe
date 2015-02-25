@@ -8,6 +8,8 @@
 * config/__analyzer__.py changed to point to the 3.1 version of the Analyzer
   by default.
 * Two track into from the .2tt file into the DST.
+* config/__analyzer__.py changed to point to the 3.1 version of the Analyzer
+  by default for the Pisan flavor, too.
 
 -------------------------------------------------------------------------------
 e3pipe (1.11.1) - Tue, 24 Feb 2015 09:00:32 +0100
