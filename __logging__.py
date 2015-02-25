@@ -98,7 +98,7 @@ def startmsg():
     from e3pipe.__version__ import TAG, BUILD_DATE
     print('\n    Welcome to e3pipe version %s (built on %s).\n' %\
               (TAG, BUILD_DATE))
-    print('    Copyright (C) 2014 Luca Baldini '
+    print('    Copyright (C) 2014--2015 Luca Baldini '
           '(luca.baldini@pi.infn.it)\n\n'
           '    e3pipe comes with ABSOLUTELY NO WARRANTY.\n'
           '    This is free software, and you are welcome to redistribute '
@@ -108,3 +108,6 @@ def startmsg():
           'more information.\n')
 
 
+    
+if __name__ == '__main__':
+    startmsg()
