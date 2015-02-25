@@ -61,8 +61,10 @@ class E3AnalyzerSumFile(E3InputFile):
         logger.info('Parsing file content...')
         self.__add('NumEvents', self.nextval(int))
         self.__add('NumGpsEvents', self.nextval(int))
-        for i in range(9):
-            self.next()
+        # Skip the wheather station record, if present. 
+        line = self.next()
+        while not 'Hit analysis' in line:
+            line = self.next()
         self.__add('NumNoHitsEvents', self.nextval(int))
         for i in range(3):
             line = self.next()
