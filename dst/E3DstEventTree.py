@@ -90,6 +90,9 @@ class E3DstEventTree(E3Tree):
     ALIAS_DICT = {'Timestamp'  : 'Seconds + 1.e-9*Nanoseconds',
                   'Theta'      : '57.29577951308232*acos(ZDir)',
                   'Phi'        : '57.29577951308232*atan2(YDir, XDir)',
+                  'Theta2T'    : '57.29577951308232*acos(ZDir2T)',
+                  'Phi2T'      : '57.29577951308232*atan2(YDir2T, XDir2T)',
+                  'NumTracks'  : '(ZDir > -1) + (ZDir2T > -1)',
                   'NumHits'    : 'NumHitsBot + NumHitsMid + NumHitsTop',
                   'NumClusters': 'NumClustersBot + NumClustersMid + NumClustersTop'}
 
