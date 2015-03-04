@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (2.0.2) - Wed, 04 Mar 2015 23:16:27 +0100
+-------------------------------------------------------------------------------
 * Minor tweaks to db/e3stat.sql
 * Alarm limits tweaked according to the new definition of a good run
   (issue #68).
