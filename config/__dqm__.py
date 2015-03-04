@@ -31,7 +31,7 @@ TOP_IMAGES = [
 
 DQM_BASELINE_LIST = [
     ('RateHitEvents', 'y_values', 10, 20, 60, 80, dict()),
-    ('DeltaTime', 'exp_fit_lambda', 5, 10, 50, 75, dict(Logy = True)),
+    ('DeltaTime', 'exp_fit_lambda', 4, 8, 80, 100, dict(Logy = True)),
     ('HitMultTop', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
     ('HitMultMid', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
     ('HitMultBot', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
@@ -42,8 +42,8 @@ DQM_BASELINE_LIST = [
     ('ClusterMultTotal', 'x_average', 1.5, 2.5, 6, 9, dict(Logy = True)),
     ('ChiSquare', 'x_average', 1, 2, 6, 10, dict(Logy = True)),
     None,
-    ('RateTrackEvents', 'y_values', 10, 20, 60, 80, dict()),
-    ('FractionTrackEvents', 'y_values', 0.75, 0.8, 1, 1, dict()),
+    ('RateTrackEvents', 'y_values', 4, 8, 80, 100, dict()),
+    ('FractionTrackEvents', 'y_values', 0.4, 0.8, 1, 1, dict()),
     ('Phi', dict()),
     ('Theta', dict()),
     ('TimeOfFlight', dict()),
