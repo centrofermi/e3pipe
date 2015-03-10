@@ -1,4 +1,7 @@
 
+* Minor tweak to the alarm limits on the rate of events with hits, now in
+  line with the new limits on the rate of events with tracks.
+
 -------------------------------------------------------------------------------
 e3pipe (2.0.2) - Wed, 04 Mar 2015 23:16:27 +0100
 -------------------------------------------------------------------------------
