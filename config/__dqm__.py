@@ -30,7 +30,7 @@ TOP_IMAGES = [
 ]
 
 DQM_BASELINE_LIST = [
-    ('RateHitEvents', 'y_values', 10, 20, 60, 80, dict()),
+    ('RateHitEvents', 'y_values', 4, 8, 80, 100, dict()),
     ('DeltaTime', 'exp_fit_lambda', 4, 8, 80, 100, dict(Logy = True)),
     ('HitMultTop', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
     ('HitMultMid', 'x_average', 0.5, 0.75, 2, 3, dict(Logy = True)),
