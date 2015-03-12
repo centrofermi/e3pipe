@@ -32,7 +32,7 @@ from e3pipe.config.__dst__ import MAX_GOOD_CHISQUARE
 
 class E3AnalyzerOutFile(E3TextTupleBase):
 
-    """ Class encapsulating a .out file from the analyizer.
+    """ Class encapsulating a .out file from the analyzer.
 
     The main purpose of this class is to be able to iterate on a .out file
     getting out structured objects rather than text lines, e.g.
