@@ -53,8 +53,13 @@ class E3DstWeatherChain(E3Chain, E3TreePlotter):
         self.setupArrays()
         logger.info('Setting up graphs for environmental quantities...')
         self.__IndoorTemperature = ROOT.TGraph()
+        self.__IndoorTemperature.SetNameTitle('IndoorTemperature',
+                                              'Indoor temperature [#circ C]')
         self.__OutdoorTemperature = ROOT.TGraph()
+        self.__OutdoorTemperature.SetNameTitle('OutdoorTemperature',
+                                               'Outdoor temperature [#circ C]')
         self.__Pressure = ROOT.TGraph()
+        self.__Pressure.SetNameTitle('Pressure', 'Pressure [hPa]')
         for i in xrange(self.GetEntries()):
             self.GetEntry(i)
             t = self.arrayValue('Seconds')

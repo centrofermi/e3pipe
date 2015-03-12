@@ -1,4 +1,8 @@
 
+* Switching to the weather three to get the environmental quantities for the
+  daily reports (they were taken from the trending tree before and this
+  was susceptible to GPS issues).
+
 -------------------------------------------------------------------------------
 e3pipe (2.0.3) - Tue, 10 Mar 2015 11:42:15 +0100
 -------------------------------------------------------------------------------
