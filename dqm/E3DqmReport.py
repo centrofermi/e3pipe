@@ -33,6 +33,7 @@ from e3pipe.dqm.E3HtmlOutputFile import E3HtmlOutputFile
 from e3pipe.__utils__ import createFolder, cp
 from e3pipe.dst.E3DstHeaderChain import E3DstHeaderChain
 from e3pipe.dst.E3DstTrendingChain import E3DstTrendingChain
+from e3pipe.dst.E3DstWeatherChain import E3DstWeatherChain
 from e3pipe.__package__ import E3PIPE_DQM
 from e3pipe.dqm.E3HtmlOutputFile import htmlTableHeader
 from e3pipe.root.E3Legend import E3Legend
@@ -130,9 +131,14 @@ class E3DqmReport:
         _canvas = E3Canvas(self.canvasName('WeatherSummary'))
         _canvas.SetRightMargin(0.15)
         _canvas.SetTicky(0)
-        g1 = trending.plot('IndoorTemperature')
-        g2 = trending.plot('OutdoorTemperature')
-        g3 = trending.plot('Pressure')
+        # Weather quantities.
+        weather = E3DstWeatherChain(self.__InputFilePath)
+        g1 = weather.indoorTemperature()
+        g2 = weather.outdoorTemperature()
+        g3 = weather.pressure()
+        store(g1)
+        store(g2)
+        store(g3)
         ymax = max([g1.GetY()[i] for i in range(g1.GetN())] +\
                    [g2.GetY()[i] for i in range(g2.GetN())])
         ymin = min([g1.GetY()[i] for i in range(g1.GetN())] +\
@@ -149,6 +155,7 @@ class E3DqmReport:
         g1.GetYaxis().SetTitle('Temperature [#circ C]')
         g1.SetLineColor(ROOT.kRed)
         g2.SetLineColor(ROOT.kBlue)
+        setupTimeDisplay(g1)
         g1.Draw('al')
         g2.Draw('lsame')
         # Now put the pressure, with a right axis.
@@ -165,8 +172,10 @@ class E3DqmReport:
         rightAxis.SetTitleFont(TEXT_FONT)
         rightAxis.SetTitleSize(TEXT_SIZE)
         rightAxis.SetTitleOffset(1.2)
+        store(rightAxis)
         rightAxis.Draw()
         g4 = g3.Clone('PressureScaled')
+        store(g4)
         g4.Draw('lsame')
         x = ROOT.Double()
         y = ROOT.Double()
