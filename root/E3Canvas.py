@@ -39,13 +39,17 @@ class E3Canvas(ROOT.TCanvas, E3RootObject):
                        'Gridy': True
     }
     
-    def __init__(self, name, title = None, timestamp = False, **kwargs):
+    def __init__(self, name, title = None, timestamp = False, logo = True,
+                 **kwargs):
         """ Conctructor.
         """
         ROOT.TCanvas.__init__(self, name, title or name)
         self.init(**kwargs)
         self.Timestamp = timestamp
-        self.Logo = E3Logo()
+        if logo:
+            self.Logo = E3Logo()
+        else:
+            self.Logo = None
 
     def annotate(self, x, y, text, size = LABEL_TEXT_SIZE, ndc = True,
                  align = 11, color = ROOT.kBlack, angle = 0):
@@ -60,7 +64,8 @@ class E3Canvas(ROOT.TCanvas, E3RootObject):
         """ Overloaded method to update the canvas and write the style
         version, if in debug mode.
         """
-        self.Logo.Draw()
+        if self.Logo is not None:
+            self.Logo.Draw()
         if self.Timestamp:
             self.annotate(0.02, 0.99, 'Created on %s' % time.asctime(),
                           size = SMALLEST_TEXT_SIZE, align = 13)
