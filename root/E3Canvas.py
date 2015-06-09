@@ -50,6 +50,11 @@ class E3Canvas(ROOT.TCanvas, E3RootObject):
             self.Logo = E3Logo()
         else:
             self.Logo = None
+        if kwargs.get('colz', False):
+            if kwargs.get('ztitle', False):
+                self.SetRightMargin(0.16)
+            else:
+                self.SetRightMargin(0.12)
 
     def annotate(self, x, y, text, size = LABEL_TEXT_SIZE, ndc = True,
                  align = 11, color = ROOT.kBlack, angle = 0):
