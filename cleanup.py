@@ -54,8 +54,8 @@ def cleanupdist():
 
 if __name__ == '__main__':
     for folderPath in [E3PIPE_BASE, E3PIPE_ANALYSIS, E3PIPE_APPS,
-                       E3PIPE_CONFIG, E3PIPE_DQM, E3PIPE_DST, E3PIPE_MC,
-                       E3PIPE_MISC, E3PIPE_PILOT, E3PIPE_ROOT, E3PIPE_DB,
-                       E3PIPE_TASKS, E3PIPE_TEST]:
+                       E3PIPE_CONFIG, E3PIPE_DISPLAY, E3PIPE_DQM, E3PIPE_DST,
+                       E3PIPE_MC, E3PIPE_MISC, E3PIPE_PILOT, E3PIPE_ROOT,
+                       E3PIPE_DB, E3PIPE_TASKS, E3PIPE_TEST]:
         cleanup(folderPath)
     cleanupdist()
