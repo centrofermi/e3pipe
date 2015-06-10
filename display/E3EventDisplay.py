@@ -136,6 +136,7 @@ class E3EventDisplay(E3DstEventChain):
         self.__readEvent(event, refit)
         self.displayHits(color)
         self.displayTrack(color, refit)
+        self.displayResiduals(color)
         self.displayEventInfo()
 
     def displayHits(self, color):
@@ -170,6 +171,27 @@ class E3EventDisplay(E3DstEventChain):
         self.__Canvas.drawLine(x0, y0, z0, xdir, ydir, zdir, bot = 1000,
                                top = 1000, LineColor = color, LineWidth = 1,
                                LineStyle = 7)
+
+    def displayResiduals(self, color, zpad = 4., textSize = 0.8):
+        """ Display the best-track residuals.
+        """
+        if self.value('TimeOfFlight') < 0:
+            zpad = -zpad
+        for hit in self.__CurrentHits:
+            resx = hit.x() - self.__CurrentTrack.extrapolate(hit.z()).x()
+            text = '%.1f cm' % resx
+            if resx > 0:
+                text = '+%s' % text
+            text = '  %s' % text
+            self.__Canvas.annotateXZ(hit.x(), hit.z() + zpad, text,
+                                     color = color, align = 12, size = textSize)
+            resy = hit.y() - self.__CurrentTrack.extrapolate(hit.z()).y()
+            text = '%.1f cm' % resy
+            if resy > 0:
+                text = '+%s' % text
+            text = '  %s' % text
+            self.__Canvas.annotateYZ(hit.y(), hit.z() + zpad, text,
+                                     color = color, align = 12, size = textSize)
 
     def displayEventInfo(self):
         """ Display the event information.
