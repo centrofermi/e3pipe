@@ -29,6 +29,8 @@ from e3pipe.display.E3EventCanvas import E3EventCanvas
 from e3pipe.__logging__ import logger
 from e3pipe.mc.E3FittingTool import E3FittingTool
 from e3pipe.mc.E3Point import E3Point
+from e3pipe.mc.E3Vector import E3Vector
+from e3pipe.mc.E3Track import E3Track
 
 import os
 
@@ -51,6 +53,76 @@ class E3EventDisplay(E3DstEventChain):
         self.__FittingTool = E3FittingTool()
         self.__Canvas = E3EventCanvas(self.__Z)
         self.__Canvas.Show()
+        self.__CurrentHits = []
+        self.__CurrentTrack = None
+
+    def canvas(self):
+        """ Return thr underlying canvas.
+        """
+        return self.__Canvas
+
+    def z(self, i):
+        """ Return the z-coordinate of the i-th plane.
+        
+        (0 is bottom and 2 is top.)
+        """
+        return self.__Z[i]
+
+    def currentHits(self):
+        """
+        """
+        return self.__CurrentHits
+    
+    def currentTrack(self):
+        """
+        """
+        return self.__CurrentTrack
+
+    def __readEvent(self, event, refit = False):
+        """ Read all the event information and store it in memory.
+        """
+        self.__CurrentHits = []
+        self.__CurrentTrack = None
+        self.GetEntry(event)
+        x = self.value('PosXBot')
+        y = self.value('PosYBot')
+        z = self.__Z[0]
+        self.__CurrentHits.append(E3Point(x, y, z))
+        x = self.value('PosXMid')
+        y = self.value('PosYMid')
+        z = self.__Z[1]
+        self.__CurrentHits.append(E3Point(x, y, z))
+        x = self.value('PosXTop')
+        y = self.value('PosYTop')
+        z = self.__Z[2]
+        self.__CurrentHits.append(E3Point(x, y, z))
+        if refit:
+            self.__CurrentTrack = self.refitTrack()
+        else:
+            x0 = self.value('IntersectXMid')
+            y0 = self.value('IntersectYMid')
+            # Note there is apparently a bug where IntersectZMid is always
+            # 80 and cannot be used here.
+            z0 = self.__Z[1]
+            origin = E3Point(x0, y0, z0)
+            xdir = self.value('XDir')
+            ydir = self.value('YDir')
+            zdir = self.value('ZDir')
+            direction = E3Vector(xdir, ydir, zdir)
+            self.__CurrentTrack = E3Track(origin, direction)
+        self.__printEventInfo(event)
+
+    def __printEventInfo(self, event):
+        """ Print event information.
+        """
+        print '*** Information for event %d ***' % event
+        for hit in self.__CurrentHits:
+            print hit
+        print self.__CurrentTrack
+        print 'Track intersection: (%.2f, %.2f, %.2f) **z is wrong **' %\
+            (self.value('IntersectXMid'), self.value('IntersectYMid'),
+             self.value('IntersectZMid'))
+        print 'Track chisquare: %.3f' % (self.value('ChiSquare'))
 
     def display(self, event, color = ROOT.kBlue, refit = False):
         """ Display a single event.
@@ -61,76 +133,40 @@ class E3EventDisplay(E3DstEventChain):
     def overlay(self, event, color, refit = False):
         """ Convenience method for displaying without erasing.
         """
-        self.GetEntry(event)
-        self.__printEventInfo(event)
+        self.__readEvent(event, refit)
         self.displayHits(color)
         self.displayTrack(color, refit)
         self.displayEventInfo()
 
-    def __printEventInfo(self, event):
-        """ Print event information.
-        """
-        print '*** Information for event %d ***' % event
-        print 'Top hit: (%.2f, %.2f, %.2f) cm' %\
-            (self.value('PosXTop'), self.value('PosYTop'), self.__Z[2])
-        print 'Mid hit: (%.2f, %.2f, %.2f) cm' %\
-            (self.value('PosXMid'), self.value('PosYMid'), self.__Z[1])
-        print 'Bot hit: (%.2f, %.2f, %.2f) cm' %\
-            (self.value('PosXBot'), self.value('PosYBot'), self.__Z[0])
-        print 'Track direction: (%.2f, %.2f, %.2f)' %\
-            (self.value('XDir'), self.value('YDir'), self.value('ZDir'))
-        print 'Track intersection: (%.2f, %.2f, %.2f) **z is wrong **' %\
-            (self.value('IntersectXMid'), self.value('IntersectYMid'),
-             self.value('IntersectZMid'))
-        print 'Track chisquare: %.3f' % (self.value('ChiSquare'))
-
     def displayHits(self, color):
         """ Display the hits.
+        
+        Note that we keep track of the 
         """
-        x = self.value('PosXBot')
-        y = self.value('PosYBot')
-        z = self.__Z[0]
-        self.__Canvas.drawMarker(x, y, z, MarkerColor = color)
-        x = self.value('PosXMid')
-        y = self.value('PosYMid')
-        z = self.__Z[1]
-        self.__Canvas.drawMarker(x, y, z, MarkerColor = color)
-        x = self.value('PosXTop')
-        y = self.value('PosYTop')
-        z = self.__Z[2]
-        self.__Canvas.drawMarker(x, y, z, MarkerColor = color)
+        for hit in self.__CurrentHits:
+            self.__Canvas.drawMarker(hit.x(), hit.y(), hit.z(),
+                                     MarkerColor = color)
 
     def refitTrack(self):
         """ Refit the track points.
         """
         logger.info('Refitting track points...')
-        p1 = E3Point(self.value('PosXBot'), self.value('PosYBot'), self.__Z[0])
-        p2 = E3Point(self.value('PosXMid'), self.value('PosYMid'), self.__Z[1])
-        p3 = E3Point(self.value('PosXTop'), self.value('PosYTop'), self.__Z[2])
-        self.__FittingTool.run([p1, p2, p3])
+        self.__FittingTool.run(self.__CurrentHits)
         print self.__FittingTool.track()
         return self.__FittingTool.track()
 
-    def displayTrack(self, color, refit = False):
+    def displayTrack(self, color, refit):
         """ Display the first track.
         """
+        x0 = self.__CurrentTrack.x0()
+        y0 = self.__CurrentTrack.y0()
+        z0 = self.__CurrentTrack.z0()
+        xdir = self.__CurrentTrack.xdir()
+        ydir = self.__CurrentTrack.ydir()
+        zdir = self.__CurrentTrack.zdir()
         if refit:
-            t = self.refitTrack()
-            x0 = t.x0()
-            y0 = t.y0()
-            z0 = t.z0()
-            xdir = -t.xdir()
-            ydir = -t.ydir()
-            zdir = t.zdir()
-        else:
-            x0 = self.value('IntersectXMid')
-            y0 = self.value('IntersectYMid')
-            # Note there is apparently a bug where IntersectZMid is always
-            # 80 and cannot be used here.
-            z0 = self.__Z[1]
-            xdir = self.value('XDir')
-            ydir = self.value('YDir')
-            zdir = self.value('ZDir')
+            xdir = -xdir
+            ydir = -ydir
         self.__Canvas.drawLine(x0, y0, z0, xdir, ydir, zdir, bot = 1000,
                                top = 1000, LineColor = color, LineWidth = 1,
                                LineStyle = 7)

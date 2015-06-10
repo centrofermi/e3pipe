@@ -152,7 +152,22 @@ class E3EventCanvas(E3PhysicalCanvas):
         annotate(0.02, 0.94, '%s [%d - %d]' % (fileName, run, evt),
                  ndc = True,  align = 12)
         self.Update()
-        
+
+    def annotateXZ(self, x, z, text, size = 1, ndc = False,
+                   align = 22, color = ROOT.kBlack, angle = 0):
+        """
+        """
+        _x, _z = self.xz2canvas(x, z)
+        annotate(_x, _z, text, size, ndc, align, color, angle)
+        self.Update()
+
+    def annotateYZ(self, y, z, text, size = 1, ndc = False,
+                   align = 22, color = ROOT.kBlack, angle = 0):
+        """
+        """
+        _y, _z = self.yz2canvas(y, z)
+        annotate(_y, _z, text, size, ndc, align, color, angle)
+        self.Update()
 
 
 if __name__ == '__main__':
