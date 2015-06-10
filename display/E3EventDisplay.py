@@ -52,6 +52,7 @@ class E3EventDisplay(E3DstEventChain):
     def display(self, event, color = ROOT.kBlue):
         """ Display a single event.
         """
+        self.__Canvas.setup()
         self.GetEntry(event)
         self.displayHits(color)
         self.displayTrack(color)

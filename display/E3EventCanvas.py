@@ -60,6 +60,7 @@ class E3EventCanvas(E3PhysicalCanvas):
     def setup(self):
         """ Setup the canvas to display an event.
         """
+        self.Clear()
         self.drawTelescope()
         self.drawReference()
         self.drawAnnotations()
