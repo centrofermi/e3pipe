@@ -131,6 +131,7 @@ class E3EventDisplay(E3DstEventChain):
         """
         self.__Canvas.setup()
         self.overlay(event, color, refit)
+        self.displayEventInfo()
 
     def overlay(self, event, color, refit = False):
         """ Convenience method for displaying without erasing.
@@ -139,7 +140,6 @@ class E3EventDisplay(E3DstEventChain):
         self.displayHits(color)
         self.displayTrack(color, refit)
         self.displayResiduals(color)
-        self.displayEventInfo()
 
     def displayHits(self, color):
         """ Display the hits.
