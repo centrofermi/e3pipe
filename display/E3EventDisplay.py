@@ -105,8 +105,10 @@ class E3EventDisplay(E3DstEventChain):
             # 80 and cannot be used here.
             z0 = self.__Z[1]
             origin = E3Point(x0, y0, z0)
-            xdir = self.value('XDir')
-            ydir = self.value('YDir')
+            # Also, it looks like we need a couple of extra minus sign here.
+            # We should agree on the reference system.
+            xdir = -self.value('XDir')
+            ydir = -self.value('YDir')
             zdir = self.value('ZDir')
             direction = E3Vector(xdir, ydir, zdir)
             self.__CurrentTrack = E3Track(origin, direction)
@@ -165,9 +167,6 @@ class E3EventDisplay(E3DstEventChain):
         xdir = self.__CurrentTrack.xdir()
         ydir = self.__CurrentTrack.ydir()
         zdir = self.__CurrentTrack.zdir()
-        if refit:
-            xdir = -xdir
-            ydir = -ydir
         self.__Canvas.drawLine(x0, y0, z0, xdir, ydir, zdir, bot = 1000,
                                top = 1000, LineColor = color, LineWidth = 1,
                                LineStyle = 7)

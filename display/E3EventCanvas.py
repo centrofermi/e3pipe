@@ -133,15 +133,15 @@ class E3EventCanvas(E3PhysicalCanvas):
         """ Draw a line.
         """
         _x0, _z0 = self.xz2canvas(x0, z0)
-        _x1 = _x0 + bot*xdir
+        _x1 = _x0 - bot*xdir
         _z1 = _z0 - bot*zdir
-        _x2 = _x0 - top*xdir
+        _x2 = _x0 + top*xdir
         _z2 = _z0 + top*zdir
         line(_x1, _z1, _x2, _z2, **kwargs)
         _y0, _z0 = self.yz2canvas(y0, z0)
-        _y1 = _y0 + bot*ydir
+        _y1 = _y0 - bot*ydir
         _z1 = _z0 - bot*zdir
-        _y2 = _y0 - top*ydir
+        _y2 = _y0 + top*ydir
         _z2 = _z0 + top*zdir
         line(_y1, _z1, _y2, _z2, **kwargs)         
         self.Update()
