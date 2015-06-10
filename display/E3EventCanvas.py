@@ -86,9 +86,10 @@ class E3EventCanvas(E3PhysicalCanvas):
             box(0.5*DX - 0.5*self.__W + self.__Pad,
                 z - 0.5*self.__H + self.__Pad,
                 DX, self.PLANE_THICKNESS)
-            box(0.5*DY - 0.5*self.__W + DX + 3*self.__Pad,
-                z - 0.5*self.__H + self.__Pad,
-                DY, self.PLANE_THICKNESS)
+            for i in range(NUM_STRIPS):
+                box((1 + i)*STRIP_PITCH - 0.5*self.__W + DX + 3*self.__Pad,
+                    z - 0.5*self.__H + self.__Pad,
+                    STRIP_PITCH, self.PLANE_THICKNESS)
 
     def drawReference(self):
         """ Draw the reference system.

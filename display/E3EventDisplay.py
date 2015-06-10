@@ -53,10 +53,33 @@ class E3EventDisplay(E3DstEventChain):
         """ Display a single event.
         """
         self.__Canvas.setup()
+        self.overlay(event, color)
+
+    def overlay(self, event, color):
+        """ Convenience method for displaying without erasing.
+        """
         self.GetEntry(event)
+        self.__printEventInfo(event)
         self.displayHits(color)
         self.displayTrack(color)
         self.displayEventInfo()
+
+    def __printEventInfo(self, event):
+        """ Print event information.
+        """
+        print '*** Information for event %d ***' % event
+        print 'Top hit: (%.2f, %.2f, %.2f) cm' %\
+            (self.value('PosXTop'), self.value('PosYTop'), self.__Z[2])
+        print 'Mid hit: (%.2f, %.2f, %.2f) cm' %\
+            (self.value('PosXMid'), self.value('PosYMid'), self.__Z[1])
+        print 'Bot hit: (%.2f, %.2f, %.2f) cm' %\
+            (self.value('PosXBot'), self.value('PosYBot'), self.__Z[0])
+        print 'Track direction: (%.2f, %.2f, %.2f)' %\
+            (self.value('XDir'), self.value('YDir'), self.value('ZDir'))
+        print 'Track intersection: (%.2f, %.2f, %.2f) **z is wrong **' %\
+            (self.value('IntersectXMid'), self.value('IntersectYMid'),
+             self.value('IntersectZMid'))
+        print 'Track chisquare: %.3f' % (self.value('ChiSquare'))
 
     def displayHits(self, color):
         """ Display the hits.
@@ -79,7 +102,7 @@ class E3EventDisplay(E3DstEventChain):
         """
         x0 = self.value('IntersectXMid')
         y0 = self.value('IntersectYMid')
-        # Note there is apparently a but where IntersectZMid is always
+        # Note there is apparently a bug where IntersectZMid is always
         # 80 and cannot be used here.
         z0 = self.__Z[1]
         xdir = self.value('XDir')
