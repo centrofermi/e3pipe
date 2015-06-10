@@ -23,9 +23,9 @@
 
 import math
 
-from e3pipe.mc.E3Point import E3Point
-from e3pipe.mc.E3Vector import E3Vector
-from e3pipe.mc.E3Track import E3Track
+from e3pipe.trk.E3Point import E3Point
+from e3pipe.trk.E3Vector import E3Vector
+from e3pipe.trk.E3Track import E3Track
 
 
 class E3FittingTool:

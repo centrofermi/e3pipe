@@ -41,6 +41,7 @@ E3PIPE_ROOT = os.path.join(E3PIPE_BASE, 'root')
 E3PIPE_DB = os.path.join(E3PIPE_BASE, 'db')
 E3PIPE_TASKS = os.path.join(E3PIPE_BASE, 'tasks')
 E3PIPE_TEST = os.path.join(E3PIPE_BASE, 'test')
+E3PIPE_TRK = os.path.join(E3PIPE_BASE, 'trk')
 
 
 """ Version information.
