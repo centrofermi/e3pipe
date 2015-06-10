@@ -199,6 +199,17 @@ E3_GEOMETRY_DICT = {
 }
 
 
+def geometry(station):
+    """ Return the location of a given station, indexed either by name or
+    unique (integer) ID.
+    """
+    if isinstance(station, int):
+        station = E3_STATION_ID_DICT[station]
+    phiNorth = E3_GEOMETRY_DICT[station]['phi_north']
+    d12 = E3_GEOMETRY_DICT[station]['d12']
+    d23 = E3_GEOMETRY_DICT[station]['d23']
+    return (phiNorth, d12, d23)
+
 
 
 if __name__ == '__main__':

@@ -40,6 +40,7 @@ class E3DstEventChain(E3Chain):
     def __init__(self, *fileList):
         """ Constructor.
         """
+        
         E3Chain.__init__(self, self.TREE_NAME, *fileList)
         
 

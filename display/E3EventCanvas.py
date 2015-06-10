@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # *********************************************************************
-# * Copyright (C) 2014 Luca Baldini (luca.baldini@pi.infn.it)         *
+# * Copyright (C) 2015 Luca Baldini (luca.baldini@pi.infn.it)         *
 # *                                                                   *
 # * For the license terms see the file LICENCE, distributed           *
 # * along with this software.                                         *
@@ -55,8 +55,14 @@ class E3EventCanvas(E3PhysicalCanvas):
         self.__H = self.__Pad*2 + dz
         E3PhysicalCanvas.__init__(self, self.NAME, self.__W, self.__H,
                                   self.WPX,  title = self.TITLE, logo = False)
+        self.setup()
+
+    def setup(self):
+        """ Setup the canvas to display an event.
+        """
         self.drawTelescope()
         self.drawReference()
+        self.drawAnnotations()
 
     def xz2canvas(self, x, z):
         """ Convert from physical units to canvas coordinates (x-z plane).
@@ -98,14 +104,53 @@ class E3EventCanvas(E3PhysicalCanvas):
         arrow(_y, _z, _y, _z + _l)
         annotate(_y, _z + _l, 'z ', align = 31)
 
-    def drawPoint(self, x, y, z):
+    def drawAnnotations(self):
+        """ Draw some annotations.
+        """
+        _x, _z = self.xz2canvas(DX + self.__Pad, self.__Z[0])
+        annotate(_x, _z, 'bot', align = 22)
+        _x, _z = self.xz2canvas(DX + self.__Pad, self.__Z[1])
+        annotate(_x, _z, 'mid', align = 22)
+        _x, _z = self.xz2canvas(DX + self.__Pad, self.__Z[2])
+        annotate(_x, _z, 'top', align = 22)
+        _x, _z1 = self.xz2canvas(-0.5*self.__Pad, self.__Z[1])
+        _x, _z2 = self.xz2canvas(-0.5*self.__Pad, self.__Z[2])
+        vquote(_z1, _z2, _x)
+
+    def drawMarker(self, x, y, z, **kwargs):
         """ Draw a three-dimensional point.
         """
         _x, _z = self.xz2canvas(x, z)
-        marker(_x, _z)
+        marker(_x, _z, **kwargs)
         _y, _z = self.yz2canvas(y, z)
-        marker(_y, _z)
+        marker(_y, _z, **kwargs)
         self.Update()
+
+    def drawLine(self, x0, y0, z0, xdir, ydir, zdir, top = 100, bot = 100,
+                 **kwargs):
+        """ Draw a line.
+        """
+        _x0, _z0 = self.xz2canvas(x0, z0)
+        _x1 = _x0 + bot*xdir
+        _z1 = _z0 - bot*zdir
+        _x2 = _x0 - top*xdir
+        _z2 = _z0 + top*zdir
+        line(_x1, _z1, _x2, _z2, **kwargs)
+        _y0, _z0 = self.yz2canvas(y0, z0)
+        _y1 = _y0 + bot*ydir
+        _z1 = _z0 - bot*zdir
+        _y2 = _y0 - top*ydir
+        _z2 = _z0 + top*zdir
+        line(_y1, _z1, _y2, _z2, **kwargs)         
+        self.Update()
+
+    def drawEventInfo(self, fileName, run, evt):
+        """
+        """
+        annotate(0.02, 0.94, '%s [%d - %d]' % (fileName, run, evt),
+                 ndc = True,  align = 12)
+        self.Update()
+        
 
 
 if __name__ == '__main__':
