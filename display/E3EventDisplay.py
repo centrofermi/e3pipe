@@ -27,6 +27,8 @@ from e3pipe.config.__stations__ import geometry
 from e3pipe.root.E3InputRootFile import E3InputRootFile
 from e3pipe.display.E3EventCanvas import E3EventCanvas
 from e3pipe.__logging__ import logger
+from e3pipe.mc.E3FittingTool import E3FittingTool
+from e3pipe.mc.E3Point import E3Point
 
 import os
 
@@ -46,22 +48,23 @@ class E3EventDisplay(E3DstEventChain):
         logger.info('Plane z values: %s' % self.__Z)
         E3DstEventChain.__init__(self, *fileList)
         self.setupArrays()
+        self.__FittingTool = E3FittingTool()
         self.__Canvas = E3EventCanvas(self.__Z)
         self.__Canvas.Show()
 
-    def display(self, event, color = ROOT.kBlue):
+    def display(self, event, color = ROOT.kBlue, refit = False):
         """ Display a single event.
         """
         self.__Canvas.setup()
-        self.overlay(event, color)
+        self.overlay(event, color, refit)
 
-    def overlay(self, event, color):
+    def overlay(self, event, color, refit = False):
         """ Convenience method for displaying without erasing.
         """
         self.GetEntry(event)
         self.__printEventInfo(event)
         self.displayHits(color)
-        self.displayTrack(color)
+        self.displayTrack(color, refit)
         self.displayEventInfo()
 
     def __printEventInfo(self, event):
@@ -97,19 +100,40 @@ class E3EventDisplay(E3DstEventChain):
         z = self.__Z[2]
         self.__Canvas.drawMarker(x, y, z, MarkerColor = color)
 
-    def displayTrack(self, color):
+    def refitTrack(self):
+        """ Refit the track points.
+        """
+        logger.info('Refitting track points...')
+        p1 = E3Point(self.value('PosXBot'), self.value('PosYBot'), self.__Z[0])
+        p2 = E3Point(self.value('PosXMid'), self.value('PosYMid'), self.__Z[1])
+        p3 = E3Point(self.value('PosXTop'), self.value('PosYTop'), self.__Z[2])
+        self.__FittingTool.run([p1, p2, p3])
+        print self.__FittingTool.track()
+        return self.__FittingTool.track()
+
+    def displayTrack(self, color, refit = False):
         """ Display the first track.
         """
-        x0 = self.value('IntersectXMid')
-        y0 = self.value('IntersectYMid')
-        # Note there is apparently a bug where IntersectZMid is always
-        # 80 and cannot be used here.
-        z0 = self.__Z[1]
-        xdir = self.value('XDir')
-        ydir = self.value('YDir')
-        zdir = self.value('ZDir')
-        self.__Canvas.drawLine(x0, y0, z0, xdir, ydir, zdir,
-                               LineColor = color, LineWidth = 1, LineStyle = 7)
+        if refit:
+            t = self.refitTrack()
+            x0 = t.x0()
+            y0 = t.y0()
+            z0 = t.z0()
+            xdir = -t.xdir()
+            ydir = -t.ydir()
+            zdir = t.zdir()
+        else:
+            x0 = self.value('IntersectXMid')
+            y0 = self.value('IntersectYMid')
+            # Note there is apparently a bug where IntersectZMid is always
+            # 80 and cannot be used here.
+            z0 = self.__Z[1]
+            xdir = self.value('XDir')
+            ydir = self.value('YDir')
+            zdir = self.value('ZDir')
+        self.__Canvas.drawLine(x0, y0, z0, xdir, ydir, zdir, bot = 1000,
+                               top = 1000, LineColor = color, LineWidth = 1,
+                               LineStyle = 7)
 
     def displayEventInfo(self):
         """ Display the event information.
@@ -124,7 +148,7 @@ def test(*fileList):
     """ Test code.
     """
     c = E3EventDisplay(*fileList)
-    c.display(0)
+    c.display(0, refit = True)
     
 
 

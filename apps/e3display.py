@@ -28,6 +28,9 @@ _synopsis = 'Single event display for the DST files'
 # Set up the command-line switches.
 from e3pipe.misc.E3OptionParser import E3OptionParser
 parser = E3OptionParser(_usage, _synopsis)
+parser.add_option('-r', '--refit', action = 'store_true',
+                  default = False, dest = 'refit',
+                  help = 're-fit the track points')
 (opts, args) = parser.parse_args()
 
 # Print the start message.
@@ -46,6 +49,6 @@ answer = ''
 msg = 'Press q to quit, s to save or type a number...'
 event = 0
 while answer != 'q':
-    display.display(event)
+    display.display(event, refit = opts.refit)
     event += 1
     answer = raw_input(msg)
