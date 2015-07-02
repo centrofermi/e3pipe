@@ -155,7 +155,7 @@ class E3EventDisplay(E3DstEventChain):
         """
         logger.info('Refitting track points...')
         self.__FittingTool.run(self.__CurrentHits)
-        print self.__FittingTool.track()
+        print self.__FittingTool
         return self.__FittingTool.track()
 
     def displayTrack(self, color, refit):

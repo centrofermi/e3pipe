@@ -43,13 +43,17 @@ class E3FittingTool:
         """
         origin = E3Point(-1., -1., -1)
         direction = E3Vector(-1., -1., -1.)
-        self.__Track = E3Track(origin, direction)
-        self.__ChiSquare = -1.
+        self.__Track = E3Track(origin, direction, -1.)
 
     def track(self):
-        """
+        """ Return the best-fit track.
         """
         return self.__Track
+
+    def __str__(self):
+        """ String formatting.
+        """
+        return '%s' % self.__Track
 
     def run(self, hits):
         """ Run the track fitting.
@@ -110,10 +114,13 @@ class E3FittingTool:
         self.__Track = E3Track(p0, v0)
         # Need a final loop to calculate the chisquare, here.
         chi2 = 0.
-        err = 2.5
+        err = 1.0
         for hit in hits:
-            pass
-        self.__ChiSquare = chi2
+            extr = self.__Track.extrapolate(hit.z())
+            resx = hit.x() - extr.x()
+            resy = hit.y() - extr.y()
+            chi2 += (resx**2 + resy**2)
+        self.__Track.setChi2(chi2)
 
 
 

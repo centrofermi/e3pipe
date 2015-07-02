@@ -30,11 +30,17 @@ class E3Track:
     """ Class representing a track.
     """
     
-    def __init__(self, origin, direction):
+    def __init__(self, origin, direction, chi2 = -1.):
         """ Constructor.
         """
         self.__Origin = origin
         self.__Direction = direction
+        self.__Chi2 = chi2
+
+    def setChi2(self, chi2):
+        """ Set the track chisquare.
+        """
+        self.__Chi2 = chi2
 
     def origin(self):
         """ Return the starting point of the track.
@@ -46,6 +52,11 @@ class E3Track:
         """
         return self.__Direction
 
+    def chi2(self):
+        """ Return the track chisquare.
+        """
+        return self.__Chi2
+    
     def x0(self):
         """ Return the x-coordinate of the starting point of the track.
         """
@@ -96,7 +107,8 @@ class E3Track:
     def __str__(self):
         """ String formatting
         """
-        return '%s -> %s' % (self.origin(), self.direction())
+        return '%s -> %s (chi2 = %.3f)' %\
+            (self.origin(), self.direction(), self.chi2())
 
 
 
