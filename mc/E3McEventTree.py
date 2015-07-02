@@ -41,7 +41,8 @@ class E3McEventTree(E3Tree):
                 E3BranchDescriptor('McZDir', 'F'),
                 E3BranchDescriptor('XDir', 'F'),
                 E3BranchDescriptor('YDir', 'F'),
-                E3BranchDescriptor('ZDir', 'F')
+                E3BranchDescriptor('ZDir', 'F'),
+                E3BranchDescriptor('ChiSquare', 'F'),
             ]
     ALIAS_DICT = {'McTheta': '57.29577951308232*acos(McZDir)',
                   'McPhi'  : '57.29577951308232*atan2(McYDir, McXDir)',
@@ -68,6 +69,9 @@ class E3McEventTree(E3Tree):
         self.hist1d('Phi', cut = 'Trigger == 1',
                     xmin = -180., xmax = 180., xbins = 50,
                     XTitle = '#phi [#circ]', Minimum = 0.)
+        self.hist1d('ChiSquare', cut = 'Trigger == 1',
+                    xmin = 0., xmax = 50., xbins = 100,
+                    XTitle = '#chi^{2}')
 
 
 def test():

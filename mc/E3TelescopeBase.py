@@ -142,6 +142,7 @@ class E3TelescopeBase:
         if len(hits) == 3:
             self.__FittingTool.run(hits)
         recTrack = self.__FittingTool.track()
+        chi2 = recTrack.chi2()
         recTheta = math.radians(recTrack.theta())
         recPhi = math.radians(recTrack.phi())
         # Rotate phi from instrument coordinates to absolute coordinates.
@@ -157,13 +158,14 @@ class E3TelescopeBase:
         recXdir = math.cos(recPhi)*math.sin(recTheta)
         recYdir = math.sin(recPhi)*math.sin(recTheta)
         recZdir = math.cos(recTheta)
-        return {'McXDir' : mcXdir,
-                'McYDir' : mcYdir,
-                'McZDir' : mcZdir,
-                'XDir'   : recXdir,
-                'YDir'   : recYdir,
-                'ZDir'   : recZdir,
-                'Trigger': trig}
+        return {'McXDir'   : mcXdir,
+                'McYDir'   : mcYdir,
+                'McZDir'   : mcZdir,
+                'XDir'     : recXdir,
+                'YDir'     : recYdir,
+                'ZDir'     : recZdir,
+                'Trigger'  : trig,
+                'ChiSquare': chi2}
 
     def withinActiveArea(self, x, y):
         """ Return whether a given (x, y) two-dimensional point is within
