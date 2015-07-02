@@ -78,7 +78,7 @@ class E3EventDisplay(E3DstEventChain):
         """
         return self.__CurrentTrack
 
-    def __readEvent(self, event, refit = False):
+    def readEvent(self, event, refit = False, verbose = True):
         """ Read all the event information and store it in memory.
         """
         self.__CurrentHits = []
@@ -97,7 +97,7 @@ class E3EventDisplay(E3DstEventChain):
         z = self.__Z[2]
         self.__CurrentHits.append(E3Point(x, y, z))
         if refit:
-            self.__CurrentTrack = self.refitTrack()
+            self.__CurrentTrack = self.refitTrack(verbose)
         else:
             x0 = self.value('IntersectXMid')
             y0 = self.value('IntersectYMid')
@@ -112,7 +112,8 @@ class E3EventDisplay(E3DstEventChain):
             zdir = self.value('ZDir')
             direction = E3Vector(xdir, ydir, zdir)
             self.__CurrentTrack = E3Track(origin, direction)
-        self.__printEventInfo(event)
+        if verbose:
+            self.__printEventInfo(event)
 
     def __printEventInfo(self, event):
         """ Print event information.
@@ -136,7 +137,7 @@ class E3EventDisplay(E3DstEventChain):
     def overlay(self, event, color, refit = False):
         """ Convenience method for displaying without erasing.
         """
-        self.__readEvent(event, refit)
+        self.readEvent(event, refit)
         self.displayHits(color)
         self.displayTrack(color, refit)
         self.displayResiduals(color)
@@ -150,12 +151,13 @@ class E3EventDisplay(E3DstEventChain):
             self.__Canvas.drawMarker(hit.x(), hit.y(), hit.z(),
                                      MarkerColor = color)
 
-    def refitTrack(self):
+    def refitTrack(self, verbose = True):
         """ Refit the track points.
         """
         logger.info('Refitting track points...')
         self.__FittingTool.run(self.__CurrentHits)
-        print self.__FittingTool
+        if verbose:
+            print self.__FittingTool
         return self.__FittingTool.track()
 
     def displayTrack(self, color, refit):
