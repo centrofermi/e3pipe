@@ -80,10 +80,18 @@ def test():
     """ Test function
     """
     fitTool = E3FittingToolBase()
-    hits = [E3Point(20.00, -53.28, 142.00),
-            E3Point(35.00, -37.05, 97.00),
-            E3Point(55.00, -21.60, 53.00)
-    ]
+    # Real event from FRAS-02-2014-10-30-00018_dst.root (11878)
+    # Processed with e3pipe 2.1.0 gives:
+    # root [4] Events.Scan("XDir:YDir:ZDir:ChiSquare", "EventNumber==11878")
+    # ************************************************************
+    # *    Row   *      XDir *      YDir *      ZDir * ChiSquare *
+    # ************************************************************
+    # *    11878 * -0.050563 * 0.1976770 * 0.9789620 * 1.6044100 *
+    # ************************************************************
+    hits = [E3Point(79.229, 38.400, 0.000),
+            E3Point(82.742, 32.000, 40.000),
+            E3Point(83.922, 22.400, 80.000)
+            ]
     fitTool.run(hits)
     print fitTool.track()
 
