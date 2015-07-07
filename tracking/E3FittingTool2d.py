@@ -82,8 +82,8 @@ class E3FittingTool2d(E3FittingToolBase):
         zdir  = 1./denom
         v0 = E3Vector(xdir, ydir, zdir)
         # Refer the centroid to a common z0 value (e.g., the z of the
-        # first hit)
-        z0 = hits[0].z()
+        # mid hit)
+        z0 = hits[1].z()
         x0 = zxintercept + z0*zxslope
         y0 = zyintercept + z0*zyslope
         p0 = E3Point(x0, y0, z0)

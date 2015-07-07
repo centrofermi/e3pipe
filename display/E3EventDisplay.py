@@ -112,6 +112,8 @@ class E3EventDisplay(E3DstEventChain):
             zdir = self.value('ZDir')
             direction = E3Vector(xdir, ydir, zdir)
             self.__CurrentTrack = E3Track(origin, direction)
+            chi2 = self.value('ChiSquare')
+            self.__CurrentTrack.setChi2(chi2)
         if verbose:
             self.__printEventInfo(event)
 
@@ -122,10 +124,6 @@ class E3EventDisplay(E3DstEventChain):
         for hit in self.__CurrentHits:
             print hit
         print self.__CurrentTrack
-        print 'Track intersection: (%.2f, %.2f, %.2f) **z is wrong **' %\
-            (self.value('IntersectXMid'), self.value('IntersectYMid'),
-             self.value('IntersectZMid'))
-        print 'Track chisquare: %.3f' % (self.value('ChiSquare'))
 
     def display(self, event, color = ROOT.kBlue, refit = False):
         """ Display a single event.
