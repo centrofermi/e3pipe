@@ -72,7 +72,7 @@ class E3FittingToolAnalyzer(E3FittingToolBase):
 	n2 = 1. / math.sqrt(1. + p0*p0 + p2*p2)
 	zzz = n0*n0 + n1*n1 + n2*n2
         
-        # Evaluation of distances between points and line in 3D-space        
+        # Evaluation of distances between points and line in 3D-space.
 	dd = math.sqrt(zzz) 
 	axB = n2*(yyB - p3) - n1*zzB
 	ayB = -1 * n2 * (xxB - p1) + n0 * zzB
