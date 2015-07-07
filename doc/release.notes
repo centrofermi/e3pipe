@@ -1,3 +1,7 @@
+
+-------------------------------------------------------------------------------
+e3pipe (2.2.0) - Tue, 07 Jul 2015 14:01:44 -0700
+-------------------------------------------------------------------------------
 * Minor modifications to the ROOT style.
 * Initial implementation of a single event display.
 * Chisquare calculation added to the track fitting.
