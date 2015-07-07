@@ -1,4 +1,7 @@
 
+* Added a stripped down version of the track fitter implemented in the
+  Analyzer for debugging purposes.
+
 -------------------------------------------------------------------------------
 e3pipe (2.2.0) - Tue, 07 Jul 2015 14:01:44 -0700
 -------------------------------------------------------------------------------
