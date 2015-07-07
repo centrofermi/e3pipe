@@ -23,44 +23,20 @@
 
 import math
 
-from e3pipe.trk.E3Point import E3Point
-from e3pipe.trk.E3Vector import E3Vector
-from e3pipe.trk.E3Track import E3Track
+from e3pipe.tracking.E3Point import E3Point
+from e3pipe.tracking.E3Vector import E3Vector
+from e3pipe.tracking.E3Track import E3Track
+from e3pipe.tracking.E3FittingToolBase import E3FittingToolBase
 
 
-class E3FittingTool:
+class E3FittingTool2d(E3FittingToolBase):
 
-    """ Simple track-fitting tool.
+    """ Simple two-dimensional track-fitting tool.
     """
 
-    def __init__(self):
-        """ Constructor.
-        """
-        self.clear()
-
-    def clear(self):
-        """ Reset the class members.
-        """
-        origin = E3Point(-1., -1., -1)
-        direction = E3Vector(-1., -1., -1.)
-        self.__Track = E3Track(origin, direction, -1.)
-
-    def track(self):
-        """ Return the best-fit track.
-        """
-        return self.__Track
-
-    def __str__(self):
-        """ String formatting.
-        """
-        return '%s' % self.__Track
-
-    def run(self, hits):
+    def fitTrack(self, hits):
         """ Run the track fitting.
         """
-        self.clear()
-        if len(hits) < 2:
-            return
         # Initialize some variables for the fit.
         n = 0
         sx = 0.
@@ -111,23 +87,24 @@ class E3FittingTool:
         x0 = zxintercept + z0*zxslope
         y0 = zyintercept + z0*zyslope
         p0 = E3Point(x0, y0, z0)
-        self.__Track = E3Track(p0, v0)
+        track = E3Track(p0, v0)
         # Need a final loop to calculate the chisquare, here.
         chi2 = 0.
         err = 1.0
         for hit in hits:
-            extr = self.__Track.extrapolate(hit.z())
+            extr = track.extrapolate(hit.z())
             resx = hit.x() - extr.x()
             resy = hit.y() - extr.y()
             chi2 += (resx**2 + resy**2)
-        self.__Track.setChi2(chi2)
+        track.setChi2(chi2)
+        return track
 
 
 
 def test():
     """
     """
-    fitTool = E3FittingTool()
+    fitTool = E3FittingTool2d()
     hits = [E3Point(20.00, -53.28, 142.00),
             E3Point(35.00, -37.05, 97.00),
             E3Point(55.00, -21.60, 53.00)

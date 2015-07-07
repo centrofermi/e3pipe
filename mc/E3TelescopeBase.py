@@ -24,11 +24,11 @@
 import random
 import math
 
-from e3pipe.trk.E3Point import E3Point
-from e3pipe.trk.E3Vector import E3Vector
-from e3pipe.trk.E3Track import E3Track
+from e3pipe.tracking.E3Point import E3Point
+from e3pipe.tracking.E3Vector import E3Vector
+from e3pipe.tracking.E3Track import E3Track
 from e3pipe.mc.E3MuonFluxService import E3MuonFluxService
-from e3pipe.trk.E3FittingTool import E3FittingTool
+from e3pipe.tracking.E3FittingTool2d import E3FittingTool2d
 
 
 class E3TelescopeBase:
@@ -60,7 +60,7 @@ class E3TelescopeBase:
         self.__Latitude = latitude
         self.__Altitude = altitude
         self.__FluxService = E3MuonFluxService()
-        self.__FittingTool = E3FittingTool()
+        self.__FittingTool = E3FittingTool2d()
 
     def name(self):
         """ Return the name.

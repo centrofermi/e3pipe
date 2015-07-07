@@ -23,7 +23,7 @@
 
 import math
 
-from e3pipe.trk.E3Point import E3Point
+from e3pipe.tracking.E3Point import E3Point
 
 
 

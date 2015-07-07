@@ -27,10 +27,10 @@ from e3pipe.config.__stations__ import geometry
 from e3pipe.root.E3InputRootFile import E3InputRootFile
 from e3pipe.display.E3EventCanvas import E3EventCanvas
 from e3pipe.__logging__ import logger
-from e3pipe.trk.E3FittingTool import E3FittingTool
-from e3pipe.trk.E3Point import E3Point
-from e3pipe.trk.E3Vector import E3Vector
-from e3pipe.trk.E3Track import E3Track
+from e3pipe.tracking.E3FittingTool2d import E3FittingTool2d
+from e3pipe.tracking.E3Point import E3Point
+from e3pipe.tracking.E3Vector import E3Vector
+from e3pipe.tracking.E3Track import E3Track
 
 import os
 
@@ -50,7 +50,7 @@ class E3EventDisplay(E3DstEventChain):
         logger.info('Plane z values: %s' % self.__Z)
         E3DstEventChain.__init__(self, *fileList)
         self.setupArrays()
-        self.__FittingTool = E3FittingTool()
+        self.__FittingTool = E3FittingTool2d()
         self.__Canvas = E3EventCanvas(self.__Z)
         self.__Canvas.Show()
         self.__CurrentHits = []

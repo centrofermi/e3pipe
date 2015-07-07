@@ -21,13 +21,15 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-from e3pipe.trk.E3Point import E3Point
-from e3pipe.trk.E3Vector import E3Vector
+from e3pipe.tracking.E3Point import E3Point
+from e3pipe.tracking.E3Vector import E3Vector
 
 
 class E3Track:
 
-    """ Class representing a track.
+    """ Class representing a track in three dimensions.
+    
+    A track is essentially the datum of an origin and a direction.
     """
     
     def __init__(self, origin, direction, chi2 = -1.):
