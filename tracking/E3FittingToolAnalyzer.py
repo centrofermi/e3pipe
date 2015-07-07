@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # *********************************************************************
-# * Copyright (C) 2014 Luca Baldini (luca.baldini@pi.infn.it)         *
+# * Copyright (C) 2015 Luca Baldini (luca.baldini@pi.infn.it)         *
 # *                                                                   *
 # * For the license terms see the file LICENSE, distributed           *
 # * along with this software.                                         *
