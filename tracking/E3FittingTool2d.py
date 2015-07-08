@@ -27,12 +27,24 @@ from e3pipe.tracking.E3Point import E3Point
 from e3pipe.tracking.E3Vector import E3Vector
 from e3pipe.tracking.E3Track import E3Track
 from e3pipe.tracking.E3FittingToolBase import E3FittingToolBase
+from e3pipe.mc.__mrpc__ import *
 
 
 class E3FittingTool2d(E3FittingToolBase):
 
     """ Simple two-dimensional track-fitting tool.
     """
+
+    def __init__(self, weighted = True):
+        """ Constructor.
+        """
+        E3FittingToolBase.__init__(self)
+        if weighted:
+            self.__Wx = MRPC_LONGITUDINAL_SIGMA
+            self.__Wy = MRPC_STRIP_PITCH/math.sqrt(12.)
+        else:
+            self.__Wx = 1.
+            self.__Wy = 1.
 
     def fitTrack(self, hits):
         """ Run the track fitting.
@@ -49,8 +61,6 @@ class E3FittingTool2d(E3FittingToolBase):
         sy_zz = 0.
         sy_y = 0.
         sy_zy = 0.
-        wx = 1
-        wy = 1
         # Loop over the points.
         # Note that, since the weights correspond to errors in the x and y
         # directions, the two views are fitted in the z-x and z-y (as opposed to
@@ -59,16 +69,16 @@ class E3FittingTool2d(E3FittingToolBase):
         # (i.e. zdir) from the z axis, rather than the x-y plane.
         for hit in hits:
             n += 1
-            sy += wy
-            sy_z += hit.z()*wy
-            sy_zz += hit.z()*hit.z()*wy;
-            sy_y += hit.y()*wy;
-            sy_zy += hit.z()*hit.y()*wy;
-            sx += wx;
-            sx_z += hit.z()*wx;
-            sx_zz += hit.z()*hit.z()*wx;
-            sx_x += hit.x()*wx;
-            sx_zx += hit.z()*hit.x()*wx;
+            sy += self.__Wy
+            sy_z += hit.z()*self.__Wy
+            sy_zz += hit.z()*hit.z()*self.__Wy;
+            sy_y += hit.y()*self.__Wy;
+            sy_zy += hit.z()*hit.y()*self.__Wy;
+            sx += self.__Wx;
+            sx_z += hit.z()*self.__Wx;
+            sx_zz += hit.z()*hit.z()*self.__Wx;
+            sx_x += hit.x()*self.__Wx;
+            sx_zx += hit.z()*hit.x()*self.__Wx;
         # Go ahead with the fit parameters, i.e. the slopes in the two views.
         zxslope = (sx_zx*sx - sx_z*sx_x)/(sx_zz*sx - sx_z*sx_z)
         zyslope = (sy_zy*sy - sy_z*sy_y)/(sy_zz*sy - sy_z*sy_z)

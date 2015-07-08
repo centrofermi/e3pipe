@@ -132,7 +132,6 @@ class E3TelescopeBase:
             hits.append(self.digitize(pbot))
             trig = True
         # If we have more than three hits we can run the reconstruction!
-        self.__FittingTool.clear()
         if len(hits) == 3:
             self.__FittingTool.run(hits)
         recTrack = self.__FittingTool.track()
