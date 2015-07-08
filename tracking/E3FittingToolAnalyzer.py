@@ -62,7 +62,7 @@ class E3FittingToolAnalyzer(E3FittingToolBase):
 	sZ2 = zzB*zzB + zzM*zzM + zzT*zzT
 	sumZ2 = sumZ*sumZ
         
-	#Fit procedure in the 3D-space	        
+	# Fit procedure in the 3D-space	        
 	p0 = (3.*sXZ - sumX*sumZ) / (3.*sZ2 - sumZ2)
 	p1 = (sumX - p0*sumZ) / 3.
 	p2 = (3.*sYZ - sumY*sumZ) / (3.*sZ2 - sumZ2)
@@ -92,6 +92,9 @@ class E3FittingToolAnalyzer(E3FittingToolBase):
         chi2 = math.sqrt(distB**2. + distM**2. + distT**2.)
         #----------------------------------------------------------------------
         # Build the best-fit track object.
+        # Note that, in order to recover the track origin, I add back the
+        # original hit coordinates to the distances calculated into the
+        # chisquare loop (wow!)
         p0 = E3Point(xxM + axM, yyM + ayM, zzM)
         v0 = E3Vector(n0, n1, n2)
         track = E3Track(p0, v0)
