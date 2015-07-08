@@ -29,6 +29,7 @@ from e3pipe.tracking.E3Vector import E3Vector
 from e3pipe.tracking.E3Track import E3Track
 from e3pipe.mc.E3MuonFluxService import E3MuonFluxService
 from e3pipe.tracking.E3FittingTool2d import E3FittingTool2d
+from e3pipe.mc.__mrpc__ import *
 
 
 class E3TelescopeBase:
@@ -38,13 +39,6 @@ class E3TelescopeBase:
     We use a coordinate system whose origin is in one of the corners of the
     lowermost RPC plane.
     """
-
-    STRIP_PITCH = 3.2
-    NUM_STRIPS_PER_PLANE = 24
-    WIDTH = STRIP_PITCH*NUM_STRIPS_PER_PLANE
-    LENGTH = 158.0
-    ACTIVE_AREA = WIDTH*LENGTH
-    LONGITUDINAL_SIGMA = 1.5
 
     def __init__(self, name = 'EEE-00',
                  d12 = 50., d23 = 50., phiNorth = 0.,
@@ -101,8 +95,8 @@ class E3TelescopeBase:
     def randomPoint(self, plane = 2):
         """
         """
-        x = random.uniform(0., self.LENGTH)
-        y = random.uniform(0., self.WIDTH)
+        x = random.uniform(0., MRPC_LENGTH)
+        y = random.uniform(0., MRPC_WIDTH)
         z = self.z(plane)
         return E3Point(x, y, z)
 
@@ -171,13 +165,13 @@ class E3TelescopeBase:
         """ Return whether a given (x, y) two-dimensional point is within
         the active area.
         """
-        return x >= 0 and x <= self.LENGTH and y >= 0 and y <= self.WIDTH
+        return x >= 0 and x <= MRPC_LENGTH and y >= 0 and y <= MRPC_WIDTH
 
     def digitize(self, point):
         """
         """
-        x = random.gauss(point.x(), self.LONGITUDINAL_SIGMA)
-        y = int(point.y()/self.STRIP_PITCH)*self.STRIP_PITCH
+        x = random.gauss(point.x(), MRPC_LONGITUDINAL_SIGMA)
+        y = int(point.y()/MRPC_STRIP_PITCH)*MRPC_STRIP_PITCH
         z = point.z()
         return E3Point(x, y, z)
 
