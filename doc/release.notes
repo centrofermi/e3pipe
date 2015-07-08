@@ -1,4 +1,6 @@
 
+* Major restructuring of the MC, mainly to make the output ntuple as close
+  as possible to the output of the new analyzer.
 * mc/e3sim.py moved to apps/e3fastsim.py
 * Added a stripped down version of the track fitter implemented in the
   Analyzer for debugging purposes.
