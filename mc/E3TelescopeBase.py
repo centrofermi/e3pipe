@@ -55,6 +55,9 @@ class E3TelescopeBase:
         self.__Altitude = altitude
         self.__FluxService = E3MuonFluxService()
         self.__FittingTool = E3FittingTool2d()
+        self.__CurrentSeconds = 0
+        self.__CurrentNanoseconds = 0
+        self.__MuonRate = 75./10000.*MRPC_ACTIVE_AREA
 
     def name(self):
         """ Return the name.
@@ -109,6 +112,14 @@ class E3TelescopeBase:
         TODO: we have to generalize for a generic trigger mask, which
         shouldn't be too hard.
         """
+        # Extract a random time for a stationary Poisson process.
+        dt = random.expovariate(self.__MuonRate)
+        ns = int(dt*1000000 + 0.5)
+        self.__CurrentNanoseconds += ns
+        if self.__CurrentNanoseconds >= 1000000:
+            s = self.__CurrentNanoseconds/1000000
+            self.__CurrentSeconds += s
+            self.__CurrentNanoseconds -= s*1000000
         # Extract a random point on the top plane.
         ptop = self.randomPoint(plane = 2)
         hits = [self.digitize(ptop)]
@@ -132,8 +143,9 @@ class E3TelescopeBase:
             hits.append(self.digitize(pbot))
             trig = True
         # If we have more than three hits we can run the reconstruction!
-        if len(hits) == 3:
-            self.__FittingTool.run(hits)
+        if len(hits) < 3:
+            return
+        self.__FittingTool.run(hits)
         recTrack = self.__FittingTool.track()
         chi2 = recTrack.chi2()
         recTheta = math.radians(recTrack.theta())
@@ -151,14 +163,41 @@ class E3TelescopeBase:
         recXdir = math.cos(recPhi)*math.sin(recTheta)
         recYdir = math.sin(recPhi)*math.sin(recTheta)
         recZdir = math.cos(recTheta)
-        return {'McXDir'   : mcXdir,
-                'McYDir'   : mcYdir,
-                'McZDir'   : mcZdir,
-                'XDir'     : recXdir,
-                'YDir'     : recYdir,
-                'ZDir'     : recZdir,
-                'Trigger'  : trig,
-                'ChiSquare': chi2}
+        # Calculate the track length and the time of flight.
+        p0 = recTrack.extrapolate(hits[0].z())
+        p1 = recTrack.extrapolate(hits[2].z())
+        length = math.sqrt((p0.x() - p1.x())**2. +\
+                           (p0.y() - p1.y())**2. +\
+                           (p0.z() - p1.z())**2.)
+        v = 2997924.58
+        tof = int(length/v*1000000 + 0.5)
+        return {'Seconds'        : self.__CurrentSeconds,
+                'Nanoseconds'    : self.__CurrentNanoseconds,
+                'McPosXBot'      : pbot.x(),
+                'McPosYBot'      : pbot.y(),
+                'McPosXMid'      : pmid.x(),
+                'McPosYMid'      : pmid.y(),
+                'McPosXTop'      : ptop.x(),
+                'McPosYTop'      : ptop.y(),
+                'McXDir'         : mcXdir,
+                'McYDir'         : mcYdir,
+                'McZDir'         : mcZdir,
+                'PosXBot'        : hits[2].x(),
+                'PosYBot'        : hits[2].y(),
+                'PosXMid'        : hits[1].x(),
+                'PosYMid'        : hits[1].y(),
+                'PosXTop'        : hits[0].x(),
+                'PosYTop'        : hits[0].y(),
+                'IntersectXMid'  : recTrack.x0(),
+                'IntersectYMid'  : recTrack.y0(),
+                'IntersectZMid'  : recTrack.z0(),
+                'XDir'           : recXdir,
+                'YDir'           : recYdir,
+                'ZDir'           : recZdir,
+                'ChiSquare'      : chi2,
+                'TimeOfFlight'   : tof,
+                'TrackLength'    : length
+        }
 
     def withinActiveArea(self, x, y):
         """ Return whether a given (x, y) two-dimensional point is within
@@ -178,7 +217,7 @@ class E3TelescopeBase:
         """ String formatting.
         """
         return '%s: z = %s, phi to N = %.3f' %\
-            (self.name(), self.__Z, self.phiNorth(), )
+            (self.name(), self.__Z, self.phiNorth())
 
 
 

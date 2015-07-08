@@ -34,7 +34,7 @@ parser.add_option('-o', '--output-file', type = str, default = None,
 parser.add_option('-n', '--numEvents', type = int, default = 100000,
                   dest = 'numEvents',
                   help = 'the number of events to generate')
-parser.add_option('-s', '--station', type = str, default = None,
+parser.add_option('-s', '--station', type = str, default = 'SAVO-01',
                   dest = 'station',
                   help = 'the actual telescope to simulate')
 parser.add_option('-p', '--theta-power', type = float, default = 2.0,
@@ -54,10 +54,7 @@ from e3pipe.__logging__ import logger
 
 
 # Setup the telscope...
-if opts.station is not None:
-    telescope = E3Telescope(opts.station)
-else:
-    telescope = E3TelescopeBase()
+telescope = E3Telescope(opts.station)
 logger.info('Simulating %s...' % telescope)
 telescope.fluxService().setThetaDistParameter(0, opts.thetaPower)
 
@@ -73,18 +70,24 @@ outputTree = E3McEventTree()
 logger.info('Entering the event loop...')
 numGenerated = 0
 numTriggered = 0
+prevTime = 0
 for i in xrange(opts.numEvents):
     event = telescope.shootMuon()
-    event['EventNumber'] = i
     numGenerated += 1
-    if event['Trigger']:
+    if event is not None:
+        elapsedTime = event['Seconds'] + 1e-6*event['Nanoseconds']
+        event['RunNumber'] = 0
+        event['StatusCode'] = 0
+        event['EventNumber'] = i
+        event['DeltaTime'] = elapsedTime - prevTime
         numTriggered += 1
-    outputTree.fillRow(event)
+        prevTime = elapsedTime
+        outputTree.fillRow(event)
 fracTriggered = float(numTriggered)/numGenerated
-logger.info('Done. %d event(s) generated, %d triggered (%.2f %%).' %\
-            (numGenerated, numTriggered, fracTriggered*100))
-estimatedRate = 130*fracTriggered
-logger.info('Estimated rate: %.1f Hz' % estimatedRate)
+triggerRate = float(numTriggered)/elapsedTime
+logger.info('Done. %d event(s) generated, %d triggered (%.2f %%) in %.3f s.' %\
+            (numGenerated, numTriggered, fracTriggered*100, elapsedTime))
+logger.info('Average trigger rate: %.3f Hz' % triggerRate)
 
 #Finalize.
 outputTree.doMonitoring()

@@ -96,7 +96,7 @@ class E3TreePlotter:
     def hist2d(self, expression, cut = '', **kwargs):
         """ Create a 2-dimensional histogram.
         """
-        pass
+        logger.error('Two-dimensional histograms not implemented, yet.')
 
     def stripChart(self, branchName, errors = False, **kwargs):
         """ Create a strip chart.

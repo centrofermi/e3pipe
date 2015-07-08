@@ -35,7 +35,7 @@ class E3FittingTool2d(E3FittingToolBase):
     """ Simple two-dimensional track-fitting tool.
     """
 
-    def __init__(self, weighted = True):
+    def __init__(self, weighted = False):
         """ Constructor.
         """
         E3FittingToolBase.__init__(self)
@@ -100,11 +100,10 @@ class E3FittingTool2d(E3FittingToolBase):
         track = E3Track(p0, v0)
         # Need a final loop to calculate the chisquare, here.
         chi2 = 0.
-        err = 1.0
         for hit in hits:
             extr = track.extrapolate(hit.z())
-            resx = hit.x() - extr.x()
-            resy = hit.y() - extr.y()
+            resx = (hit.x() - extr.x())/self.__Wx
+            resy = (hit.y() - extr.y())/self.__Wy
             chi2 += (resx**2 + resy**2)
         track.setChi2(chi2)
         return track

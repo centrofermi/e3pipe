@@ -44,6 +44,20 @@ class E3Vector(E3Point):
             raise ZeroDivisionError
         return E3Vector(self.x()/scalar, self.y()/scalar, self.z()/scalar)
 
+    def __add__(self, other):
+        """
+        """
+        return E3Vector(self.x() + other.x(),
+                        self.y() + other.y(),
+                        self.z() + other.z()) 
+
+    def __sub__(self, other):
+        """
+        """
+        return E3Vector(self.x() - other.x(),
+                        self.y() - other.y(),
+                        self.z() - other.z())
+    
     def unit(self):
         """
         """
@@ -58,6 +72,19 @@ class E3Vector(E3Point):
         """ Return the magnutude of the vector.
         """
         return math.sqrt(self.mag2())
+
+    def dot(self, other):
+        """ Return the scalar product with another vector.
+        """
+        return self.x()*other.x() + self.y()*other.y() + self.z()*other.z()
+
+    def cross(self, other):
+        """ Return the vector product with another vector.
+        """
+        _x = self.y()*other.z() - self.z()*other.y()
+        _y = self.z()*other.x() - self.x()*other.z()
+        _z = self.x()*other.y() - self.y()*other.x()
+        return E3Vector(_x, _y, _z)
 
     def theta(self):
         """ Return the theta angle corresponding to the vector.

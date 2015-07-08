@@ -178,14 +178,14 @@ class E3EventDisplay(E3DstEventChain):
             zpad = -zpad
         for hit in self.__CurrentHits:
             resx = hit.x() - self.__CurrentTrack.extrapolate(hit.z()).x()
-            text = '%.1f cm' % resx
+            text = '%.2f cm' % resx
             if resx > 0:
                 text = '+%s' % text
             text = '  %s' % text
             self.__Canvas.annotateXZ(hit.x(), hit.z() + zpad, text,
                                      color = color, align = 12, size = textSize)
             resy = hit.y() - self.__CurrentTrack.extrapolate(hit.z()).y()
-            text = '%.1f cm' % resy
+            text = '%.2f cm' % resy
             if resy > 0:
                 text = '+%s' % text
             text = '  %s' % text

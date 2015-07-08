@@ -49,6 +49,20 @@ class E3Point:
         """
         return self.__Z
 
+    def __add__(self, other):
+        """
+        """
+        return E3Point(self.x() + other.x(),
+                       self.y() + other.y(),
+                       self.z() + other.z()) 
+
+    def __sub__(self, other):
+        """
+        """
+        return E3Point(self.x() - other.x(),
+                       self.y() - other.y(),
+                       self.z() - other.z())
+
     def __str__(self):
         """ String representation.
         """
