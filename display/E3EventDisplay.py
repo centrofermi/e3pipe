@@ -196,7 +196,10 @@ class E3EventDisplay(E3DstEventChain):
         """ Display the event information.
         """
         evt = self.value('EventNumber')
-        run = self.value('UniqueRunId')
+        try:
+            run = self.value('UniqueRunId')
+        except:
+            run = self.value('RunNumber')
         self.__Canvas.drawEventInfo(self.__FileName, run, evt)
 
         

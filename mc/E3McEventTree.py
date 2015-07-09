@@ -33,7 +33,7 @@ class E3McEventTree(E3Tree):
     information for the Monte Carlo sim.
     """
 
-    NAME = 'McEvents'
+    NAME = 'Events'
     BRANCHES = [E3BranchDescriptor('RunNumber', 'i'),
                 E3BranchDescriptor('EventNumber', 'i'),
                 E3BranchDescriptor('StatusCode', 'i'),

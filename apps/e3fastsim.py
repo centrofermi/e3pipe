@@ -63,7 +63,8 @@ outputFilePath = opts.outputFile
 if outputFilePath is None:
     outputFilePath = '%s_mc.root' % telescope.name()
     logger.info('No output file specified, using %s...' % outputFilePath)
-outputFile = E3OutputRootFile(outputFilePath, 'e3sim.py')
+outputFile = E3OutputRootFile(outputFilePath, 'e3sim.py',
+                              station = opts.station)
 outputTree = E3McEventTree()
 
 # Finally: get started.
