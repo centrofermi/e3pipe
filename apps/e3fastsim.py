@@ -40,6 +40,9 @@ parser.add_option('-s', '--station', type = str, default = 'SAVO-01',
 parser.add_option('-p', '--theta-power', type = float, default = 2.0,
                   dest = 'thetaPower',
                   help = 'the power for the cos(theta) term in the muon flux')
+parser.add_option('-R', '--run-number', type = int, default = 1,
+                  dest = 'runNumber',
+                  help = 'the run number (and random seed) for the simulation')
 parser.add_option('-i', '--interactive', action = 'store_true',
                   default = False, dest = 'interactive',
                   help = 'run interactively (show the plots)')
@@ -53,7 +56,13 @@ from e3pipe.root.E3OutputRootFile import E3OutputRootFile
 from e3pipe.__logging__ import logger
 
 
-# Setup the telscope...
+# Initialize the random number generator.
+logger.info('Setting the seed for the random generator to %d...' %\
+            opts.runNumber)
+import random
+random.seed(opts.runNumber)
+
+# Setup the telescope...
 telescope = E3Telescope(opts.station)
 logger.info('Simulating %s...' % telescope)
 telescope.fluxService().setThetaDistParameter(0, opts.thetaPower)
@@ -77,18 +86,21 @@ for i in xrange(opts.numEvents):
     numGenerated += 1
     if event is not None:
         elapsedTime = event['Seconds'] + 1e-6*event['Nanoseconds']
-        event['RunNumber'] = 0
+        event['RunNumber'] = opts.runNumber
         event['StatusCode'] = 0
         event['EventNumber'] = i
         event['DeltaTime'] = elapsedTime - prevTime
         numTriggered += 1
         prevTime = elapsedTime
         outputTree.fillRow(event)
-fracTriggered = float(numTriggered)/numGenerated
-triggerRate = float(numTriggered)/elapsedTime
-logger.info('Done. %d event(s) generated, %d triggered (%.2f %%) in %.3f s.' %\
-            (numGenerated, numTriggered, fracTriggered*100, elapsedTime))
-logger.info('Average trigger rate: %.3f Hz' % triggerRate)
+if numTriggered:
+    fracTriggered = float(numTriggered)/numGenerated
+    triggerRate = float(numTriggered)/elapsedTime
+    logger.info('%d event(s) generated, %d triggered (%.2f %%) in %.3f s.' %\
+                (numGenerated, numTriggered, fracTriggered*100, elapsedTime))
+    logger.info('Average trigger rate: %.3f Hz' % triggerRate)
+else:
+    logger.info('No events triggered the telescope.')
 
 #Finalize.
 outputTree.doMonitoring()
