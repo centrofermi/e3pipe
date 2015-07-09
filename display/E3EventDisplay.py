@@ -46,6 +46,7 @@ class E3EventDisplay(E3DstEventChain):
         self.__FileName = os.path.basename(fileList[0])
         logger.info('Parsing telescope geometry for %s...' % station)
         phiNorth, d12, d23 = geometry(station)
+        logger.info('Phi to north: %.1f deg' % phiNorth)
         self.__Z = [0, d12, d12 + d23]
         logger.info('Plane z values: %s' % self.__Z)
         E3DstEventChain.__init__(self, *fileList)
@@ -107,8 +108,8 @@ class E3EventDisplay(E3DstEventChain):
             origin = E3Point(x0, y0, z0)
             # Also, it looks like we need a couple of extra minus sign here.
             # We should agree on the reference system.
-            xdir = -self.value('XDir')
-            ydir = -self.value('YDir')
+            xdir = self.value('XDir')
+            ydir = self.value('YDir')
             zdir = self.value('ZDir')
             direction = E3Vector(xdir, ydir, zdir)
             self.__CurrentTrack = E3Track(origin, direction)
