@@ -130,11 +130,11 @@ class E3TelescopeBase:
         mcXdir = math.cos(mcPhi)*math.sin(mcTheta)
         mcYdir = math.sin(mcPhi)*math.sin(mcTheta)
         mcZdir = math.cos(mcTheta)
-        v0 = E3Vector(mcXdir, mcYdir, mcZdir)
+        mcDirection = E3Vector(mcXdir, mcYdir, mcZdir)        
         # Extrapolate the MC track to the bottom plane---note this has to be
         # done in instrument coordinates, e.g., before we rotate taking the
         # angle to North into account.
-        mcTrack = E3Track(ptop, v0)
+        mcTrack = E3Track(ptop, mcDirection)
         pmid = mcTrack.extrapolate(self.zmid())
         if self.withinActiveArea(pmid.x(), pmid.y()):
             hits.append(self.digitize(pmid))

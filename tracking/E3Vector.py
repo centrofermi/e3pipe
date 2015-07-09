@@ -38,28 +38,28 @@ class E3Vector(E3Point):
         return E3Vector(self.x()*scalar, self.y()*scalar, self.z()*scalar)
 
     def __div__(self, scalar):
-        """
+        """ Overloaded division operator.
         """
         if scalar == 0:
             raise ZeroDivisionError
         return E3Vector(self.x()/scalar, self.y()/scalar, self.z()/scalar)
 
     def __add__(self, other):
-        """
+        """ Overloaded sum operator.
         """
         return E3Vector(self.x() + other.x(),
                         self.y() + other.y(),
                         self.z() + other.z()) 
 
     def __sub__(self, other):
-        """
+        """ Overloaded subtraction operator.
         """
         return E3Vector(self.x() - other.x(),
                         self.y() - other.y(),
                         self.z() - other.z())
     
     def unit(self):
-        """
+        """ Return the normalized unit vector.
         """
         return self/self.mag()
 
