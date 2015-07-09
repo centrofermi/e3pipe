@@ -1,4 +1,7 @@
 
+* Added a command-line switch to e3fastsim to choose the pattern recognition
+  (i.e., the fitting tool) to be used.
+
 -------------------------------------------------------------------------------
 e3pipe (2.3.0) - Wed, 08 Jul 2015 23:52:13 -0700
 -------------------------------------------------------------------------------
