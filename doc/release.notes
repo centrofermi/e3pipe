@@ -1,4 +1,5 @@
 
+* MC and single event display now compatible with each other.
 * Major restructuring of the MC, mainly to make the output ntuple as close
   as possible to the output of the new analyzer.
 * mc/e3sim.py moved to apps/e3fastsim.py
