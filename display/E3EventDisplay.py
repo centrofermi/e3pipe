@@ -45,8 +45,8 @@ class E3EventDisplay(E3DstEventChain):
         station = E3InputRootFile(fileList[0]).station()
         self.__FileName = os.path.basename(fileList[0])
         logger.info('Parsing telescope geometry for %s...' % station)
-        phiNorth, d12, d23 = geometry(station)
-        logger.info('Phi to north: %.1f deg' % phiNorth)
+        self.__PhiNorth, d12, d23 = geometry(station)
+        logger.info('Phi to north: %.1f deg' % self.__PhiNorth)
         self.__Z = [0, d12, d12 + d23]
         logger.info('Plane z values: %s' % self.__Z)
         E3DstEventChain.__init__(self, *fileList)
@@ -106,12 +106,14 @@ class E3EventDisplay(E3DstEventChain):
             # 80 and cannot be used here.
             z0 = self.__Z[1]
             origin = E3Point(x0, y0, z0)
-            # Also, it looks like we need a couple of extra minus sign here.
-            # We should agree on the reference system.
             xdir = self.value('XDir')
             ydir = self.value('YDir')
             zdir = self.value('ZDir')
-            direction = E3Vector(xdir, ydir, zdir)
+            directionRot = E3Vector(xdir, ydir, zdir)
+            # Remember: in the DST we store the direction referred to the
+            # north, and we do have to transform back into instrument
+            # coordinates.
+            direction = directionRot.rotatez(-self.__PhiNorth, deg = True)
             self.__CurrentTrack = E3Track(origin, direction)
             chi2 = self.value('ChiSquare')
             self.__CurrentTrack.setChi2(chi2)

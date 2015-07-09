@@ -121,3 +121,6 @@ if __name__ == '__main__':
     print v.phi()
     print v.rotatez(0., deg = True)
     print v.rotatez(90., deg = True)
+    v1 = v.rotatez(36., deg = True)
+    v2 = v1.rotatez(-36., deg = True)
+    print v, v1, v2
