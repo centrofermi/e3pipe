@@ -49,6 +49,9 @@ parser.add_option('-P', '--patrec', type = str, default = '2d',
 parser.add_option('-i', '--interactive', action = 'store_true',
                   default = False, dest = 'interactive',
                   help = 'run interactively (show the plots)')
+parser.add_option('-l', '--label', type = str, default = None,
+                  dest = 'label',
+                  help = 'a label to be attached to the default file name')
 (opts, args) = parser.parse_args()
 
 
@@ -75,7 +78,10 @@ telescope.fluxService().setThetaDistParameter(0, opts.thetaPower)
 # Setup the output file...
 outputFilePath = opts.outputFile
 if outputFilePath is None:
-    outputFilePath = '%s_mc.root' % telescope.name()
+    outputFilePath = '%s_%d_mc' % (telescope.name(), opts.runNumber)
+    if opts.label is not None:
+        outputFilePath += '_%s' % (opts.label)
+    outputFilePath += '.root'
     logger.info('No output file specified, using %s...' % outputFilePath)
 outputFile = E3OutputRootFile(outputFilePath, 'e3sim.py',
                               station = opts.station)
