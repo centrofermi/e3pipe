@@ -43,6 +43,9 @@ parser.add_option('-p', '--theta-power', type = float, default = 2.0,
 parser.add_option('-R', '--run-number', type = int, default = 1,
                   dest = 'runNumber',
                   help = 'the run number (and random seed) for the simulation')
+parser.add_option('-P', '--patrec', type = str, default = '2d',
+                  dest = 'patrec',
+                  help = 'the tracking pattern recognition to be used')
 parser.add_option('-i', '--interactive', action = 'store_true',
                   default = False, dest = 'interactive',
                   help = 'run interactively (show the plots)')
@@ -63,7 +66,9 @@ import random
 random.seed(opts.runNumber)
 
 # Setup the telescope...
-telescope = E3Telescope(opts.station)
+if not opts.patrec in E3TelescopeBase.PATREC_DICT.keys():
+    parser.error('Unknown patrec "%s"' % opts.patrec)
+telescope = E3Telescope(opts.station, patrec = opts.patrec)
 logger.info('Simulating %s...' % telescope)
 telescope.fluxService().setThetaDistParameter(0, opts.thetaPower)
 

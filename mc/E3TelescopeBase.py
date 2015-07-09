@@ -30,7 +30,9 @@ from e3pipe.tracking.E3Track import E3Track
 from e3pipe.mc.E3MuonFluxService import E3MuonFluxService
 from e3pipe.mc.E3PoissonService import E3PoissonService
 from e3pipe.tracking.E3FittingTool2d import E3FittingTool2d
+from e3pipe.tracking.E3FittingToolAnalyzer import E3FittingToolAnalyzer
 from e3pipe.mc.__mrpc__ import *
+
 
 
 class E3TelescopeBase:
@@ -41,10 +43,13 @@ class E3TelescopeBase:
     lowermost RPC plane.
     """
 
+    PATREC_DICT = {'2d'      : E3FittingTool2d,
+                   'Analyzer': E3FittingToolAnalyzer}
+
     def __init__(self, name = 'EEE-00',
                  d12 = 50., d23 = 50., phiNorth = 0.,
                  latitude = 0., longitude = 0, altitude = 0.,
-                 triggerMask = 0b111):
+                 triggerMask = 0b111, patrec = '2d'):
         """ Constructor.
         """
         self.__Name = name
@@ -56,7 +61,7 @@ class E3TelescopeBase:
         self.__Altitude = altitude
         self.__FluxService = E3MuonFluxService()
         self.__PoissonService = E3PoissonService(7.5e-3*MRPC_ACTIVE_AREA)
-        self.__FittingTool = E3FittingTool2d()
+        self.__FittingTool = self.PATREC_DICT[patrec]()
 
     def name(self):
         """ Return the name.

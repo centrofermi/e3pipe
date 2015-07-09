@@ -32,7 +32,7 @@ class E3Telescope(E3TelescopeBase):
     operation.
     """
 
-    def __init__(self, stationName, triggerMask = 0b111):
+    def __init__(self, stationName, triggerMask = 0b111, patrec = '2d'):
         """ Constructor.
         """
         geo = E3_GEOMETRY_DICT[stationName]
@@ -40,7 +40,7 @@ class E3Telescope(E3TelescopeBase):
         E3TelescopeBase.__init__(self, stationName,
                                  geo['d12'], geo['d23'], geo['phi_north'],
                                  loc['lat'], loc['lon'], loc['alt'],
-                                 triggerMask)
+                                 triggerMask, patrec)
 
 
 if __name__ == '__main__':

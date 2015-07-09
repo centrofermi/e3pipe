@@ -26,6 +26,8 @@ import math
 from e3pipe.tracking.E3Point import E3Point
 from e3pipe.tracking.E3Vector import E3Vector
 from e3pipe.tracking.E3Track import E3Track
+from e3pipe.__logging__ import logger
+
 
 
 class E3FittingToolBase:
@@ -38,6 +40,8 @@ class E3FittingToolBase:
     def __init__(self):
         """ Constructor.
         """
+        logger.info('Initializing fitting tool %s...' %\
+                    (self.__class__.__name__))
         self.clear()
 
     def track(self):
