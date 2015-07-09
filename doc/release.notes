@@ -1,4 +1,7 @@
 
+-------------------------------------------------------------------------------
+e3pipe (2.3.0) - Wed, 08 Jul 2015 23:52:13 -0700
+-------------------------------------------------------------------------------
 * Correct rotation from/to instrument coordinates to geographic coordinates
   consistently implemented into the simulation and the event display.
 * MC and single event display now compatible with each other.
