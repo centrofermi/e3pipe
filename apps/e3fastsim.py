@@ -85,7 +85,7 @@ for i in xrange(opts.numEvents):
     event = telescope.shootMuon()
     numGenerated += 1
     if event is not None:
-        elapsedTime = event['Seconds'] + 1e-6*event['Nanoseconds']
+        elapsedTime = event['Seconds'] + 1e-9*event['Nanoseconds']
         event['RunNumber'] = opts.runNumber
         event['StatusCode'] = 0
         event['EventNumber'] = i

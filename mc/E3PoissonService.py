@@ -24,6 +24,8 @@
 import random
 
 from e3pipe.dst.E3Timestamp import E3Timestamp
+from e3pipe.__logging__ import logger
+
 
 
 class E3PoissonService:
@@ -34,15 +36,15 @@ class E3PoissonService:
     def __init__(self, rate):
         """ Constructor.
         """
+        logger.info('Inizializing Poisson service @ %.3f Hz' % rate)
         self.__Rate = rate
         self.__Timestamp = E3Timestamp(0, 0)
 
     def next(self):
         """ Generate the next arrival time.
         """
-        dt = random.expovariate(self.__Rate)
-        ns = int(dt*1000000000 + 0.5)
-        self.__Timestamp += E3Timestamp(0, ns)
+        dns = int(1000000000*random.expovariate(self.__Rate) + 0.5)
+        self.__Timestamp += E3Timestamp(0, dns)
         return self.__Timestamp
 
     def seconds(self):
@@ -58,6 +60,6 @@ class E3PoissonService:
 
 
 if __name__ == '__main__':
-    p = E3PoissonService(2.5)
+    svc = E3PoissonService(2.5)
     for i in range(10):
-        print p.next()
+        print svc.next()

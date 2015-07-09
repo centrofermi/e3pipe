@@ -96,6 +96,16 @@ class E3Vector(E3Point):
         """
         return math.degrees(math.atan2(self.y(), self.x()))
 
+    def rotatez(self, phi, deg = False):
+        """ Return a new vector rotated by an angle phi around the zaxis.
+        """
+        if deg:
+            phi = math.radians(phi)
+        _x = self.x()*math.cos(phi) - self.y()*math.sin(phi)
+        _y = self.x()*math.sin(phi) + self.y()*math.cos(phi)
+        _z = self.z()
+        return E3Vector(_x, _y, _z)
+
     def __str__(self):
         """ String representation.
         """
@@ -109,3 +119,5 @@ if __name__ == '__main__':
     print v.mag()
     print v.theta()
     print v.phi()
+    print v.rotatez(0., deg = True)
+    print v.rotatez(90., deg = True)

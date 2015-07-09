@@ -25,6 +25,7 @@ import math
 
 from e3pipe.root.__ROOT__ import *
 from e3pipe.__logging__ import logger
+from e3pipe.tracking.E3VectorSpherical import E3VectorSpherical
 
 
 
@@ -49,12 +50,12 @@ class E3MuonFluxService:
                     (i, value))
         self.__ThetaDist.SetParameter(i, value)
 
-    def randomDirection(self):
+    def next(self):
         """ Return a random muon direction.
         """
         theta = self.__ThetaDist.GetRandom()
         phi = self.__PhiDist.GetRandom()
-        return theta, phi
+        return E3VectorSpherical(theta, phi)
 
 
 
@@ -66,9 +67,9 @@ def test(numEvents = 100000):
     htheta = E3H1D('htheta', 'Theta', 100, 0, 90)
     hphi = E3H1D('hphi', 'Phi', 100, -180, 180)
     for i in xrange(numEvents):
-        theta, phi = svc.randomDirection()
-        htheta.Fill(math.degrees(theta))
-        hphi.Fill(math.degrees(phi))
+        d = svc.next()
+        htheta.Fill(d.theta())
+        hphi.Fill(d.phi())
     return htheta, hphi
 
 

@@ -28,6 +28,7 @@ from e3pipe.tracking.E3Point import E3Point
 from e3pipe.tracking.E3Vector import E3Vector
 from e3pipe.tracking.E3Track import E3Track
 from e3pipe.mc.E3MuonFluxService import E3MuonFluxService
+from e3pipe.mc.E3PoissonService import E3PoissonService
 from e3pipe.tracking.E3FittingTool2d import E3FittingTool2d
 from e3pipe.mc.__mrpc__ import *
 
@@ -54,10 +55,8 @@ class E3TelescopeBase:
         self.__Latitude = latitude
         self.__Altitude = altitude
         self.__FluxService = E3MuonFluxService()
+        self.__PoissonService = E3PoissonService(7.5e-3*MRPC_ACTIVE_AREA)
         self.__FittingTool = E3FittingTool2d()
-        self.__CurrentSeconds = 0
-        self.__CurrentNanoseconds = 0
-        self.__MuonRate = 75./10000.*MRPC_ACTIVE_AREA
 
     def name(self):
         """ Return the name.
@@ -113,90 +112,61 @@ class E3TelescopeBase:
         shouldn't be too hard.
         """
         # Extract a random time for a stationary Poisson process.
-        dt = random.expovariate(self.__MuonRate)
-        ns = int(dt*1000000 + 0.5)
-        self.__CurrentNanoseconds += ns
-        if self.__CurrentNanoseconds >= 1000000:
-            s = self.__CurrentNanoseconds/1000000
-            self.__CurrentSeconds += s
-            self.__CurrentNanoseconds -= s*1000000
-        # Extract a random point on the top plane.
-        ptop = self.randomPoint(plane = 2)
-        hits = [self.digitize(ptop)]
-        trig = False
+        timestamp = self.__PoissonService.next()
         # Extract a random direction from the flux service.
-        mcTheta, mcPhi = self.__FluxService.randomDirection()
-        # Calculate the cosine directors.
-        mcXdir = math.cos(mcPhi)*math.sin(mcTheta)
-        mcYdir = math.sin(mcPhi)*math.sin(mcTheta)
-        mcZdir = math.cos(mcTheta)
-        mcDirection = E3Vector(mcXdir, mcYdir, mcZdir)        
-        # Extrapolate the MC track to the bottom plane---note this has to be
-        # done in instrument coordinates, e.g., before we rotate taking the
-        # angle to North into account.
-        mcTrack = E3Track(ptop, mcDirection)
-        pmid = mcTrack.extrapolate(self.zmid())
-        if self.withinActiveArea(pmid.x(), pmid.y()):
-            hits.append(self.digitize(pmid))
-        pbot = mcTrack.extrapolate(self.zbot())
-        if self.withinActiveArea(pbot.x(), pbot.y()):
-            hits.append(self.digitize(pbot))
-            trig = True
-        # If we have more than three hits we can run the reconstruction!
-        if len(hits) < 3:
+        mcDirection = self.__FluxService.next()
+        # Extract a random point on the top plane.
+        mcHitTop = self.randomPoint(plane = 2)
+        # Create the MC track and extrapolate it to the other planes.
+        mcTrack = E3Track(mcHitTop, mcDirection)
+        mcHitMid = mcTrack.extrapolate(self.zmid())
+        mcHitBot = mcTrack.extrapolate(self.zbot())
+        # Check that the event triggered the telescope.
+        if not self.withinActiveArea(mcHitBot.x(), mcHitBot.y()):
             return
-        self.__FittingTool.run(hits)
-        recTrack = self.__FittingTool.track()
-        chi2 = recTrack.chi2()
-        recTheta = math.radians(recTrack.theta())
-        recPhi = math.radians(recTrack.phi())
-        # Rotate phi from instrument coordinates to absolute coordinates.
-        mcPhi += math.radians(self.phiNorth())
-        recPhi += math.radians(self.phiNorth())
-        if mcPhi > math.pi:
-            mcPhi -= 2*math.pi
-        if recPhi > math.pi:
-            recPhi -= 2*math.pi
-        # Calculate the new xdir and ydir.
-        mcXdir = math.cos(mcPhi)*math.sin(mcTheta)
-        mcYdir = math.sin(mcPhi)*math.sin(mcTheta)
-        recXdir = math.cos(recPhi)*math.sin(recTheta)
-        recYdir = math.sin(recPhi)*math.sin(recTheta)
-        recZdir = math.cos(recTheta)
+        # Digitize the hits in the detector.
+        digiHitTop = self.digitize(mcHitTop)
+        digiHitMid = self.digitize(mcHitMid)
+        digiHitBot = self.digitize(mcHitBot)
+        # Find the best-fit track.
+        self.__FittingTool.run([digiHitBot, digiHitMid, digiHitTop])
+        reconTrack = self.__FittingTool.track()
         # Calculate the track length and the time of flight.
-        p0 = recTrack.extrapolate(hits[0].z())
-        p1 = recTrack.extrapolate(hits[2].z())
-        length = math.sqrt((p0.x() - p1.x())**2. +\
-                           (p0.y() - p1.y())**2. +\
-                           (p0.z() - p1.z())**2.)
-        v = 2997924.58
-        tof = int(length/v*1000000 + 0.5)
-        return {'Seconds'        : self.__CurrentSeconds,
-                'Nanoseconds'    : self.__CurrentNanoseconds,
-                'McPosXBot'      : pbot.x(),
-                'McPosYBot'      : pbot.y(),
-                'McPosXMid'      : pmid.x(),
-                'McPosYMid'      : pmid.y(),
-                'McPosXTop'      : ptop.x(),
-                'McPosYTop'      : ptop.y(),
-                'McXDir'         : mcXdir,
-                'McYDir'         : mcYdir,
-                'McZDir'         : mcZdir,
-                'PosXBot'        : hits[2].x(),
-                'PosYBot'        : hits[2].y(),
-                'PosXMid'        : hits[1].x(),
-                'PosYMid'        : hits[1].y(),
-                'PosXTop'        : hits[0].x(),
-                'PosYTop'        : hits[0].y(),
-                'IntersectXMid'  : recTrack.x0(),
-                'IntersectYMid'  : recTrack.y0(),
-                'IntersectZMid'  : recTrack.z0(),
-                'XDir'           : recXdir,
-                'YDir'           : recYdir,
-                'ZDir'           : recZdir,
-                'ChiSquare'      : chi2,
+        pbot = reconTrack.extrapolate(self.zbot())
+        ptop = reconTrack.extrapolate(self.ztop())
+        trackLength = pbot.dist(ptop)
+        c = 29979245800.
+        tof = trackLength/c*1000000000
+        # Rotate the director cosines in the absolute reference system.
+        mcDirectionRot = mcDirection.rotatez(self.phiNorth(), deg = True)
+        reconDirectionRot = reconTrack.direction().rotatez(self.phiNorth(),
+                                                           deg = True)
+        return {'Seconds'        : timestamp.seconds(),
+                'Nanoseconds'    : timestamp.nanoseconds(),
+                'McPosXBot'      : mcHitBot.x(),
+                'McPosYBot'      : mcHitBot.y(),
+                'McPosXMid'      : mcHitMid.x(),
+                'McPosYMid'      : mcHitMid.y(),
+                'McPosXTop'      : mcHitTop.x(),
+                'McPosYTop'      : mcHitTop.y(),
+                'McXDir'         : mcDirectionRot.x(),
+                'McYDir'         : mcDirectionRot.y(),
+                'McZDir'         : mcDirectionRot.z(),
+                'PosXBot'        : digiHitBot.x(),
+                'PosYBot'        : digiHitBot.y(),
+                'PosXMid'        : digiHitMid.x(),
+                'PosYMid'        : digiHitMid.y(),
+                'PosXTop'        : digiHitTop.x(),
+                'PosYTop'        : digiHitTop.y(),
+                'IntersectXMid'  : reconTrack.x0(),
+                'IntersectYMid'  : reconTrack.y0(),
+                'IntersectZMid'  : reconTrack.z0(),
+                'XDir'           : reconDirectionRot.x(),
+                'YDir'           : reconDirectionRot.y(),
+                'ZDir'           : reconDirectionRot.z(),
+                'ChiSquare'      : reconTrack.chi2(),
                 'TimeOfFlight'   : tof,
-                'TrackLength'    : length
+                'TrackLength'    : trackLength
         }
 
     def withinActiveArea(self, x, y):

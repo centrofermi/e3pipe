@@ -21,6 +21,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
+import math
+
 
 class E3Point:
 
@@ -50,18 +52,25 @@ class E3Point:
         return self.__Z
 
     def __add__(self, other):
-        """
+        """ Overloaded addition method.
         """
         return E3Point(self.x() + other.x(),
                        self.y() + other.y(),
                        self.z() + other.z()) 
 
     def __sub__(self, other):
-        """
+        """ Overloaded subtraction method.
         """
         return E3Point(self.x() - other.x(),
                        self.y() - other.y(),
                        self.z() - other.z())
+
+    def dist(self, other):
+        """ Return the distance to another point.
+        """
+        return math.sqrt((self.x() - other.x())**2. +\
+                         (self.y() - other.y())**2. +\
+                         (self.z() - other.z())**2.)
 
     def __str__(self):
         """ String representation.
