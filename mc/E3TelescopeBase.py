@@ -52,7 +52,7 @@ class E3TelescopeBase:
     def __init__(self, name = 'EEE-00',
                  d12 = 50., d23 = 50., phiNorth = 0.,
                  latitude = 0., longitude = 0, altitude = 0.,
-                 triggerMask = 0b111, fitTool = '2d'):
+                 triggerMask = 0b111, fitTool = '2dw'):
         """ Constructor.
         """
         self.__Name = name
@@ -105,8 +105,8 @@ class E3TelescopeBase:
     def randomPoint(self, plane = 2):
         """
         """
-        x = random.uniform(0., MRPC_LENGTH)
-        y = random.uniform(0., MRPC_WIDTH)
+        x = random.uniform(MRPC_X_MIN, MRPC_X_MAX)
+        y = random.uniform(MRPC_Y_MIN, MRPC_Y_MAX)
         z = self.z(plane)
         return E3Point(x, y, z)
 
@@ -184,10 +184,10 @@ class E3TelescopeBase:
         return x >= 0 and x <= MRPC_LENGTH and y >= 0 and y <= MRPC_WIDTH
 
     def digitize(self, point):
-        """
+        """ Digitize a hit on a plane of the MRPC.
         """
         x = random.gauss(point.x(), MRPC_LONGITUDINAL_SIGMA)
-        y = int(point.y()/MRPC_STRIP_PITCH)*MRPC_STRIP_PITCH
+        y = int(point.y()/MRPC_STRIP_PITCH + 0.5)*MRPC_STRIP_PITCH
         z = point.z()
         return E3Point(x, y, z)
 
@@ -203,4 +203,7 @@ if __name__ == '__main__':
     telescope = E3TelescopeBase()
     print telescope
     p = telescope.randomPoint(2)
+    print p, telescope.digitize(p)
+    ztop = telescope.ztop()
+    p = E3Point(10, 1.7, ztop)
     print p, telescope.digitize(p)
