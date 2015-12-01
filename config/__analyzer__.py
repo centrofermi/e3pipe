@@ -68,6 +68,11 @@ E3_CALIB_FILE_NAME = 'eee_calib.txt'
 E3_ANALYZER_OUTPUTS = ['.2tt', '.out', '.sum', '.tim']
 
 
+""" And extensions of the output files produced by the new analyzer.
+"""
+E3_ANALYZER_NEW_OUTPUTS = ['.root', '_dst.root']
+
+
 
 if __name__ == '__main__':
     for key in dir():

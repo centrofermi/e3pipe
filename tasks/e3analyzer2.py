@@ -30,7 +30,8 @@ from e3pipe.__logging__ import logger, startmsg, abort
 from e3pipe.misc.E3Chrono import E3Chrono
 from e3pipe.config.__storage__ import E3PIPE_TEMP, splitFilePath,\
     cleanupTemp, listTemp
-from e3pipe.config.__analyzer__ import E3_ANALYZER_NEW, E3_CALIB_FILE_NAME
+from e3pipe.config.__analyzer__ import E3_ANALYZER_NEW, E3_CALIB_FILE_NAME,\
+    E3_ANALYZER_NEW_OUTPUTS
 
 
 
@@ -64,14 +65,16 @@ def e3analyzer2(binFilePath, suffix = None, opts = '-b -r -c'):
     __utils__.cp(binFilePath, copyFilePath)
     __e3analyzer2(copyFilePath, opts)
     logger.info('Run processed in %.3f s.' % chrono.stop())
-    dstFilePath = copyFilePath.replace('.bin', '.root')
+    baseFilePath = copyFilePath.replace('.bin', '')
     if suffix is not None:
-        dest = dstFilePath.replace('.root', '_%s.root' % suffix)
-        __utils__.mv(dstFilePath, dest)
-        dstFilePath = dest
+        for extension in E3_ANALYZER_NEW_OUTPUTS:
+            src = '%s%s' % (baseFilePath, extension)
+            dest = '%s_%s%s' % (baseFilePath, suffix, extension)
+            __utils__.mv(src, dest)
+        baseFilePath = '%s_%s' % (baseFilePath, suffix)
     listTemp()
-    logger.info('Returning dst file path: "%s"...' % dstFilePath)
-    return dstFilePath
+    logger.info('Returning base path: "%s"...' % baseFilePath)
+    return baseFilePath
 
 
 	
