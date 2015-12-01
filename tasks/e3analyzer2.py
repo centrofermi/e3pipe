@@ -70,8 +70,8 @@ def e3analyzer2(binFilePath, suffix = None, opts = '-b -r -c'):
         __utils__.mv(dstFilePath, dest)
         dstFilePath = dest
     listTemp()
-    logger.info('Returning dst file path: "%s"...' % dest)
-    return dest
+    logger.info('Returning dst file path: "%s"...' % dstFilePath)
+    return dstFilePath
 
 
 	
