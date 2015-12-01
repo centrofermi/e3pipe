@@ -47,6 +47,15 @@ try:
 except KeyError:
     E3_ANALYZER_PI = '/opt/eee/bin/EEE_Analyzer_PI_V3.1'
 
+    
+""" And, if that was not enough, here is the brand new analyzer written
+by Francesco Noferini that will eventually replace the old one.
+"""
+try:
+    E3_ANALYZER_NEW  = os.environ['E3_ANALYZER_NEW']
+except KeyError:
+    E3_ANALYZER_NEW = '/opt/eee/bin/eeereco.exe'
+
 
 """ Name of the calibration file that is created on the fly by the analysis
 program.
