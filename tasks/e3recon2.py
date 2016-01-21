@@ -28,7 +28,7 @@ import e3pipe.__utils__ as __utils__
 from e3pipe.__logging__ import logger
 from e3pipe.tasks.e3analyzer2 import e3analyzer2
 from e3pipe.tasks.e3dqm import e3dqm
-from e3pipe.config.__storage__ import E3PIPE_TEMP, E3RawDataInfo
+from e3pipe.config.__storage2__ import E3PIPE_TEMP, E3RawDataInfo
 from e3pipe.config.__analyzer__ import E3_CALIB_FILE_NAME
 
 
