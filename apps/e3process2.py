@@ -25,7 +25,7 @@ import e3pipe.__utils__ as __utils__
 
 from e3pipe.misc.E3Chrono import E3Chrono
 from e3pipe.__logging__ import logger
-from e3pipe.config.__storage__ import doDbRegister, E3RawDataInfo
+from e3pipe.config.__storage2__ import doDbRegister, E3RawDataInfo
 from e3pipe.dst.__runid__ import uniqueRunId
 from e3pipe.db.__register__ import registerRun
 

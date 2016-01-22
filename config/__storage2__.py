@@ -55,7 +55,7 @@ except KeyError:
 """ Base folder for the output DST ROOT files.
 """
 try:
-    E3PIPE_RECON_BASE = os.environ['E3PIPE_RECON_BASE']
+    E3PIPE_RECON_BASE = os.environ['E3PIPE_RECON_BASE2']
 except KeyError:
     E3PIPE_RECON_BASE = '/recon2'
 
@@ -72,7 +72,7 @@ def doDbRegister():
 """ Base folder for the eee_calib.txt files.
 """
 try:
-    E3PIPE_CALIB_BASE = os.environ['E3PIPE_CALIB_BASE']
+    E3PIPE_CALIB_BASE = os.environ['E3PIPE_CALIB_BASE2']
 except KeyError:
     E3PIPE_CALIB_BASE = '/calib2'
 
@@ -80,7 +80,7 @@ except KeyError:
 """ Base folder for the output dqm folders.
 """
 try:
-    E3PIPE_DQM_BASE = os.environ['E3PIPE_DQM_BASE']
+    E3PIPE_DQM_BASE = os.environ['E3PIPE_DQM_BASE2']
 except KeyError:
     E3PIPE_DQM_BASE = '/dqm2'
 
@@ -90,7 +90,7 @@ except KeyError:
 TODO: need to ask Francesco to link /reports, here.
 """
 try:
-    E3PIPE_DQM_REPORT_BASE = os.environ['E3PIPE_DQM_REPORT_BASE']
+    E3PIPE_DQM_REPORT_BASE = os.environ['E3PIPE_DQM_REPORT_BASE2']
 except KeyError:
     E3PIPE_DQM_REPORT_BASE = '/dqmreport2'
 
