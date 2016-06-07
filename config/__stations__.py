@@ -73,10 +73,8 @@ E3_STATION_DICT = {
     'VIAR-02': 47,
     'FRAS-03': 48,
     'GROS-02': 49,
-    'ROMA-01': 50,
     'SIEN-01': 51,
     'VICE-01': 52,
-    'ROMA-02': 53
 }
 
 
