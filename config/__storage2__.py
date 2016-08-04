@@ -61,7 +61,7 @@ except KeyError:
 
 
 def doDbRegister():
-    """ Return true if E3PIPE_RECON_BASE is pointing to /recon.
+    """ Return true if E3PIPE_RECON_BASE is pointing to /recon2.
 
     (This means that we are writing in the actual recon space and
     we should register any action into the db.)
@@ -97,7 +97,7 @@ except KeyError:
 
 """ Base folder for the log files.
 """
-E3PIPE_LOG_BASE = os.path.expanduser(os.path.join('~', 'eeelog'))
+E3PIPE_LOG_BASE = os.path.expanduser(os.path.join('~', 'eeelog2'))
 __utils__.createFolder(E3PIPE_LOG_BASE)
 
 
@@ -106,7 +106,7 @@ __utils__.createFolder(E3PIPE_LOG_BASE)
 try:
     E3PIPE_LOCK_BASE = os.environ['E3PIPE_LOCK_BASE']
 except KeyError:
-    E3PIPE_LOCK_BASE = os.path.expanduser(os.path.join('~', 'eeelock'))
+    E3PIPE_LOCK_BASE = os.path.expanduser(os.path.join('~', 'eeelock2'))
     __utils__.createFolder(E3PIPE_LOCK_BASE)
 
 
@@ -121,7 +121,7 @@ the module is imported.
 try:
     E3PIPE_TEMP = os.environ['E3PIPE_TEMP']
 except KeyError:
-    E3PIPE_TEMP = os.path.expanduser(os.path.join('~', 'eeetmp'))
+    E3PIPE_TEMP = os.path.expanduser(os.path.join('~', 'eeetmp2'))
 __utils__.createFolder(E3PIPE_TEMP)
 
 def cleanupTemp():
