@@ -108,7 +108,6 @@ class E3Chain(ROOT.TChain):
             x = numpy.empty((1,), ROOT_TO_NUMPY_DICT[branchType])
             self.__ArrayDict[branchName] = x
             self.SetBranchAddress(branchName, x)
-
     def setupArrays(self):
         """ Setup the arrays to be attached to all the enabled tree
         branches.
@@ -148,7 +147,9 @@ class E3Chain(ROOT.TChain):
                     formatList.append('%.12e')
                 elif branchType == 'F':
                     formatList.append('%.6e')
-                else:
+                elif branchType=='C':
+		    formatList.append('%s')	
+		else:
                     formatList.append('%d')
         outputFile.write('#')
         for branchName in branchList[:-1]:

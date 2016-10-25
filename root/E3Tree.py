@@ -28,7 +28,7 @@ from e3pipe.__logging__ import logger
 from e3pipe.root.E3TreePlotter import E3TreePlotter
 
 
-ROOT_TO_NUMPY_DICT = {'C': '',
+ROOT_TO_NUMPY_DICT = {'C': 'string',
                       'B' : 'int8',
                       'b' : 'uint8',
                       'S' : 'int16',

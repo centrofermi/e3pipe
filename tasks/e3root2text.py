@@ -32,5 +32,6 @@ def e3root2text(inputFilePath, treeName, outputFilePath = None):
     if outputFilePath is None:
         outputFilePath = inputFilePath.replace('.root', '_%s.csv' % treeName)
     chain.setupArrays()
+    print 'writing to ascii'
     chain.writeAscii(outputFilePath)
 
