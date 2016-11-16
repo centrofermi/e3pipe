@@ -75,6 +75,7 @@ E3_STATION_DICT = {
     'GROS-02': 49,
     'SIEN-01': 51,
     'VICE-01': 52,
+    'LODI-02': 53,	
 }
 
 
