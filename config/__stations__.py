@@ -79,6 +79,10 @@ E3_STATION_DICT = {
     'SIEN-02': 54,
     'SALE-02': 55,
     'LAMP-01': 56,	
+    'POLA-01': 57,
+    'POLA-02': 58,
+    'POLA-03': 59,
+    'POLA-04': 60,
 }
 
 
