@@ -63,7 +63,8 @@ def e3analyzer2(binFilePath, suffix = None, opts = '-b -r -c'):
     binFileName = os.path.basename(binFilePath)
     copyFilePath = os.path.join(E3PIPE_TEMP, binFileName)
     __utils__.cp(binFilePath, copyFilePath)
-    __e3analyzer2(copyFilePath, opts)
+#    __e3analyzer2(copyFilePath, opts)
+    __e3analyzer2(binFilePath, opts)
     logger.info('Run processed in %.3f s.' % chrono.stop())
     baseFilePath = copyFilePath.replace('.bin', '')
     if suffix is not None:
