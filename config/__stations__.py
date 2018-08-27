@@ -83,6 +83,7 @@ E3_STATION_DICT = {
     'POLA-02': 58,
     'POLA-03': 59,
     'POLA-04': 60,
+    'GENO-01': 61,
 }
 
 
