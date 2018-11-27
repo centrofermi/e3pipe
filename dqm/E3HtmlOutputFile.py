@@ -28,12 +28,12 @@ from e3pipe.__logging__ import logger
 
 HTML_HEADER = \
 """
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 
 <html lang="en">
   
 <head>
-<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<meta charset="UTF-8">
 <title>%s</title>
 <link rel="stylesheet" href="%s" type="text/css" media="all">
 </head>
@@ -54,8 +54,8 @@ HTML_FOOTER = \
 Extreme Energy Events (EEE) is powered by
 <a href="https://github.com/centrofermi/e3pipe">e3pipe</a> version %s.<br>
 This page validates as
-<a href="http://validator.w3.org/check?uri=referer">HTML 4.01 strict</a> and 
-<a href="http://jigsaw.w3.org/css-validator/check/referer">css level 3</a>.<br>
+<a href="https://validator.w3.org/check?uri=referer">HTML5</a> and 
+<a href="https://jigsaw.w3.org/css-validator/check/referer">css level 3</a>.<br>
 Generated on %s.
 </div>
 </body>
