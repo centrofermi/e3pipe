@@ -213,6 +213,7 @@ class E3DqmRunMonitor:
             outputFile.li('Weather station data not found.')
         outputFile.write('</ul>\n')
         outputFile.section('Alarm summary')
+        outputFile.write('\n<div style="overflow-x:auto">\n')
         outputFile.write('\n<table style="width:100%">\n')
         outputFile.write('%s\n' % E3Alarm.HTML_TABLE_HEADER)
 
@@ -242,7 +243,7 @@ class E3DqmRunMonitor:
                 outputFile.write('%s\n' % item.htmlTableRow(True, i))
             elif isinstance(item, str):
                 outputFile.write('%s\n' % _htmlTableRow(item, True, i))
-        outputFile.write('</table>\n<p></p>\n')
+        outputFile.write('</table>\n</div>\n<p></p>\n')
         outputFile.close()
         logger.info('Done.')
         
