@@ -125,14 +125,14 @@ tr.even
 #container
 {
     margin: 0em auto;
-    width: 1000px;
+    max-width: 1000px;
     text-align: left;
     background: #fff;
 }
 
 #header
 {
-    height: 67px;
+    min-height: 67px;
     width: 100%;
     position: relative;
     background: url(../images/header.png) repeat 0 0;
@@ -251,7 +251,7 @@ tr.even
 #footer
 {
     margin: 0em auto;
-    width: 1000px;
+    max-width: 1000px;
     clear: both;
     text-align: center;
     font-size: 83%;

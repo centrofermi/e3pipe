@@ -164,7 +164,7 @@ class E3DqmRunMonitor:
         outputFile.write('<p></p>\n')
         for objName, alarmName in TOP_IMAGES:
             img = '%s.png' % self.canvasName(objName, alarmName)
-            outputFile.image(img, width = '49%')
+            outputFile.image(img, style = 'width:49%', alt = 'plot')
         outputFile.section('Run summary')
         header = self.__InputFile.Get('Header')
         header.GetEntry(0)
@@ -213,7 +213,8 @@ class E3DqmRunMonitor:
             outputFile.li('Weather station data not found.')
         outputFile.write('</ul>\n')
         outputFile.section('Alarm summary')
-        outputFile.write('\n<table width=100%>\n')
+        outputFile.write('\n<div style="overflow-x:auto">\n')
+        outputFile.write('\n<table style="width:100%">\n')
         outputFile.write('%s\n' % E3Alarm.HTML_TABLE_HEADER)
 
         def _htmlTableRow(objName, linkPlot = True, index = None):
@@ -242,7 +243,7 @@ class E3DqmRunMonitor:
                 outputFile.write('%s\n' % item.htmlTableRow(True, i))
             elif isinstance(item, str):
                 outputFile.write('%s\n' % _htmlTableRow(item, True, i))
-        outputFile.write('</table>\n<p></p>\n')
+        outputFile.write('</table>\n</div>\n<p></p>\n')
         outputFile.close()
         logger.info('Done.')
         

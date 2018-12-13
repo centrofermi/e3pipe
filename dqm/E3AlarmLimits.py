@@ -159,7 +159,7 @@ class E3AlarmLimits:
     def html(self):
         """ Html formatting.
         """
-        return '[<font class="error">%s</font> / <font class="warning">%s</font> &ndash; <font class="warning">%s</font> / <font class="error">%s</font>]'%\
+        return '[<span class="error">%s</span> / <span class="warning">%s</span> &ndash; <span class="warning">%s</span> / <span class="error">%s</span>]'%\
             (formatNumber(self.ErrorMin), formatNumber(self.WarningMin),
              formatNumber(self.WarningMax), formatNumber(self.ErrorMax))
 

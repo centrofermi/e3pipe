@@ -230,7 +230,7 @@ class E3DqmReport:
         outputFile.write('<p></p>\n')
         for objName in ['RateSummary', 'WeatherSummary']:
             img = '%s.png' % self.canvasName(objName)
-            outputFile.image(img, width = '49%')
+            outputFile.image(img, style = 'width:49%', alt = 'plot')
         outputFile.section('Summary')
         inputFile = E3InputRootFile(self.__InputFilePath)
         station = inputFile.station()
@@ -260,7 +260,7 @@ class E3DqmReport:
                        csvWeatherAnchor))
         outputFile.write('</ul>\n')
         outputFile.section('Summary plots')
-        outputFile.write('\n<table width=100%>\n')
+        outputFile.write('\n<table style="width:100%">\n')
         outputFile.write('%s\n' % htmlTableHeader('Plot'))
 
         def _htmlTableRow(objName, linkPlot = True, index = None):
