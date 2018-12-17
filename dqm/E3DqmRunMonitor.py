@@ -164,7 +164,7 @@ class E3DqmRunMonitor:
         outputFile.write('<p></p>\n')
         for objName, alarmName in TOP_IMAGES:
             img = '%s.png' % self.canvasName(objName, alarmName)
-            outputFile.image(img, style = 'width:49%', alt = 'plot')
+            outputFile.image(img, alt = 'plot')
         outputFile.section('Run summary')
         header = self.__InputFile.Get('Header')
         header.GetEntry(0)
