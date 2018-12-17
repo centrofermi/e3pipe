@@ -69,7 +69,7 @@ def htmlAttributes(**kwargs):
     """
     attributes = ''
     for key, value in kwargs.items():
-        attributes += '%s = %s ' % (key, value)
+        attributes += '%s="%s" ' % (key, value)
     return attributes.strip()
 
 def htmlTableHeader(*args, **kwargs):
