@@ -67,10 +67,7 @@ Generated on %s.
 def htmlAttributes(**kwargs):
     """ Format a python dictionary as a collection of html attributes.
     """
-    attributes = ''
-    for key, value in kwargs.items():
-        attributes += '%s = %s ' % (key, value)
-    return attributes.strip()
+    return ' '.join('%s="%s"' % item for item in kwargs.items())
 
 def htmlTableHeader(*args, **kwargs):
     """ Format a list of arguments as a html table header.

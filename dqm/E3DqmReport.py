@@ -230,7 +230,7 @@ class E3DqmReport:
         outputFile.write('<p></p>\n')
         for objName in ['RateSummary', 'WeatherSummary']:
             img = '%s.png' % self.canvasName(objName)
-            outputFile.image(img, style = 'width:49%', alt = 'plot')
+            outputFile.image(img, alt = 'plot')
         outputFile.section('Summary')
         inputFile = E3InputRootFile(self.__InputFilePath)
         station = inputFile.station()
