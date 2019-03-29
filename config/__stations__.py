@@ -86,6 +86,7 @@ E3_STATION_DICT = {
     'GENO-01': 60,
     'BOLO-05': 61,
     'CARI-01': 62,
+    'LODI-03': 63,
 }
 
 
