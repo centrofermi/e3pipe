@@ -89,6 +89,7 @@ E3_STATION_DICT = {
     'LODI-03': 63,
     'REND-01': 64,
     'CAGL-04': 65,
+    'FERM-01': 66,
 }
 
 
