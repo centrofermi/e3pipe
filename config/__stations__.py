@@ -90,6 +90,10 @@ E3_STATION_DICT = {
     'REND-01': 64,
     'CAGL-04': 65,
     'FERM-01': 66,
+    'RECA-01': 67,
+    'LNLE-01': 68,
+    'SALE-03': 69,
+    'MESS-01': 70,
 }
 
 
