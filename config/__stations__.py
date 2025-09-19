@@ -95,6 +95,7 @@ E3_STATION_DICT = {
     'SALE-03': 69,
     'MESS-01': 70,
     'REND-02': 71,
+    'VICE-02': 72,
 }
 
 
