@@ -50,7 +50,7 @@ startmsg()
 
 # Run e3recon
 chrono = E3Chrono()
-_cmd = 'e3recon2.py %s' % rawFilePath
+_cmd = 'timeout 300 e3recon2.py %s' % rawFilePath
 exitCode = __utils__.cmd(_cmd)
 if exitCode == 0:
     logger.info('Run processed in %.3f s.' % chrono.stop())
