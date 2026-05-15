@@ -38,7 +38,7 @@ from e3pipe.config.__analyzer__ import E3_ANALYZER_NEW, E3_CALIB_FILE_NAME,\
 def __e3analyzer2(filePath, opts):
     """ Run the brand new analyzer.
     """
-    _cmd = 'cd %s; %s %s %s' % (E3PIPE_TEMP, E3_ANALYZER_NEW, opts, filePath)
+    _cmd = 'cd %s; timeout 300 %s %s %s' % (E3PIPE_TEMP, E3_ANALYZER_NEW, opts, filePath)
     logger.info('Generating the calibration file...')
     exitCode = __utils__.cmd(_cmd)
     if exitCode:
